@@ -206,6 +206,54 @@ footer p { margin: 0; max-width: 70ch; }
 .kv { margin: 0 0 10px; color: var(--ink-soft); }
 .kv b { color: var(--ink); }
 
+
+/* Sign-in, inbox and chat */
+button.who { font: inherit; cursor: pointer; }
+.dot {
+  display: inline-block; min-width: 20px; padding: 0 6px; border-radius: 10px; background: var(--beet); color: var(--paper);
+  border: 1.5px solid #f3e7cf; font-weight: 700; font-size: 14px; line-height: 18px; text-align: center; font-style: normal;
+}
+.dot.sm { min-width: 0; width: 11px; height: 11px; padding: 0; border: 0; border-radius: 50%; flex: none; }
+.panel.wide { max-width: 900px; }
+.cblock { border-top: 1.5px dashed var(--line); padding-top: 12px; margin-top: 12px; }
+.cblock .kv { margin-bottom: 4px; }
+.phone.sm { font-size: 20px; }
+.chatwrap {
+  display: grid; grid-template-columns: 260px minmax(0, 1fr); height: min(540px, 68vh); min-width: 0;
+  border: 2px solid var(--wood-light); background: var(--bg); margin-top: 10px;
+}
+.clist { overflow-y: auto; border-right: 2px solid var(--wood-light); display: flex; flex-direction: column; min-width: 0; }
+.citem { display: block; width: 100%; text-align: left; background: transparent; border: 0; border-bottom: 1.5px dashed var(--line); padding: 10px 12px; min-width: 0; }
+.citem.on { background: var(--paper); }
+.citem b { display: flex; gap: 6px; align-items: center; min-width: 0; }
+.citem b span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.citem .l2, .citem .l3 { display: block; font-size: 14.5px; color: var(--ink-soft); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.thread { display: flex; flex-direction: column; min-width: 0; min-height: 0; overflow: hidden; background: var(--paper); }
+.thead { display: flex; gap: 10px; align-items: center; padding: 10px 12px; border-bottom: 2px solid var(--wood-light); min-width: 0; }
+.thead .back { display: none; }
+.thead > div { min-width: 0; }
+.tsub { font-size: 14.5px; color: var(--ink-soft); overflow-wrap: anywhere; }
+.msgs { flex: 1; min-height: 0; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+.msg { display: flex; flex-direction: column; max-width: 82%; gap: 2px; min-width: 0; }
+.msg.me { align-self: flex-end; align-items: flex-end; }
+.msg.them { align-self: flex-start; align-items: flex-start; }
+.bub { padding: 8px 12px; border-radius: 3px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.me .bub { background: var(--leaf); color: var(--leaf-ink); }
+.them .bub { background: var(--bg); border: 1.5px solid var(--line); }
+.mt { font-size: 13px; color: var(--ink-soft); }
+.composer { display: flex; gap: 8px; padding: 10px 12px; border-top: 2px solid var(--wood-light); align-items: flex-end; }
+.composer textarea { flex: 1; min-width: 0; background: var(--bg); border: 2px solid var(--wood-light); border-radius: 3px; padding: 8px 10px; resize: none; }
+.chatnote { margin: 0; padding: 0 12px 6px; font-size: 14px; color: var(--ink-soft); }
+.thread .err { padding: 0 12px; min-height: 0; }
+.chatnone { padding: 16px; color: var(--ink-soft); margin: 0; }
+@media (max-width: 720px) {
+  .chatwrap { grid-template-columns: minmax(0, 1fr); }
+  .chatwrap .thread { display: none; }
+  .chatwrap.show-thread .thread { display: flex; }
+  .chatwrap.show-thread .clist { display: none; }
+  .thead .back { display: inline-flex; }
+}
+
 @media (max-width: 720px) {
   .board { grid-template-columns: 1fr; padding: 18px 16px 20px; }
   .frow { grid-template-columns: 1fr 1fr; }
@@ -220,6 +268,8 @@ footer p { margin: 0; max-width: 70ch; }
   <div class="wrap bar">
     <h2 class="stamp" id="brand" data-i="brand">Онлайн урожай</h2>
     <div class="bar-right">
+      <button type="button" class="who" id="loginBtn" data-act="login" hidden></button>
+      <button type="button" class="who" id="inbox" data-act="inbox" hidden></button>
       <span class="who" id="who" hidden></span>
       <div class="lang" role="group" aria-label="Язык / Тіл">
         <button type="button" data-act="lang-ru" id="lang-ru" aria-pressed="true">РУС</button>
@@ -263,6 +313,20 @@ footer p { margin: 0; max-width: 70ch; }
 <footer><div class="wrap"><p data-i="footer"></p></div></footer>
 <div class="overlay" id="modal" hidden></div>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+/* ВСТАВЬТЕ СЮДА НАСТРОЙКИ ИЗ FIREBASE: Project settings → Your apps → Web app → firebaseConfig */
+window.FIREBASE_CONFIG = {
+  apiKey: "PASTE_API_KEY",
+  authDomain: "PASTE_PROJECT.firebaseapp.com",
+  projectId: "PASTE_PROJECT_ID",
+  storageBucket: "PASTE_PROJECT.appspot.com",
+  messagingSenderId: "PASTE",
+  appId: "PASTE"
+};
+</script>
 <script>
 (function () {
   "use strict";
@@ -352,6 +416,58 @@ footer p { margin: 0; max-width: 70ch; }
       close: "Жабу", ok: "Түсінікті"
     }
   };
+  Object.assign(D.ru, {
+    heroText: "Выставьте свой товар за пару минут. Покупатель увидит объявление и свяжется с вами напрямую: по телефону, в Telegram или в чате на сайте.",
+    pTitle: "Регистрация", pText: "Покупатели увидят эти контакты в ваших объявлениях. Оставьте удобные способы связи.",
+    pPhone: "Телефон (необязательно)", pChat: "Принимать сообщения в чате на сайте",
+    login: "Войти", inbox: "Сообщения",
+    gTitle: "Добро пожаловать в «Онлайн урожай»",
+    gSignText: "Чтобы выставлять урожай и писать продавцам, войдите в аккаунт claude.ai (подойдёт вход через Google, то есть Gmail) и откройте эту страницу снова. Смотреть объявления можно и без входа.",
+    gGuest: "Смотреть как гость",
+    gRegText: "Вы вошли. Оставьте контакты: телефон, Telegram или чат на сайте. После этого можно выставлять урожай и переписываться.",
+    gLater: "Позже",
+    eNoContact: "Оставьте хотя бы один способ связи: телефон, Telegram или чат",
+    eTg: "Telegram: от 5 символов, латиница, цифры и знак _",
+    cChat: "Написать в чате на сайте", cTgLabel: "Telegram",
+    chatTitle: "Сообщения", chatEmpty: "Переписок пока нет. Откройте объявление, нажмите «Связаться» и напишите продавцу.",
+    chatPick: "Выберите переписку слева.", chatNone: "Сообщений пока нет. Напишите первым.",
+    chatPh: "Ваше сообщение…", chatSend: "Отправить", chatAbout: "Товар:",
+    chatNote: "Не отправляйте в чат пароли и данные банковских карт.",
+    chatSendErr: "Сообщение не отправилось. Попробуйте ещё раз.", chatBack: "Назад"
+  });
+  Object.assign(D.kk, {
+    heroText: "Тауарыңызды бірнеше минутта орналастырыңыз. Сатып алушы хабарландыруды көріп, сізбен телефон, Telegram немесе сайттағы чат арқылы тікелей байланысады.",
+    pTitle: "Тіркеу", pText: "Сатып алушылар бұл байланыс деректерін хабарландыруларыңыздан көреді. Ыңғайлы байланыс тәсілдерін қалдырыңыз.",
+    pPhone: "Телефон (міндетті емес)", pChat: "Сайттағы чатта хабарлама қабылдау",
+    login: "Кіру", inbox: "Хабарламалар",
+    gTitle: "«Онлайн егінге» қош келдіңіз",
+    gSignText: "Егінді орналастыру және сатушыларға жазу үшін claude.ai аккаунтына кіріңіз (Google, яғни Gmail арқылы кіруге болады) да, осы бетті қайта ашыңыз. Хабарландыруларды кірмей де көруге болады.",
+    gGuest: "Қонақ ретінде қарау",
+    gRegText: "Сіз кірдіңіз. Байланыс деректерін қалдырыңыз: телефон, Telegram немесе сайттағы чат. Содан кейін егінді орналастырып, хат алмаса аласыз.",
+    gLater: "Кейін",
+    eNoContact: "Кемінде бір байланыс тәсілін қалдырыңыз: телефон, Telegram немесе чат",
+    eTg: "Telegram: кемінде 5 таңба, латын әріптері, сандар және _ белгісі",
+    cChat: "Сайттағы чатта жазу", cTgLabel: "Telegram",
+    chatTitle: "Хабарламалар", chatEmpty: "Әзірге сұхбат жоқ. Хабарландыруды ашып, «Байланысу» түймесін басып, сатушыға жазыңыз.",
+    chatPick: "Сол жақтан сұхбатты таңдаңыз.", chatNone: "Хабарлама әлі жоқ. Бірінші болып жазыңыз.",
+    chatPh: "Хабарламаңыз…", chatSend: "Жіберу", chatAbout: "Тауар:",
+    chatNote: "Чатқа құпия сөздер мен банк карталарының деректерін жібермеңіз.",
+    chatSendErr: "Хабарлама жіберілмеді. Қайталап көріңіз.", chatBack: "Артқа"
+  });
+  Object.assign(D.ru, {
+    gGoogle: "Войти через Google", logout: "Выйти из аккаунта",
+    gSignText: "Войдите через аккаунт Google (Gmail), чтобы выставлять урожай и писать продавцам. Смотреть объявления можно и без входа.",
+    offNote: "Сайт ещё не подключён к базе данных, поэтому показаны примеры.",
+    cfgText: "Сайт ещё не подключён к Firebase. Вставьте настройки проекта в начало файла index.html (см. инструкцию), и вход через Google заработает.",
+    popupErr: "Не удалось войти. Разрешите всплывающие окна и попробуйте ещё раз."
+  });
+  Object.assign(D.kk, {
+    gGoogle: "Google арқылы кіру", logout: "Аккаунттан шығу",
+    gSignText: "Егінді орналастыру және сатушыларға жазу үшін Google (Gmail) аккаунты арқылы кіріңіз. Хабарландыруларды кірмей де көруге болады.",
+    offNote: "Сайт әлі дерекқорға қосылмаған, сондықтан мысалдар көрсетілген.",
+    cfgText: "Сайт әлі Firebase-ке қосылмаған. Жоба параметрлерін index.html файлының басына қойыңыз (нұсқаулықты қараңыз), сонда Google арқылы кіру жұмыс істейді.",
+    popupErr: "Кіру мүмкін болмады. Қалқымалы терезелерге рұқсат беріп, қайталап көріңіз."
+  });
   var CATS = [
     ["veg", "Овощи", "Көкөністер"], ["fruit", "Фрукты", "Жемістер"], ["berry", "Ягоды", "Жидектер"],
     ["greens", "Зелень", "Жасыл шөптер"], ["grain", "Зерно и бобовые", "Астық және бұршақ"],
@@ -431,6 +547,7 @@ footer p { margin: 0; max-width: 70ch; }
   var F = { q: "", cat: "all", region: "all", sort: "new", mine: false };
   var pendingDel = null, pendingPhoto = null, editing = null;
   var modal = $("modal");
+  var chats = {}, chatState = { id: null, meta: null, msgs: [], unsub: null }, gateDone = false;
 
   function mySeller() { return uid && sellers[uid] ? sellers[uid] : null; }
   function isReal() { return dbState === "ok" && listings.length > 0; }
@@ -453,16 +570,29 @@ footer p { margin: 0; max-width: 70ch; }
   }
 
   /* ---------- Rendering ---------- */
+  function isUnread(c) {
+    if (!uid || !c.lastFrom || c.lastFrom === uid) return false;
+    if (chatState.id === c.id && !modal.hidden) return false;
+    return (c.lastAt || 0) > ((c.seen && c.seen[uid]) || 0);
+  }
+  function unreadCount() { var n = 0; Object.keys(chats).forEach(function (k) { if (isUnread(chats[k])) n++; }); return n; }
   function renderTop() {
     var s = mySeller();
     var who = $("who");
     if (s) { who.hidden = false; who.textContent = s.name; } else { who.hidden = true; }
+    var ib = $("inbox"), un = unreadCount();
+    ib.hidden = !(uid && db && s);
+    ib.innerHTML = esc(t("inbox")) + (un ? ' <span class="dot">' + un + "</span>" : "");
+    var lb = $("loginBtn");
+    lb.hidden = !!(uid && db);
+    lb.textContent = t("login");
     var cta = $("mainCta");
     cta.textContent = s ? t("sell") : (uid && db ? t("become") : t("sell"));
     var stats = $("stats");
     if (dbState === "ok" && listings.length) {
       var active = listings.filter(function (l) { return l.status !== "sold"; }).length;
-      var n = Object.keys(sellers).length;
+      var ids = {}; listings.forEach(function (l) { ids[l.sellerId] = 1; });
+      var n = Object.keys(ids).length;
       stats.innerHTML = "<span>" + esc(t("statAds", { n: active })) + "</span><span>" + esc(t("statSellers", { n: n })) + "</span>";
     } else stats.innerHTML = "";
   }
@@ -535,45 +665,84 @@ footer p { margin: 0; max-width: 70ch; }
   function renderAll() { renderTop(); renderChips(); renderNotice(); renderGrid(); }
 
   /* ---------- Modal ---------- */
-  function openModal(html) {
-    modal.innerHTML = '<div class="panel" role="dialog" aria-modal="true" aria-labelledby="mtitle"><button type="button" class="xbtn" data-act="close" aria-label="' + esc(t("close")) + '">×</button>' + html + "</div>";
+  function openModal(html, cls) {
+    chatLeave();
+    modal.innerHTML = '<div class="panel' + (cls ? " " + cls : "") + '" role="dialog" aria-modal="true" aria-labelledby="mtitle"><button type="button" class="xbtn" data-act="close" aria-label="' + esc(t("close")) + '">×</button>' + html + "</div>";
     modal.hidden = false;
     document.body.classList.add("lock");
     var f = modal.querySelector("input:not([type=file]), select, textarea, .btn");
     if (f) try { f.focus({ preventScroll: true }); } catch (e) {}
   }
-  function closeModal() { modal.hidden = true; modal.innerHTML = ""; document.body.classList.remove("lock"); pendingPhoto = null; editing = null; }
+  function closeModal() {
+    chatLeave();
+    modal.hidden = true; modal.innerHTML = ""; document.body.classList.remove("lock");
+    pendingPhoto = null; editing = null; F.after = null; F.afterRegister = false;
+    renderTop();
+  }
 
   function infoModal(msg) {
     openModal('<h2 id="mtitle">' + esc(t("brand")) + '</h2><p class="sub">' + esc(msg) + '</p><div class="row"><button type="button" class="btn" data-act="close">' + esc(t("ok")) + "</button></div>");
   }
 
-  function profileModal() {
+  var auth = null, cfgMissing = false, sellersUnsub = null, chatsUnsub = null;
+  function gateModal(msg) {
+    var main = cfgMissing
+      ? '<p class="sub">' + esc(t("cfgText")) + "</p>"
+      : '<p class="sub">' + esc(t("gSignText")) + '</p><p class="err" id="g_err" role="alert">' + esc(msg || "") + '</p><div class="row"><button type="button" class="btn yolk" data-act="google">' + esc(t("gGoogle")) + "</button></div>";
+    openModal('<h2 id="mtitle">' + esc(t("gTitle")) + "</h2>" + main + '<div class="row" style="margin-top:10px"><button type="button" class="btn ghost" data-act="close">' + esc(t("gGuest")) + "</button></div>");
+  }
+  function googleLogin() {
+    if (!auth) return;
+    var p = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(p).catch(function (e) {
+      if (e && (e.code === "auth/popup-blocked" || e.code === "auth/operation-not-supported-in-this-environment")) { auth.signInWithRedirect(p); return; }
+      if (e && (e.code === "auth/popup-closed-by-user" || e.code === "auth/cancelled-popup-request")) return;
+      var g = $("g_err"); if (g) g.textContent = t("popupErr");
+    });
+  }
+  function decideGate() {
+    if (gateDone) return;
+    gateDone = true;
+    if (!uid || !db) { gateModal(); return; }
+    if (!mySeller()) { F.afterRegister = false; profileModal({ gate: true }); }
+  }
+
+  function profileModal(opts) {
+    var gate = !!(opts && opts.gate);
     var s = mySeller() || {};
     var isEdit = !!mySeller();
-    openModal('<h2 id="mtitle">' + esc(isEdit ? t("pTitleEdit") : t("pTitle")) + '</h2><p class="sub">' + esc(t("pText")) + "</p>" +
+    var chatOn = s.chatOn !== false;
+    openModal('<h2 id="mtitle">' + esc(gate ? t("gTitle") : (isEdit ? t("pTitleEdit") : t("pTitle"))) + '</h2><p class="sub">' + esc(gate ? t("gRegText") : t("pText")) + "</p>" +
       '<form class="form" id="profileForm" novalidate>' +
       '<div class="field"><label for="p_name">' + esc(t("pName")) + '</label><input type="text" id="p_name" maxlength="60" autocomplete="name" placeholder="' + esc(t("pNamePh")) + '" value="' + esc(s.name || meName || "") + '"></div>' +
       '<div class="field"><label for="p_phone">' + esc(t("pPhone")) + '</label><input type="text" id="p_phone" inputmode="tel" maxlength="24" autocomplete="tel" placeholder="' + esc(t("pPhonePh")) + '" value="' + esc(s.phone ? fmtPhone(s.phone) : "") + '"></div>' +
       '<div class="field"><label for="p_tg">' + esc(t("pTg")) + '</label><input type="text" id="p_tg" maxlength="40" placeholder="' + esc(t("pTgPh")) + '" value="' + esc(s.telegram ? "@" + s.telegram : "") + '"></div>' +
+      '<label class="check" for="p_chat"><input type="checkbox" id="p_chat"' + (chatOn ? " checked" : "") + "><span>" + esc(t("pChat")) + "</span></label>" +
       '<div class="field"><label for="p_about">' + esc(t("pAbout")) + '</label><textarea id="p_about" maxlength="200" placeholder="' + esc(t("pAboutPh")) + '">' + esc(s.about || "") + "</textarea></div>" +
       '<p class="err" id="p_err" role="alert"></p>' +
-      '<div class="row"><button type="submit" class="btn" id="p_save">' + esc(isEdit ? t("pSaveEdit") : t("pSave")) + '</button><button type="button" class="btn ghost" data-act="close">' + esc(t("cancel")) + "</button></div></form>");
+      '<div class="row"><button type="submit" class="btn" id="p_save">' + esc(isEdit ? t("pSaveEdit") : t("pSave")) + '</button><button type="button" class="btn ghost" data-act="close">' + esc(gate ? t("gLater") : t("cancel")) + "</button></div>" +
+      (isEdit ? '<button type="button" class="btn ghost small" data-act="logout">' + esc(t("logout")) + "</button>" : "") + "</form>");
     $("profileForm").addEventListener("submit", function (e) { e.preventDefault(); saveProfile(); });
   }
   async function saveProfile() {
-    var name = $("p_name").value.trim(), ph = normPhone($("p_phone").value), n = digits($("p_phone").value).length;
-    var tg = $("p_tg").value.trim().replace(/^@/, "").replace(/[^A-Za-z0-9_]/g, "");
+    var name = $("p_name").value.trim(), rawPh = $("p_phone").value.trim(), n = digits(rawPh).length;
+    var ph = rawPh ? normPhone(rawPh) : "";
+    var tg = $("p_tg").value.trim().replace(/^(https?:\/\/)?t\.me\//i, "").replace(/^@/, "").replace(/[^A-Za-z0-9_]/g, "");
+    var chatOn = $("p_chat").checked;
     var err = $("p_err");
     if (name.length < 2) { err.textContent = t("ePName"); $("p_name").focus(); return; }
-    if (n < 10 || n > 13) { err.textContent = t("ePPhone"); $("p_phone").focus(); return; }
+    if (rawPh && (n < 10 || n > 13)) { err.textContent = t("ePPhone"); $("p_phone").focus(); return; }
+    if (tg && tg.length < 5) { err.textContent = t("eTg"); $("p_tg").focus(); return; }
+    if (!ph && !tg && !chatOn) { err.textContent = t("eNoContact"); return; }
     $("p_save").disabled = true;
+    var data = { name: name, phone: ph, telegram: tg, chatOn: chatOn, about: $("p_about").value.trim(), updatedAt: Date.now() };
     try {
-      await db.doc("sellers/" + uid).set({ name: name, phone: ph, telegram: tg, about: $("p_about").value.trim(), updatedAt: Date.now() });
-      sellers[uid] = { name: name, phone: ph, telegram: tg, about: $("p_about").value.trim() };
-      var wasNew = !editing && !listings.some(function (l) { return l.sellerId === uid; });
+      await db.doc("sellers/" + uid).set(data);
+      sellers[uid] = data;
+      var afterReg = F.afterRegister, cb = F.after;
+      F.afterRegister = false; F.after = null;
       closeModal(); renderAll();
-      if (wasNew && F.afterRegister) { F.afterRegister = false; listingModal(null); }
+      if (cb) cb(); else if (afterReg) listingModal(null);
     } catch (e) {
       err.textContent = (e && e.code === "invalid_argument") ? t("noWrite") : t("saveErr");
       $("p_save").disabled = false;
@@ -663,20 +832,124 @@ footer p { margin: 0; max-width: 70ch; }
     if (l.example) body = '<p class="sub">' + esc(t("cExample")) + "</p>";
     else {
       var s = sellers[l.sellerId];
-      if (!s || !s.phone) body = '<p class="sub">' + esc(t("cNone")) + "</p>";
+      var canChat = !!s && s.chatOn !== false;
+      if (!s || (!s.phone && !s.telegram && !canChat)) body = '<p class="sub">' + esc(t("cNone")) + "</p>";
       else {
         body = '<p class="kv">' + esc(t("cProduct")) + ": <b>" + esc(l.title) + "</b><br>" + esc(t("seller")) + ": <b>" + esc(s.name) + "</b>" +
-          (l.region ? "<br>" + esc(regionLabel(l.region)) : "") + "</p>" +
-          '<div class="kv">' + esc(t("cPhone")) + '</div><div class="phone" id="c_phone">' + esc(fmtPhone(s.phone)) + "</div>" +
+          (l.region ? "<br>" + esc(regionLabel(l.region)) : "") + "</p>";
+        if (canChat) body += '<div class="row"><button type="button" class="btn" data-act="chat" data-id="' + esc(l.id) + '">' + esc(t("cChat")) + "</button></div>";
+        if (s.telegram) body += '<div class="cblock"><div class="kv">' + esc(t("cTgLabel")) + '</div><div class="phone sm">@' + esc(s.telegram) + '</div>' +
+          '<div class="row"><a class="btn yolk" href="https://t.me/' + esc(s.telegram) + '" target="_blank" rel="noopener">' + esc(t("cTg")) + "</a></div></div>";
+        if (s.phone) body += '<div class="cblock"><div class="kv">' + esc(t("cPhone")) + '</div><div class="phone" id="c_phone">' + esc(fmtPhone(s.phone)) + "</div>" +
           '<div class="row"><button type="button" class="btn ghost" data-act="copy" data-v="' + esc(fmtPhone(s.phone)) + '" id="c_copy">' + esc(t("cCopy")) + "</button>" +
           '<a class="btn" href="tel:+' + esc(s.phone) + '">' + esc(t("cCall")) + "</a></div>" +
-          '<div class="row" style="margin-top:10px"><a class="btn yolk" href="https://wa.me/' + esc(s.phone) + '" target="_blank" rel="noopener">' + esc(t("cWa")) + "</a>" +
-          (s.telegram ? '<a class="btn yolk" href="https://t.me/' + esc(s.telegram) + '" target="_blank" rel="noopener">' + esc(t("cTg")) + "</a>" : "") + "</div>" +
-          '<p class="kv" style="margin-top:14px">' + esc(t("cNote")) + "</p>";
+          '<div class="row" style="margin-top:10px"><a class="btn yolk" href="https://wa.me/' + esc(s.phone) + '" target="_blank" rel="noopener">' + esc(t("cWa")) + "</a></div></div>";
+        body += '<p class="kv" style="margin-top:14px">' + esc(t("cNote")) + "</p>";
       }
     }
     openModal('<h2 id="mtitle">' + esc(t("cTitle")) + "</h2>" + body);
   }
+
+  /* ---------- Chat ---------- */
+  function chatPartner(c) { return c.sellerId === uid ? c.buyerId : c.sellerId; }
+  function partnerName(c) { var p = sellers[chatPartner(c)]; return (p && p.name) || t("seller"); }
+  function fmtTime(ts) {
+    if (!ts) return "";
+    var d = new Date(ts), loc = lang === "kk" ? "kk-KZ" : "ru-RU";
+    try {
+      var tm = d.toLocaleTimeString(loc, { hour: "2-digit", minute: "2-digit" });
+      if (d.toDateString() === new Date().toDateString()) return tm;
+      return d.toLocaleDateString(loc, { day: "numeric", month: "short" }) + ", " + tm;
+    } catch (e) { return ""; }
+  }
+  function markSeen(id) {
+    var c = chats[id];
+    if (!c || !db || !uid) return;
+    if (!((c.lastAt || 0) > ((c.seen && c.seen[uid]) || 0))) return;
+    var p = {}; p["seen." + uid] = Date.now();
+    db.doc("chats/" + id).update(p).catch(function () {});
+  }
+  function chatLeave() {
+    if (chatState.unsub) { chatState.unsub(); chatState.unsub = null; }
+    if (chatState.id) { var id = chatState.id; chatState.id = null; chatState.meta = null; chatState.msgs = []; markSeen(id); }
+  }
+  function openChatModal() {
+    openModal('<h2 id="mtitle">' + esc(t("chatTitle")) + '</h2><div class="chatwrap" id="chatwrap"><div class="clist" id="clist"></div><div class="thread" id="thread"><p class="chatnone">' + esc(t("chatPick")) + "</p></div></div>", "wide");
+    renderChatList();
+  }
+  function renderChatList() {
+    var el = $("clist");
+    if (!el) return;
+    var arr = Object.keys(chats).map(function (k) { return chats[k]; });
+    if (chatState.id && !chats[chatState.id] && chatState.meta) arr.push(Object.assign({ id: chatState.id, lastAt: Date.now(), lastText: "" }, chatState.meta));
+    arr.sort(function (a, b) { return (b.lastAt || 0) - (a.lastAt || 0); });
+    el.innerHTML = arr.length ? arr.map(function (c) {
+      return '<button type="button" class="citem' + (c.id === chatState.id ? " on" : "") + '" data-act="chat-open" data-id="' + esc(c.id) + '"><b>' +
+        (isUnread(c) ? '<i class="dot sm" aria-hidden="true"></i>' : "") + "<span>" + esc(partnerName(c)) + '</span></b><span class="l2">' + esc(c.listingTitle || "") + '</span><span class="l3">' + esc(c.lastText || "") + "</span></button>";
+    }).join("") : '<p class="chatnone">' + esc(t("chatEmpty")) + "</p>";
+  }
+  function selectChat(cid, meta) {
+    if (chatState.unsub) { chatState.unsub(); chatState.unsub = null; }
+    if (chatState.id && chatState.id !== cid) markSeen(chatState.id);
+    chatState.id = cid; chatState.meta = meta; chatState.msgs = [];
+    var c = meta || {};
+    $("thread").innerHTML = '<div class="thead"><button type="button" class="btn small ghost back" data-act="chat-back" aria-label="' + esc(t("chatBack")) + '">←</button><div><b>' + esc(partnerName(c)) +
+      '</b><div class="tsub">' + esc(t("chatAbout")) + " " + esc(c.listingTitle || "") + '</div></div></div>' +
+      '<div class="msgs" id="msgs" role="log" aria-live="polite"></div>' +
+      '<form class="composer" id="composer"><textarea id="c_text" rows="2" maxlength="1000" aria-label="' + esc(t("chatPh")) + '" placeholder="' + esc(t("chatPh")) + '"></textarea><button type="submit" class="btn" id="c_send">' + esc(t("chatSend")) + "</button></form>" +
+      '<p class="chatnote">' + esc(t("chatNote")) + '</p><p class="err" id="c_err" role="alert"></p>';
+    $("chatwrap").classList.add("show-thread");
+    $("composer").addEventListener("submit", function (e) { e.preventDefault(); sendMsg(); });
+    $("c_text").addEventListener("keydown", function (e) { if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); sendMsg(); } });
+    renderMsgs(true);
+    renderChatList();
+    chatState.unsub = db.collection("chats/" + cid + "/messages").orderBy("at", "desc").limit(150).onSnapshot(function (snap) {
+      if (chatState.id !== cid) return;
+      chatState.msgs = snap.docs.map(function (d) { var x = d.data() || {}; x.id = d.id; return x; }).reverse();
+      renderMsgs(false);
+    }, function () { var e = $("c_err"); if (e) e.textContent = t("saveErr"); });
+    markSeen(cid);
+    try { $("c_text").focus({ preventScroll: true }); } catch (e) {}
+  }
+  function renderMsgs(first) {
+    var el = $("msgs");
+    if (!el) return;
+    var nearEnd = first || el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+    el.innerHTML = chatState.msgs.length ? chatState.msgs.map(function (m) {
+      return '<div class="msg ' + (m.from === uid ? "me" : "them") + '"><div class="bub">' + esc(m.text) + '</div><span class="mt">' + esc(fmtTime(m.at)) + "</span></div>";
+    }).join("") : '<p class="chatnone">' + esc(t("chatNone")) + "</p>";
+    if (nearEnd) el.scrollTop = el.scrollHeight;
+  }
+  async function sendMsg() {
+    var ta = $("c_text");
+    if (!ta || !chatState.id) return;
+    var text = ta.value.trim();
+    if (!text) return;
+    var cid = chatState.id, m = chatState.meta || {}, err = $("c_err"), btn = $("c_send"), now = Date.now();
+    btn.disabled = true; err.textContent = "";
+    try {
+      var ref = db.doc("chats/" + cid), snap = await ref.get();
+      var base = { lastText: text.slice(0, 120), lastAt: now, lastFrom: uid };
+      if (snap.exists) { var up = Object.assign({}, base); up["seen." + uid] = now; await ref.update(up); }
+      else { var sn = {}; sn[uid] = now; await ref.set(Object.assign({ listingId: m.listingId || "", listingTitle: m.listingTitle || "", sellerId: m.sellerId, buyerId: m.buyerId, participants: [m.sellerId, m.buyerId], createdAt: now, seen: sn }, base)); }
+      await db.collection("chats/" + cid + "/messages").add({ from: uid, text: text, at: now });
+      if (chatState.id === cid) ta.value = "";
+    } catch (e) {
+      if (chatState.id === cid) err.textContent = (e && e.code === "invalid_argument") ? t("noWrite") : t("chatSendErr");
+    }
+    if (chatState.id === cid) { btn.disabled = false; ta.focus(); }
+  }
+  function startChat(listingId) {
+    var l = byId(listingId);
+    if (!l) return;
+    if (!uid || !db) { gateModal(); return; }
+    if (canWrite === false) { infoModal(t("noWrite")); return; }
+    if (!mySeller()) { F.after = function () { startChat(listingId); }; profileModal(); return; }
+    if (l.sellerId === uid) return;
+    openChatModal();
+    selectChat(l.id + "-" + uid, { listingId: l.id, listingTitle: l.title, sellerId: l.sellerId, buyerId: uid });
+  }
+
   function copyPhone(btn) {
     var txt = btn.getAttribute("data-v");
     var done = function () { btn.textContent = t("cCopied"); setTimeout(function () { btn.textContent = t("cCopy"); }, 1600); };
@@ -686,7 +959,7 @@ footer p { margin: 0; max-width: 70ch; }
 
   /* ---------- Actions ---------- */
   function onCta() {
-    if (!db || !uid) { infoModal(t("needLogin")); return; }
+    if (!db || !uid) { gateModal(); return; }
     if (canWrite === false) { infoModal(t("noWrite")); return; }
     if (!mySeller()) { F.afterRegister = true; profileModal(); return; }
     listingModal(null);
@@ -711,6 +984,13 @@ footer p { margin: 0; max-width: 70ch; }
       case "close": closeModal(); break;
       case "contact": var it = byId(id); if (!it) { for (var i = 0; i < DEMOS.length; i++) if (DEMOS[i].id === id) it = { example: true }; } if (it) contactModal(it); break;
       case "copy": copyPhone(el); break;
+      case "login": gateModal(); break;
+      case "google": googleLogin(); break;
+      case "logout": if (auth) { closeModal(); auth.signOut(); } break;
+      case "inbox": if (!uid || !db) gateModal(); else openChatModal(); break;
+      case "chat": startChat(id); break;
+      case "chat-open": if (chats[id]) selectChat(id, chats[id]); break;
+      case "chat-back": var cw = $("chatwrap"); if (cw) cw.classList.remove("show-thread"); break;
       case "edit": var o = byId(id); if (o) listingModal(o); break;
       case "sold": patch(id, { status: "sold" }); break;
       case "reopen": patch(id, { status: "active" }); break;
@@ -729,25 +1009,34 @@ footer p { margin: 0; max-width: 70ch; }
   $("who").addEventListener("keydown", function (e) { if ((e.key === "Enter" || e.key === " ") && mySeller()) { e.preventDefault(); profileModal(); } });
 
   /* ---------- Boot ---------- */
-  async function boot() {
+  function boot() {
     applyLang(); renderAll();
-    var c = window.claude;
-    if (!c || !c.use) { dbState = "off"; renderAll(); return; }
-    try { user = await c.use("user"); } catch (e) {}
-    try { db = await c.use("db"); } catch (e) {}
-    if (user) {
-      try { var me = await user.me(); uid = me.id; meName = me.name || ""; } catch (e) {}
-      try { canWrite = await user.can("data.write"); } catch (e) {}
-    }
-    if (!db) { dbState = "off"; renderAll(); return; }
+    var cfg = window.FIREBASE_CONFIG;
+    if (!window.firebase || !cfg || !cfg.apiKey || /PASTE/.test(cfg.apiKey)) { dbState = "off"; cfgMissing = true; renderAll(); gateDone = true; gateModal(); return; }
+    try { firebase.initializeApp(cfg); db = firebase.firestore(); auth = firebase.auth(); } catch (e) { dbState = "error"; renderAll(); return; }
     dbState = "ok"; renderAll();
     db.collection("listings").orderBy("createdAt", "desc").limit(60).onSnapshot(function (snap) {
       listings = snap.docs.map(function (d) { var x = d.data() || {}; x.id = d.id; return x; });
       renderAll();
     }, function () { dbState = "error"; renderAll(); });
-    db.collection("sellers").limit(500).onSnapshot(function (snap) {
-      var m = {}; snap.docs.forEach(function (d) { m[d.id] = d.data(); }); sellers = m; renderAll();
-    }, function () {});
+    auth.onAuthStateChanged(function (u) {
+      if (sellersUnsub) { sellersUnsub(); sellersUnsub = null; }
+      if (chatsUnsub) { chatsUnsub(); chatsUnsub = null; }
+      if (!modal.hidden) closeModal();
+      sellers = {}; chats = {}; gateDone = false; F.mine = false;
+      uid = u ? u.uid : null; meName = (u && u.displayName) || ""; canWrite = !!u;
+      renderAll();
+      if (!u) { decideGate(); return; }
+      sellersUnsub = db.collection("sellers").limit(500).onSnapshot(function (snap) {
+        var m = {}; snap.docs.forEach(function (d) { m[d.id] = d.data(); }); sellers = m; renderAll();
+        renderChatList();
+        decideGate();
+      }, function () { decideGate(); });
+      chatsUnsub = db.collection("chats").where("participants", "array-contains", u.uid).limit(200).onSnapshot(function (snap) {
+        var m = {}; snap.docs.forEach(function (d) { var x = d.data() || {}; x.id = d.id; m[d.id] = x; });
+        chats = m; renderTop(); renderChatList();
+      }, function () {});
+    });
   }
   boot();
 })();
