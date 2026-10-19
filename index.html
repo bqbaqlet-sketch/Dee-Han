@@ -888,6 +888,14 @@ window.FIREBASE_CONFIG = {
         (isUnread(c) ? '<i class="dot sm" aria-hidden="true"></i>' : "") + "<span>" + esc(partnerName(c)) + '</span></b><span class="l2">' + esc(c.listingTitle || "") + '</span><span class="l3">' + esc(c.lastText || "") + "</span></button>";
     }).join("") : '<p class="chatnone">' + esc(t("chatEmpty")) + "</p>";
   }
+  function subscribeMsgs(cid) {
+    if (chatState.unsub) { chatState.unsub(); chatState.unsub = null; }
+    chatState.unsub = db.collection("chats/" + cid + "/messages").orderBy("at", "desc").limit(150).onSnapshot(function (snap) {
+      if (chatState.id !== cid) return;
+      chatState.msgs = snap.docs.map(function (d) { var x = d.data() || {}; x.id = d.id; return x; }).reverse();
+      renderMsgs(false);
+    }, function (e) { var el = $("c_err"); if (el) el.textContent = t("saveErr") + (e && e.code ? " [" + e.code + "]" : ""); });
+  }
   function selectChat(cid, meta) {
     if (chatState.unsub) { chatState.unsub(); chatState.unsub = null; }
     if (chatState.id && chatState.id !== cid) markSeen(chatState.id);
@@ -903,11 +911,7 @@ window.FIREBASE_CONFIG = {
     $("c_text").addEventListener("keydown", function (e) { if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); sendMsg(); } });
     renderMsgs(true);
     renderChatList();
-    chatState.unsub = db.collection("chats/" + cid + "/messages").orderBy("at", "desc").limit(150).onSnapshot(function (snap) {
-      if (chatState.id !== cid) return;
-      chatState.msgs = snap.docs.map(function (d) { var x = d.data() || {}; x.id = d.id; return x; }).reverse();
-      renderMsgs(false);
-    }, function () { var e = $("c_err"); if (e) e.textContent = t("saveErr"); });
+    if (chats[cid]) subscribeMsgs(cid);
     markSeen(cid);
     try { $("c_text").focus({ preventScroll: true }); } catch (e) {}
   }
@@ -928,14 +932,14 @@ window.FIREBASE_CONFIG = {
     var cid = chatState.id, m = chatState.meta || {}, err = $("c_err"), btn = $("c_send"), now = Date.now();
     btn.disabled = true; err.textContent = "";
     try {
-      var ref = db.doc("chats/" + cid), snap = await ref.get();
+      var ref = db.doc("chats/" + cid), exists = !!chats[cid];
       var base = { lastText: text.slice(0, 120), lastAt: now, lastFrom: uid };
-      if (snap.exists) { var up = Object.assign({}, base); up["seen." + uid] = now; await ref.update(up); }
+      if (exists) { var up = Object.assign({}, base); up["seen." + uid] = now; await ref.update(up); }
       else { var sn = {}; sn[uid] = now; await ref.set(Object.assign({ listingId: m.listingId || "", listingTitle: m.listingTitle || "", sellerId: m.sellerId, buyerId: m.buyerId, participants: [m.sellerId, m.buyerId], createdAt: now, seen: sn }, base)); }
       await db.collection("chats/" + cid + "/messages").add({ from: uid, text: text, at: now });
-      if (chatState.id === cid) ta.value = "";
+      if (chatState.id === cid) { ta.value = ""; if (!chatState.unsub) subscribeMsgs(cid); }
     } catch (e) {
-      if (chatState.id === cid) err.textContent = (e && e.code === "invalid_argument") ? t("noWrite") : t("chatSendErr");
+      if (chatState.id === cid) err.textContent = t("chatSendErr") + (e && e.code ? " [" + e.code + "]" : "");
     }
     if (chatState.id === cid) { btn.disabled = false; ta.focus(); }
   }
