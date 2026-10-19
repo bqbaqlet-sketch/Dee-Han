@@ -1,0 +1,756 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Онлайн урожай</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@400;500;700&family=Bitter:wght@600;800&family=Caveat:wght@600;700&display=swap">
+<style>
+/* Layout: plank-wood header, chalkboard hero, then a market table of paper price-tag cards on linen. */
+:root {
+  --bg: #e3dfc6;
+  --paper: #f2eedb;
+  --ink: #2b2a22;
+  --ink-soft: #5e5a47;
+  --wood: #6b4a2f;
+  --wood-dark: #4a321f;
+  --wood-light: #8a6240;
+  --leaf: #4d6b2c;
+  --leaf-ink: #f4f1dd;
+  --beet: #8c2f3d;
+  --yolk: #e2a72e;
+  --chalk: #26332b;
+  --chalk-ink: #f1efe2;
+  --line: rgba(70, 55, 30, 0.28);
+  --shadow: rgba(40, 28, 10, 0.4);
+  --font-display: "Bitter", Georgia, "Times New Roman", serif;
+  --font-hand: "Caveat", "Segoe Script", "Comic Sans MS", cursive;
+  --font-body: "Alegreya Sans", "Segoe UI", Roboto, Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1b1a15; --paper: #26241c; --ink: #ece6d0; --ink-soft: #b0a98f;
+    --wood: #3a2a1b; --wood-dark: #2a1d12; --wood-light: #5a4129;
+    --leaf: #8fb15a; --leaf-ink: #15200a; --beet: #e0808d; --yolk: #e8b94a;
+    --chalk: #121a15; --chalk-ink: #eee9d4; --line: rgba(235, 225, 190, 0.2); --shadow: rgba(0, 0, 0, 0.6);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1b1a15; --paper: #26241c; --ink: #ece6d0; --ink-soft: #b0a98f;
+  --wood: #3a2a1b; --wood-dark: #2a1d12; --wood-light: #5a4129;
+  --leaf: #8fb15a; --leaf-ink: #15200a; --beet: #e0808d; --yolk: #e8b94a;
+  --chalk: #121a15; --chalk-ink: #eee9d4; --line: rgba(235, 225, 190, 0.2); --shadow: rgba(0, 0, 0, 0.6);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.45;
+  background-image: radial-gradient(var(--line) 0.6px, transparent 0.7px);
+  background-size: 7px 7px;
+}
+body.lock { overflow: hidden; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid var(--yolk); outline-offset: 2px; }
+.wrap {
+  max-width: 1160px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* Plank header */
+.planks {
+  background-color: var(--wood);
+  background-image:
+    repeating-linear-gradient(180deg, transparent 0 38px, rgba(0,0,0,.38) 38px 40px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.03) 0 3px, rgba(0,0,0,.05) 3px 7px),
+    radial-gradient(ellipse 30px 12px at 18% 60%, rgba(0,0,0,.22), transparent 70%),
+    radial-gradient(ellipse 26px 10px at 74% 25%, rgba(0,0,0,.2), transparent 70%);
+  border-bottom: 5px solid var(--wood-dark);
+  color: #f3e7cf;
+}
+.bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 12px; flex-wrap: wrap; }
+.stamp {
+  font-family: var(--font-display); font-weight: 800; text-transform: uppercase; letter-spacing: .14em;
+  font-size: 17px; line-height: 1.1; padding: 9px 14px; border: 3px double #f3e7cf; border-radius: 3px;
+  transform: rotate(-1.5deg); background: rgba(0,0,0,.18); color: #f3e7cf; margin: 0;
+}
+.bar-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.lang { display: inline-flex; border: 2px solid #f3e7cf; border-radius: 3px; overflow: hidden; }
+.lang button { background: transparent; color: #f3e7cf; border: 0; padding: 6px 12px; font-weight: 700; letter-spacing: .06em; }
+.lang button[aria-pressed="true"] { background: #f3e7cf; color: var(--wood-dark); }
+.who {
+  background: rgba(0,0,0,.25); border: 2px solid #f3e7cf; color: #f3e7cf; border-radius: 3px;
+  padding: 6px 12px; max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* Chalkboard hero */
+.hero { padding-block: 22px 8px; }
+.board {
+  background: var(--chalk); color: var(--chalk-ink);
+  border: 10px solid var(--wood-light); border-radius: 4px;
+  box-shadow: inset 0 0 50px rgba(0,0,0,.5), 0 10px 22px -12px var(--shadow);
+  padding: 22px 22px 24px;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px 28px; align-items: end;
+}
+.eyebrow { font-family: var(--font-display); font-weight: 600; text-transform: uppercase; letter-spacing: .18em; font-size: 13px; color: var(--yolk); margin: 0 0 8px; }
+.board h1 { font-family: var(--font-hand); font-weight: 700; font-size: clamp(34px, 6vw, 56px); line-height: 1; margin: 0 0 10px; text-wrap: balance; }
+.board p.lead { margin: 0; max-width: 56ch; opacity: .92; }
+.board-side { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; min-width: 0; }
+.stats { display: flex; gap: 18px; font-family: var(--font-hand); font-size: 24px; color: var(--yolk); flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-align: center;
+  background: var(--leaf); color: var(--leaf-ink); border: 2px solid var(--leaf); border-radius: 3px;
+  padding: 10px 18px; font-weight: 700; font-size: 17px; letter-spacing: .02em; text-decoration: none;
+  box-shadow: 0 3px 0 rgba(0,0,0,.35);
+}
+.btn:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0,0,0,.35); }
+.btn.yolk { background: var(--yolk); border-color: var(--yolk); color: #2b2a22; }
+.btn.ghost { background: transparent; color: var(--ink); border-color: var(--ink-soft); box-shadow: none; }
+.btn.small { padding: 6px 12px; font-size: 15px; }
+.btn.danger { background: transparent; color: var(--beet); border-color: var(--beet); box-shadow: none; }
+
+/* Market table: filters */
+.filters { padding-block: 18px 6px; display: grid; gap: 12px; }
+.frow { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+.field input[type="search"], .field select, .field input[type="text"], .field input[type="number"], .field input[type="date"], .field textarea {
+  width: 100%; background: var(--paper); border: 2px solid var(--wood-light); border-radius: 3px; padding: 9px 12px; min-width: 0;
+}
+.field textarea { resize: vertical; min-height: 84px; }
+.chips { display: flex; gap: 8px; overflow-x: auto; padding: 4px 2px 8px; scrollbar-width: thin; }
+.chip {
+  flex: none; background: var(--paper); border: 2px solid var(--wood-light); border-radius: 3px; padding: 6px 13px;
+  font-weight: 500; white-space: nowrap;
+}
+.chip[aria-pressed="true"] { background: var(--leaf); border-color: var(--leaf); color: var(--leaf-ink); font-weight: 700; }
+.note {
+  background: var(--paper); border: 2px dashed var(--wood-light); border-radius: 3px; padding: 10px 14px; margin: 6px 0 0; color: var(--ink-soft);
+}
+.count { font-family: var(--font-hand); font-size: 24px; color: var(--ink-soft); margin: 8px 0 0; }
+
+/* Price-tag cards */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(255px, 1fr)); gap: 26px 22px; padding-block: 18px 36px; }
+.tag {
+  position: relative; background: var(--paper); border-radius: 3px; min-width: 0;
+  box-shadow: 0 1px 0 var(--line), 0 10px 18px -12px var(--shadow);
+  display: flex; flex-direction: column;
+}
+.tag::after { content: ""; position: absolute; inset: 6px; border: 1.5px dashed var(--line); border-radius: 2px; pointer-events: none; }
+.photo { position: relative; aspect-ratio: 4 / 3; margin: 10px 10px 0; background: var(--bg); overflow: hidden; border-radius: 2px; }
+.photo img, .photo .art, .photo .art svg { width: 100%; height: 100%; display: block; }
+.photo img { object-fit: cover; }
+.art svg { padding: 10px; }
+.price {
+  position: absolute; left: -4px; bottom: 10px; z-index: 2; background: var(--chalk); color: var(--chalk-ink);
+  font-family: var(--font-hand); font-weight: 700; font-size: 25px; line-height: 1; padding: 7px 12px 7px 24px; transform: rotate(-2deg);
+  border-radius: 2px 6px 6px 2px; box-shadow: 0 3px 8px -2px var(--shadow); max-width: 92%;
+}
+.price::before { content: ""; position: absolute; left: 8px; top: 50%; width: 8px; height: 8px; margin-top: -4px; border-radius: 50%; background: var(--paper); box-shadow: inset 0 1px 2px rgba(0,0,0,.5); }
+.price small { font-family: var(--font-body); font-size: 14px; font-weight: 500; opacity: .85; }
+.price.neg { font-size: 20px; }
+.badge {
+  position: absolute; right: 8px; top: 8px; z-index: 2; font-family: var(--font-display); font-weight: 800; text-transform: uppercase;
+  letter-spacing: .1em; font-size: 11px; padding: 4px 8px; color: var(--beet); background: var(--paper); border: 2px solid var(--beet);
+  border-radius: 2px; transform: rotate(3deg);
+}
+.badge.ex { color: var(--ink-soft); border-color: var(--ink-soft); }
+.soldmark {
+  position: absolute; inset: 0; z-index: 3; display: grid; place-items: center; background: rgba(20,15,5,.45);
+  font-family: var(--font-display); font-weight: 800; text-transform: uppercase; letter-spacing: .2em; color: #fff; font-size: 26px;
+}
+.soldmark span { border: 4px solid #fff; padding: 4px 14px; transform: rotate(-8deg); }
+.tbody { padding: 14px 18px 18px; display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 0; }
+.tbody h3 { font-family: var(--font-display); font-weight: 800; font-size: 19px; line-height: 1.2; margin: 0; overflow-wrap: anywhere; }
+.meta { display: flex; flex-wrap: wrap; gap: 2px 14px; color: var(--ink-soft); font-size: 15.5px; }
+.meta b { color: var(--ink); font-weight: 700; }
+.desc { margin: 0; font-size: 15.5px; overflow-wrap: anywhere; }
+.seller { font-size: 15px; color: var(--ink-soft); border-top: 1.5px dashed var(--line); padding-top: 8px; margin-top: auto; overflow-wrap: anywhere; }
+.actions { display: flex; gap: 8px; flex-wrap: wrap; position: relative; z-index: 4; }
+.actions .btn { flex: 1 1 auto; }
+.empty { grid-column: 1 / -1; text-align: center; padding: 34px 16px; border: 2px dashed var(--wood-light); border-radius: 3px; background: var(--paper); }
+.empty h3 { font-family: var(--font-hand); font-size: 32px; margin: 0 0 4px; }
+.empty p { margin: 0; color: var(--ink-soft); }
+footer { background: var(--wood-dark); color: #e8dcc2; padding-block: 18px; border-top: 5px solid var(--wood); font-size: 15px; }
+footer p { margin: 0; max-width: 70ch; }
+
+/* Modal */
+.overlay {
+  position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; background: rgba(20, 14, 4, .62);
+  padding: calc(16px + env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) calc(16px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+}
+.panel {
+  position: relative; width: 100%; max-width: 520px; max-height: 100%; overflow-y: auto; background: var(--paper);
+  border: 4px solid var(--wood-light); border-radius: 4px; padding: 20px 20px 22px; box-shadow: 0 20px 40px -10px rgba(0,0,0,.6);
+}
+.panel h2 { font-family: var(--font-display); font-weight: 800; font-size: 22px; margin: 0 38px 6px 0; line-height: 1.2; }
+.panel p.sub { margin: 0 0 14px; color: var(--ink-soft); }
+.xbtn { position: absolute; right: 10px; top: 10px; width: 36px; height: 36px; border: 2px solid var(--ink-soft); background: transparent; border-radius: 3px; font-size: 20px; line-height: 1; }
+.form { display: grid; gap: 12px; }
+.field label { display: block; font-weight: 700; margin-bottom: 4px; font-size: 15.5px; }
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+.drop {
+  display: grid; place-items: center; min-height: 120px; border: 2px dashed var(--wood-light); border-radius: 3px; cursor: pointer;
+  text-align: center; padding: 8px; color: var(--ink-soft); background: var(--bg); overflow: hidden;
+}
+.drop img { max-height: 190px; max-width: 100%; display: block; }
+.drop input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.drop:focus-within { outline: 3px solid var(--yolk); outline-offset: 2px; }
+.check { display: flex; gap: 10px; align-items: flex-start; font-weight: 500; }
+.check input { width: 22px; height: 22px; margin-top: 2px; accent-color: var(--leaf); flex: none; }
+.err { color: var(--beet); font-weight: 700; min-height: 1.2em; margin: 0; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; }
+.row .btn { flex: 1 1 auto; }
+.phone { font-family: var(--font-display); font-weight: 800; font-size: 24px; user-select: all; -webkit-user-select: all; overflow-wrap: anywhere; margin: 4px 0 10px; }
+.kv { margin: 0 0 10px; color: var(--ink-soft); }
+.kv b { color: var(--ink); }
+
+@media (max-width: 720px) {
+  .board { grid-template-columns: 1fr; padding: 18px 16px 20px; }
+  .frow { grid-template-columns: 1fr 1fr; }
+  .frow .field:first-child { grid-column: 1 / -1; }
+  .grid { grid-template-columns: 1fr; }
+  .two { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<header class="planks">
+  <div class="wrap bar">
+    <h2 class="stamp" id="brand" data-i="brand">Онлайн урожай</h2>
+    <div class="bar-right">
+      <span class="who" id="who" hidden></span>
+      <div class="lang" role="group" aria-label="Язык / Тіл">
+        <button type="button" data-act="lang-ru" id="lang-ru" aria-pressed="true">РУС</button>
+        <button type="button" data-act="lang-kk" id="lang-kk" aria-pressed="false">ҚАЗ</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero wrap" aria-labelledby="h1">
+    <div class="board">
+      <div>
+        <p class="eyebrow" data-i="eyebrow"></p>
+        <h1 id="h1" data-i="heroTitle"></h1>
+        <p class="lead" data-i="heroText"></p>
+      </div>
+      <div class="board-side">
+        <div class="stats" id="stats"></div>
+        <button type="button" class="btn yolk" id="mainCta" data-act="cta"></button>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap filters" aria-label="Фильтры">
+    <div class="frow">
+      <div class="field"><input type="search" id="q" data-ph="searchPh" autocomplete="off" aria-label="Поиск"></div>
+      <div class="field"><select id="regionSel" aria-label="Регион"></select></div>
+      <div class="field"><select id="sortSel" aria-label="Сортировка"></select></div>
+    </div>
+    <div class="chips" id="chips" role="group" aria-label="Категории"></div>
+    <div id="notice"></div>
+    <p class="count" id="count"></p>
+  </section>
+
+  <section class="wrap">
+    <div class="grid" id="grid"></div>
+  </section>
+</main>
+
+<footer><div class="wrap"><p data-i="footer"></p></div></footer>
+<div class="overlay" id="modal" hidden></div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- Dictionary ---------- */
+  var D = {
+    ru: {
+      brand: "Онлайн урожай", eyebrow: "Только свой урожай",
+      heroTitle: "Свежий урожай прямо от тех, кто его вырастил",
+      heroText: "Выставьте свой товар за пару минут. Покупатель увидит объявление и свяжется с вами напрямую: по телефону, в WhatsApp или Telegram.",
+      sell: "Выставить урожай", become: "Стать продавцом", myProfile: "Мой профиль",
+      statAds: "Объявлений: {n}", statSellers: "Продавцов: {n}",
+      searchPh: "Что ищете? Картофель, яблоки…", all: "Всё", allRegions: "Все регионы",
+      sortNew: "Сначала новые", sortCheap: "Подешевле", mine: "Мои объявления", found: "Найдено: {n}",
+      emptyT: "Пока ничего не нашлось", emptyX: "Попробуйте другой запрос или выберите все регионы.",
+      examplesNote: "Пока нет объявлений. Так будут выглядеть карточки, это примеры.",
+      offNote: "Сейчас показаны примеры. Чтобы видеть реальные объявления и публиковать свои, откройте сайт, войдя в аккаунт.",
+      errNote: "Не удалось загрузить объявления. Обновите страницу.",
+      own: "Свой урожай", sold: "Продано", example: "Пример", priceNeg: "Цена договорная",
+      avail: "В наличии", harvested: "Собрано", contact: "Связаться", edit: "Изменить", del: "Удалить",
+      delSure: "Точно удалить?", markSold: "Продано", reopen: "Вернуть в продажу", seller: "Продавец",
+      fTitleNew: "Новое объявление", fTitleEdit: "Изменить объявление", fPhoto: "Фото урожая",
+      fPhotoHint: "Нажмите, чтобы выбрать фото", fName: "Что продаёте", fNamePh: "Например, картофель «Невский»",
+      fCat: "Категория", fPrice: "Цена за единицу, ₸", fPricePh: "Пусто: договорная", fUnit: "Единица",
+      fQty: "Сколько в наличии", fRegion: "Регион", fRegionPick: "Выберите регион", fHarvest: "Дата сбора", fDesc: "Описание",
+      fDescPh: "Сорт, размер, как выращено, самовывоз или доставка",
+      fOwn: "Подтверждаю: это мой урожай, я вырастил(а) его сам(а)",
+      publish: "Опубликовать", save: "Сохранить", cancel: "Отмена",
+      eName: "Укажите название товара", eQty: "Укажите количество", eRegion: "Выберите регион",
+      eOwn: "Поставьте отметку, что это ваш урожай",
+      saveErr: "Не удалось сохранить. Проверьте соединение и попробуйте ещё раз.",
+      photoErr: "Не удалось обработать фото. Выберите другое.",
+      pTitle: "Регистрация продавца", pTitleEdit: "Ваш профиль",
+      pText: "Покупатели увидят это в объявлениях, чтобы связаться с вами.",
+      pName: "Имя", pNamePh: "Как к вам обращаться", pPhone: "Телефон", pPhonePh: "+7 701 000 00 00",
+      pTg: "Telegram (необязательно)", pTgPh: "@имя", pAbout: "О хозяйстве (необязательно)",
+      pAboutPh: "Например, огород в Талгаре, без химии", pSave: "Зарегистрироваться", pSaveEdit: "Сохранить",
+      ePName: "Укажите имя", ePPhone: "Укажите телефон: 10–11 цифр",
+      needLogin: "Чтобы выставлять урожай, войдите в аккаунт и откройте сайт снова.",
+      noWrite: "У вас пока нет права публиковать. Попросите владельца сайта открыть доступ участника.",
+      cTitle: "Связаться с продавцом", cPhone: "Телефон", cCall: "Позвонить", cCopy: "Скопировать",
+      cCopied: "Скопировано", cWa: "Написать в WhatsApp", cTg: "Написать в Telegram",
+      cNote: "Договаривайтесь о цене, оплате и доставке напрямую с продавцом.",
+      cExample: "Это пример объявления, контактов у него нет.", cNone: "Контакты продавца недоступны.",
+      cProduct: "Товар", footer: "Объявления размещают продавцы. Цену, оплату и доставку покупатель и продавец обсуждают сами.",
+      close: "Закрыть", ok: "Понятно"
+    },
+    kk: {
+      brand: "Онлайн егін", eyebrow: "Тек өз егініміз",
+      heroTitle: "Жаңа піскен өнім өсірген адамнан тікелей",
+      heroText: "Тауарыңызды бірнеше минутта орналастырыңыз. Сатып алушы хабарландыруды көріп, сізбен телефон, WhatsApp немесе Telegram арқылы тікелей байланысады.",
+      sell: "Егінді орналастыру", become: "Сатушы болу", myProfile: "Менің профилім",
+      statAds: "Хабарландыру: {n}", statSellers: "Сатушы: {n}",
+      searchPh: "Не іздейсіз? Картоп, алма…", all: "Барлығы", allRegions: "Барлық өңір",
+      sortNew: "Алдымен жаңалары", sortCheap: "Арзанырақтары", mine: "Менің хабарландыруларым", found: "Табылды: {n}",
+      emptyT: "Әзірге ештеңе табылмады", emptyX: "Басқа сұрау енгізіңіз немесе барлық өңірді таңдаңыз.",
+      examplesNote: "Әзірге хабарландыру жоқ. Карточкалар былай көрінеді, бұл мысалдар.",
+      offNote: "Қазір мысалдар көрсетілген. Нақты хабарландыруларды көру және өзіңіздікін қою үшін сайтты аккаунтпен кіріп ашыңыз.",
+      errNote: "Хабарландырулар жүктелмеді. Бетті жаңартыңыз.",
+      own: "Өз егінім", sold: "Сатылды", example: "Мысал", priceNeg: "Бағасы келісім бойынша",
+      avail: "Бар", harvested: "Жиналған", contact: "Байланысу", edit: "Өзгерту", del: "Жою",
+      delSure: "Растайсыз ба?", markSold: "Сатылды", reopen: "Қайта сатылымға шығару", seller: "Сатушы",
+      fTitleNew: "Жаңа хабарландыру", fTitleEdit: "Хабарландыруды өзгерту", fPhoto: "Егін суреті",
+      fPhotoHint: "Суретті таңдау үшін басыңыз", fName: "Не сатасыз", fNamePh: "Мысалы, «Невский» картобы",
+      fCat: "Санат", fPrice: "Бір бірлік бағасы, ₸", fPricePh: "Бос болса: келісім бойынша", fUnit: "Бірлік",
+      fQty: "Қанша бар", fRegion: "Өңір", fRegionPick: "Өңірді таңдаңыз", fHarvest: "Жиналған күні", fDesc: "Сипаттама",
+      fDescPh: "Сұрпы, көлемі, қалай өсірілген, өзі алып кету немесе жеткізу",
+      fOwn: "Растаймын: бұл менің егінім, өзім өсірдім",
+      publish: "Жариялау", save: "Сақтау", cancel: "Бас тарту",
+      eName: "Тауар атауын жазыңыз", eQty: "Мөлшерін жазыңыз", eRegion: "Өңірді таңдаңыз",
+      eOwn: "Бұл өз егініңіз екенін белгілеңіз",
+      saveErr: "Сақтау мүмкін болмады. Байланысты тексеріп, қайталап көріңіз.",
+      photoErr: "Суретті өңдеу мүмкін болмады. Басқасын таңдаңыз.",
+      pTitle: "Сатушыны тіркеу", pTitleEdit: "Сіздің профиліңіз",
+      pText: "Сатып алушылар сізбен байланысу үшін мұны хабарландыруда көреді.",
+      pName: "Аты", pNamePh: "Сізге қалай жүгінеміз", pPhone: "Телефон", pPhonePh: "+7 701 000 00 00",
+      pTg: "Telegram (міндетті емес)", pTgPh: "@аты", pAbout: "Шаруашылық туралы (міндетті емес)",
+      pAboutPh: "Мысалы, Талғардағы бақша, химиясыз", pSave: "Тіркелу", pSaveEdit: "Сақтау",
+      ePName: "Атыңызды жазыңыз", ePPhone: "Телефонды жазыңыз: 10–11 сан",
+      needLogin: "Егінді орналастыру үшін аккаунтқа кіріп, сайтты қайта ашыңыз.",
+      noWrite: "Әзірге жариялауға құқығыңыз жоқ. Сайт иесінен қатысушы ретінде рұқсат беруін сұраңыз.",
+      cTitle: "Сатушымен байланысу", cPhone: "Телефон", cCall: "Қоңырау шалу", cCopy: "Көшіру",
+      cCopied: "Көшірілді", cWa: "WhatsApp-қа жазу", cTg: "Telegram-ға жазу",
+      cNote: "Баға, төлем және жеткізу туралы сатушымен тікелей келісіңіз.",
+      cExample: "Бұл хабарландыру мысалы, байланыс деректері жоқ.", cNone: "Сатушының байланыс деректері қолжетімсіз.",
+      cProduct: "Тауар", footer: "Хабарландыруларды сатушылар орналастырады. Баға, төлем мен жеткізуді сатып алушы мен сатушы өздері келіседі.",
+      close: "Жабу", ok: "Түсінікті"
+    }
+  };
+  var CATS = [
+    ["veg", "Овощи", "Көкөністер"], ["fruit", "Фрукты", "Жемістер"], ["berry", "Ягоды", "Жидектер"],
+    ["greens", "Зелень", "Жасыл шөптер"], ["grain", "Зерно и бобовые", "Астық және бұршақ"],
+    ["melon", "Бахча", "Бақша дақылдары"], ["sprout", "Саженцы и цветы", "Көшет пен гүл"], ["nuts", "Грибы и орехи", "Саңырауқұлақ, жаңғақ"]
+  ];
+  var UNITS = [["kg", "кг", "кг"], ["sack", "мешок", "қап"], ["crate", "ящик", "жәшік"], ["bucket", "ведро", "шелек"], ["bunch", "пучок", "бау"], ["pc", "шт.", "дана"], ["l", "л", "л"]];
+  var REGIONS = [
+    ["almaty_city", "Алматы", "Алматы"], ["almaty", "Алматинская обл.", "Алматы обл."], ["jetisu", "Жетысуская обл.", "Жетісу обл."],
+    ["astana", "Астана", "Астана"], ["shymkent", "Шымкент", "Шымкент"], ["turkestan", "Туркестанская обл.", "Түркістан обл."],
+    ["zhambyl", "Жамбылская обл.", "Жамбыл обл."], ["kyzylorda", "Кызылординская обл.", "Қызылорда обл."],
+    ["aktobe", "Актюбинская обл.", "Ақтөбе обл."], ["atyrau", "Атырауская обл.", "Атырау обл."],
+    ["wko", "Западно-Казахстанская обл.", "Батыс Қазақстан обл."], ["mangystau", "Мангистауская обл.", "Маңғыстау обл."],
+    ["kostanay", "Костанайская обл.", "Қостанай обл."], ["akmola", "Акмолинская обл.", "Ақмола обл."],
+    ["nko", "Северо-Казахстанская обл.", "Солтүстік Қазақстан обл."], ["pavlodar", "Павлодарская обл.", "Павлодар обл."],
+    ["eko", "Восточно-Казахстанская обл.", "Шығыс Қазақстан обл."], ["abai", "Абайская обл.", "Абай обл."],
+    ["karaganda", "Карагандинская обл.", "Қарағанды обл."], ["ulytau", "Улытауская обл.", "Ұлытау обл."]
+  ];
+
+  /* ---------- Example cards (shown only when there are no real ads) ---------- */
+  var DAY = 86400000, NOW = Date.now();
+  function dayStr(n) { var d = new Date(NOW - n * DAY); return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
+  var DEMOS = [
+    { id: "x1", t: ["Картофель", "Картоп"], d: ["Крупный, в мешках по 40 кг. Самовывоз с поля.", "Ірі, 40 келілік қаптарда. Өзі алып кетеді."], cat: "veg", price: 250, unit: "kg", qty: 300, region: "almaty", hv: dayStr(3) },
+    { id: "x2", t: ["Томаты", "Қызанақ"], d: ["Мясистые, без химии, ящики по 10 кг.", "Етті, химиясыз, 10 келілік жәшіктерде."], cat: "veg", price: 400, unit: "kg", qty: 80, region: "turkestan", hv: dayStr(2) },
+    { id: "x3", t: ["Яблоки «Апорт»", "«Апорт» алмасы"], d: ["Из сада, ранний сбор, хорошо хранятся.", "Бақтан, ерте жиналған, жақсы сақталады."], cat: "fruit", price: 900, unit: "kg", qty: 150, region: "almaty_city", hv: dayStr(5) },
+    { id: "x4", t: ["Облепиха", "Шырғанақ"], d: ["Свежая, ветки обобраны, ведро 5 кг.", "Балғын, 5 келілік шелекте."], cat: "berry", price: 1200, unit: "kg", qty: 40, region: "eko", hv: dayStr(1) },
+    { id: "x5", t: ["Укроп и петрушка", "Аскөк пен ақжелкен"], d: ["Тепличная зелень, пучки по 100 г.", "Жылыжай көк шөбі, 100 граммдық бау."], cat: "greens", price: 150, unit: "bunch", qty: 60, region: "shymkent", hv: dayStr(0) },
+    { id: "x6", t: ["Тыква", "Асқабақ"], d: ["Мускатная, сладкая, от 3 до 6 кг.", "Мускат асқабақ, тәтті, 3–6 кг."], cat: "melon", price: 150, unit: "kg", qty: 200, region: "pavlodar", hv: dayStr(4) }
+  ];
+
+  /* ---------- Category illustrations ---------- */
+  var ART = {
+    veg: ["#d9e3b8", '<path d="M60 80 L46 32 Q60 26 74 32 Z" fill="#e0742a"/><path d="M52 42h10M50 54h12M54 66h8" stroke="#b85a1c" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M60 28 C50 16 44 12 40 6 C52 8 58 16 60 26 C62 16 68 8 80 6 C76 12 70 16 60 28Z" fill="#4d7a2a"/>'],
+    fruit: ["#f0d9c8", '<circle cx="48" cy="52" r="24" fill="#b8332c"/><circle cx="72" cy="52" r="24" fill="#c53d33"/><path d="M60 32 q2-12 10-16" stroke="#5a3a1e" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M64 24 q12-8 20 0 q-10 8 -20 0z" fill="#5c8a33"/>'],
+    berry: ["#e6d6e2", '<g fill="#6b2d5c"><circle cx="48" cy="50" r="12"/><circle cx="72" cy="50" r="12"/><circle cx="60" cy="66" r="12"/><circle cx="60" cy="36" r="12"/></g><path d="M60 22 q10-10 22-6 q-8 10 -22 6z" fill="#4d7a2a"/>'],
+    greens: ["#d3e0c0", '<path d="M60 80 C40 60 40 30 60 10 C80 30 80 60 60 80Z" fill="#4d7a2a"/><path d="M60 78 V18" stroke="#2f5219" stroke-width="2" fill="none"/><path d="M60 80 C30 70 22 50 24 36 C44 44 56 60 60 80Z" fill="#5f9033"/><path d="M60 80 C90 70 98 50 96 36 C76 44 64 60 60 80Z" fill="#5f9033"/>'],
+    grain: ["#ecdfae", '<path d="M60 84 V20" stroke="#a37a1f" stroke-width="3" fill="none"/><g fill="#d8a62c"><ellipse cx="52" cy="32" rx="6" ry="10" transform="rotate(-25 52 32)"/><ellipse cx="68" cy="32" rx="6" ry="10" transform="rotate(25 68 32)"/><ellipse cx="50" cy="50" rx="6" ry="10" transform="rotate(-25 50 50)"/><ellipse cx="70" cy="50" rx="6" ry="10" transform="rotate(25 70 50)"/><ellipse cx="52" cy="68" rx="6" ry="10" transform="rotate(-25 52 68)"/><ellipse cx="68" cy="68" rx="6" ry="10" transform="rotate(25 68 68)"/><ellipse cx="60" cy="16" rx="5" ry="9"/></g>'],
+    melon: ["#d8e6c9", '<ellipse cx="60" cy="48" rx="38" ry="30" fill="#3f7a35"/><path d="M60 18 C46 32 46 64 60 78 M60 18 C74 32 74 64 60 78 M60 18 V78" stroke="#9cc46a" stroke-width="3" fill="none"/>'],
+    sprout: ["#e5dcc6", '<path d="M42 62 H78 L72 82 H48Z" fill="#a8582f"/><path d="M60 62 V36" stroke="#3f6a22" stroke-width="3" fill="none"/><path d="M60 44 C44 44 38 34 38 26 C52 26 60 34 60 44Z" fill="#5f9033"/><path d="M60 38 C74 38 82 28 82 20 C68 20 60 28 60 38Z" fill="#4d7a2a"/>'],
+    nuts: ["#e2d6c4", '<path d="M24 52 C24 28 96 28 96 52Z" fill="#a8632f"/><rect x="50" y="52" width="20" height="26" rx="6" fill="#efe3c8"/><circle cx="46" cy="42" r="4" fill="#efe3c8"/><circle cx="68" cy="38" r="5" fill="#efe3c8"/>']
+  };
+  function art(cat) {
+    var a = ART[cat] || ART.veg;
+    return '<div class="art" style="background:' + a[0] + '"><svg viewBox="0 0 120 90" aria-hidden="true" preserveAspectRatio="xMidYMid meet">' + a[1] + "</svg></div>";
+  }
+
+  /* ---------- Helpers ---------- */
+  var $ = function (id) { return document.getElementById(id); };
+  var lang = "ru";
+  try { var sl = localStorage.getItem("ur_lang"); if (sl === "ru" || sl === "kk") lang = sl; else if (/^kk/i.test(navigator.language || "")) lang = "kk"; } catch (e) {}
+  function t(k, v) {
+    var s = (D[lang] && D[lang][k]) || D.ru[k] || k;
+    if (v) for (var x in v) s = s.replace("{" + x + "}", v[x]);
+    return s;
+  }
+  function L(arr) { return lang === "kk" ? arr[2] : arr[1]; }
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function find(list, key) { for (var i = 0; i < list.length; i++) if (list[i][0] === key) return list[i]; return null; }
+  function catLabel(k) { var c = find(CATS, k); return c ? L(c) : ""; }
+  function unitLabel(k) { var c = find(UNITS, k); return c ? L(c) : ""; }
+  function regionLabel(k) { var c = find(REGIONS, k); return c ? L(c) : ""; }
+  function digits(s) { return String(s || "").replace(/\D/g, ""); }
+  function normPhone(s) { var d = digits(s); if (d.length === 11 && d[0] === "8") d = "7" + d.slice(1); if (d.length === 10) d = "7" + d; return d; }
+  function fmtPhone(d) { return (d.length === 11 && d[0] === "7") ? "+7 " + d.slice(1, 4) + " " + d.slice(4, 7) + " " + d.slice(7, 9) + " " + d.slice(9) : "+" + d; }
+  function fmtMoney(n) { return Number(n).toLocaleString(lang === "kk" ? "kk-KZ" : "ru-RU"); }
+  function fmtDate(s) {
+    if (!s) return "";
+    var d = new Date(s + "T00:00:00");
+    if (isNaN(d.getTime())) return "";
+    try { return d.toLocaleDateString(lang === "kk" ? "kk-KZ" : "ru-RU", { day: "numeric", month: "long" }); } catch (e) { return s; }
+  }
+  function todayStr() { return dayStr(0); }
+
+  /* ---------- State ---------- */
+  var db = null, user = null, uid = null, canWrite = null, meName = "";
+  var listings = [], sellers = {}, dbState = "loading";
+  var F = { q: "", cat: "all", region: "all", sort: "new", mine: false };
+  var pendingDel = null, pendingPhoto = null, editing = null;
+  var modal = $("modal");
+
+  function mySeller() { return uid && sellers[uid] ? sellers[uid] : null; }
+  function isReal() { return dbState === "ok" && listings.length > 0; }
+
+  /* ---------- Static text and selects ---------- */
+  function applyLang() {
+    document.documentElement.lang = lang === "kk" ? "kk" : "ru";
+    document.querySelectorAll("[data-i]").forEach(function (el) { el.textContent = t(el.getAttribute("data-i")); });
+    document.querySelectorAll("[data-ph]").forEach(function (el) { el.placeholder = t(el.getAttribute("data-ph")); });
+    $("lang-ru").setAttribute("aria-pressed", String(lang === "ru"));
+    $("lang-kk").setAttribute("aria-pressed", String(lang === "kk"));
+    var rs = $("regionSel");
+    rs.innerHTML = '<option value="all">' + esc(t("allRegions")) + "</option>" + REGIONS.map(function (r) { return '<option value="' + r[0] + '">' + esc(L(r)) + "</option>"; }).join("");
+    rs.value = F.region;
+    var ss = $("sortSel");
+    ss.innerHTML = '<option value="new">' + esc(t("sortNew")) + '</option><option value="cheap">' + esc(t("sortCheap")) + "</option>";
+    ss.value = F.sort;
+    $("q").setAttribute("aria-label", t("searchPh"));
+    $("regionSel").setAttribute("aria-label", t("fRegion"));
+  }
+
+  /* ---------- Rendering ---------- */
+  function renderTop() {
+    var s = mySeller();
+    var who = $("who");
+    if (s) { who.hidden = false; who.textContent = s.name; } else { who.hidden = true; }
+    var cta = $("mainCta");
+    cta.textContent = s ? t("sell") : (uid && db ? t("become") : t("sell"));
+    var stats = $("stats");
+    if (dbState === "ok" && listings.length) {
+      var active = listings.filter(function (l) { return l.status !== "sold"; }).length;
+      var n = Object.keys(sellers).length;
+      stats.innerHTML = "<span>" + esc(t("statAds", { n: active })) + "</span><span>" + esc(t("statSellers", { n: n })) + "</span>";
+    } else stats.innerHTML = "";
+  }
+  function renderChips() {
+    var items = [["all", t("all")]].concat(CATS.map(function (c) { return [c[0], L(c)]; }));
+    var h = items.map(function (c) { return '<button type="button" class="chip" data-act="cat" data-v="' + c[0] + '" aria-pressed="' + (F.cat === c[0]) + '">' + esc(c[1]) + "</button>"; }).join("");
+    if (mySeller()) h += '<button type="button" class="chip" data-act="mine" aria-pressed="' + F.mine + '">' + esc(t("mine")) + "</button>";
+    $("chips").innerHTML = h;
+  }
+  function renderNotice() {
+    var m = "";
+    if (dbState === "off") m = t("offNote");
+    else if (dbState === "error") m = t("errNote");
+    else if (dbState === "ok" && listings.length === 0) m = t("examplesNote");
+    $("notice").innerHTML = m ? '<p class="note">' + esc(m) + "</p>" : "";
+  }
+  function viewItems() {
+    var real = isReal();
+    var src = real ? listings.slice() : DEMOS.map(function (d) {
+      return { id: d.id, example: true, title: lang === "kk" ? d.t[1] : d.t[0], desc: lang === "kk" ? d.d[1] : d.d[0], category: d.cat, price: d.price, unit: d.unit, qty: d.qty, region: d.region, harvest: d.hv, own: true, createdAt: NOW - DAY };
+    });
+    var q = F.q.trim().toLowerCase();
+    var out = src.filter(function (l) {
+      if (F.cat !== "all" && l.category !== F.cat) return false;
+      if (F.region !== "all" && l.region !== F.region) return false;
+      if (F.mine && l.sellerId !== uid) return false;
+      if (q) {
+        var sn = (sellers[l.sellerId] && sellers[l.sellerId].name) || "";
+        var hay = (l.title + " " + (l.desc || "") + " " + catLabel(l.category) + " " + sn).toLowerCase();
+        if (hay.indexOf(q) === -1) return false;
+      }
+      return true;
+    });
+    if (F.sort === "cheap") out.sort(function (a, b) { return (a.price > 0 ? a.price : 1e12) - (b.price > 0 ? b.price : 1e12); });
+    else out.sort(function (a, b) { return (b.createdAt || 0) - (a.createdAt || 0); });
+    return out;
+  }
+  function cardHtml(l) {
+    var mine = !l.example && uid && l.sellerId === uid;
+    var photo = l.photo ? '<img src="' + esc(l.photo) + '" alt="' + esc(l.title) + '" loading="lazy">' : art(l.category);
+    var price = l.price > 0 ? '<div class="price">' + esc(fmtMoney(l.price)) + " ₸ <small>/ " + esc(unitLabel(l.unit)) + "</small></div>" : '<div class="price neg">' + esc(t("priceNeg")) + "</div>";
+    var badge = l.example ? '<span class="badge ex">' + esc(t("example")) + "</span>" : (l.own ? '<span class="badge">' + esc(t("own")) + "</span>" : "");
+    var sold = l.status === "sold" ? '<div class="soldmark"><span>' + esc(t("sold")) + "</span></div>" : "";
+    var sn = l.example ? t("seller") + " (" + t("example").toLowerCase() + ")" : ((sellers[l.sellerId] && sellers[l.sellerId].name) || t("seller"));
+    var meta = "";
+    if (l.qty > 0) meta += "<span>" + esc(t("avail")) + ": <b>" + esc(fmtMoney(l.qty)) + " " + esc(unitLabel(l.unit)) + "</b></span>";
+    if (l.region) meta += "<span>" + esc(regionLabel(l.region)) + "</span>";
+    if (l.harvest) meta += "<span>" + esc(t("harvested")) + ": " + esc(fmtDate(l.harvest)) + "</span>";
+    var acts = "";
+    if (mine) {
+      acts += '<button type="button" class="btn small ghost" data-act="edit" data-id="' + esc(l.id) + '">' + esc(t("edit")) + "</button>";
+      acts += l.status === "sold"
+        ? '<button type="button" class="btn small ghost" data-act="reopen" data-id="' + esc(l.id) + '">' + esc(t("reopen")) + "</button>"
+        : '<button type="button" class="btn small ghost" data-act="sold" data-id="' + esc(l.id) + '">' + esc(t("markSold")) + "</button>";
+      acts += pendingDel === l.id
+        ? '<button type="button" class="btn small danger" data-act="delok" data-id="' + esc(l.id) + '">' + esc(t("delSure")) + "</button>"
+        : '<button type="button" class="btn small danger" data-act="del" data-id="' + esc(l.id) + '">' + esc(t("del")) + "</button>";
+    } else {
+      acts = '<button type="button" class="btn" data-act="contact" data-id="' + esc(l.id) + '">' + esc(t("contact")) + "</button>";
+    }
+    return '<article class="tag"><div class="photo">' + photo + price + badge + sold + '</div><div class="tbody"><h3>' + esc(l.title) + '</h3><div class="meta">' + meta + "</div>" +
+      (l.desc ? '<p class="desc">' + esc(l.desc) + "</p>" : "") + '<div class="seller">' + esc(sn) + '</div><div class="actions">' + acts + "</div></div></article>";
+  }
+  function renderGrid() {
+    var items = viewItems();
+    $("count").textContent = t("found", { n: items.length });
+    $("grid").innerHTML = items.length ? items.map(cardHtml).join("") :
+      '<div class="empty"><h3>' + esc(t("emptyT")) + "</h3><p>" + esc(t("emptyX")) + "</p></div>";
+  }
+  function renderAll() { renderTop(); renderChips(); renderNotice(); renderGrid(); }
+
+  /* ---------- Modal ---------- */
+  function openModal(html) {
+    modal.innerHTML = '<div class="panel" role="dialog" aria-modal="true" aria-labelledby="mtitle"><button type="button" class="xbtn" data-act="close" aria-label="' + esc(t("close")) + '">×</button>' + html + "</div>";
+    modal.hidden = false;
+    document.body.classList.add("lock");
+    var f = modal.querySelector("input:not([type=file]), select, textarea, .btn");
+    if (f) try { f.focus({ preventScroll: true }); } catch (e) {}
+  }
+  function closeModal() { modal.hidden = true; modal.innerHTML = ""; document.body.classList.remove("lock"); pendingPhoto = null; editing = null; }
+
+  function infoModal(msg) {
+    openModal('<h2 id="mtitle">' + esc(t("brand")) + '</h2><p class="sub">' + esc(msg) + '</p><div class="row"><button type="button" class="btn" data-act="close">' + esc(t("ok")) + "</button></div>");
+  }
+
+  function profileModal() {
+    var s = mySeller() || {};
+    var isEdit = !!mySeller();
+    openModal('<h2 id="mtitle">' + esc(isEdit ? t("pTitleEdit") : t("pTitle")) + '</h2><p class="sub">' + esc(t("pText")) + "</p>" +
+      '<form class="form" id="profileForm" novalidate>' +
+      '<div class="field"><label for="p_name">' + esc(t("pName")) + '</label><input type="text" id="p_name" maxlength="60" autocomplete="name" placeholder="' + esc(t("pNamePh")) + '" value="' + esc(s.name || meName || "") + '"></div>' +
+      '<div class="field"><label for="p_phone">' + esc(t("pPhone")) + '</label><input type="text" id="p_phone" inputmode="tel" maxlength="24" autocomplete="tel" placeholder="' + esc(t("pPhonePh")) + '" value="' + esc(s.phone ? fmtPhone(s.phone) : "") + '"></div>' +
+      '<div class="field"><label for="p_tg">' + esc(t("pTg")) + '</label><input type="text" id="p_tg" maxlength="40" placeholder="' + esc(t("pTgPh")) + '" value="' + esc(s.telegram ? "@" + s.telegram : "") + '"></div>' +
+      '<div class="field"><label for="p_about">' + esc(t("pAbout")) + '</label><textarea id="p_about" maxlength="200" placeholder="' + esc(t("pAboutPh")) + '">' + esc(s.about || "") + "</textarea></div>" +
+      '<p class="err" id="p_err" role="alert"></p>' +
+      '<div class="row"><button type="submit" class="btn" id="p_save">' + esc(isEdit ? t("pSaveEdit") : t("pSave")) + '</button><button type="button" class="btn ghost" data-act="close">' + esc(t("cancel")) + "</button></div></form>");
+    $("profileForm").addEventListener("submit", function (e) { e.preventDefault(); saveProfile(); });
+  }
+  async function saveProfile() {
+    var name = $("p_name").value.trim(), ph = normPhone($("p_phone").value), n = digits($("p_phone").value).length;
+    var tg = $("p_tg").value.trim().replace(/^@/, "").replace(/[^A-Za-z0-9_]/g, "");
+    var err = $("p_err");
+    if (name.length < 2) { err.textContent = t("ePName"); $("p_name").focus(); return; }
+    if (n < 10 || n > 13) { err.textContent = t("ePPhone"); $("p_phone").focus(); return; }
+    $("p_save").disabled = true;
+    try {
+      await db.doc("sellers/" + uid).set({ name: name, phone: ph, telegram: tg, about: $("p_about").value.trim(), updatedAt: Date.now() });
+      sellers[uid] = { name: name, phone: ph, telegram: tg, about: $("p_about").value.trim() };
+      var wasNew = !editing && !listings.some(function (l) { return l.sellerId === uid; });
+      closeModal(); renderAll();
+      if (wasNew && F.afterRegister) { F.afterRegister = false; listingModal(null); }
+    } catch (e) {
+      err.textContent = (e && e.code === "invalid_argument") ? t("noWrite") : t("saveErr");
+      $("p_save").disabled = false;
+    }
+  }
+
+  function listingModal(l) {
+    editing = l ? l.id : null;
+    pendingPhoto = null;
+    var v = l || { title: "", category: "veg", price: "", unit: "kg", qty: "", region: (mySeller() && mySeller().region) || "", harvest: todayStr(), desc: "", own: false };
+    var catOpts = CATS.map(function (c) { return '<option value="' + c[0] + '"' + (v.category === c[0] ? " selected" : "") + ">" + esc(L(c)) + "</option>"; }).join("");
+    var unitOpts = UNITS.map(function (c) { return '<option value="' + c[0] + '"' + (v.unit === c[0] ? " selected" : "") + ">" + esc(L(c)) + "</option>"; }).join("");
+    var regOpts = '<option value="">' + esc(t("fRegionPick")) + "</option>" + REGIONS.map(function (c) { return '<option value="' + c[0] + '"' + (v.region === c[0] ? " selected" : "") + ">" + esc(L(c)) + "</option>"; }).join("");
+    var cur = l && l.photo ? '<img src="' + esc(l.photo) + '" alt="">' : '<span>' + esc(t("fPhotoHint")) + "</span>";
+    openModal('<h2 id="mtitle">' + esc(l ? t("fTitleEdit") : t("fTitleNew")) + "</h2>" +
+      '<form class="form" id="listingForm" novalidate>' +
+      '<div class="field"><label for="f_photo">' + esc(t("fPhoto")) + '</label><label class="drop" id="f_drop" for="f_photo">' + cur + '<input type="file" id="f_photo" accept="image/*"></label></div>' +
+      '<div class="field"><label for="f_title">' + esc(t("fName")) + '</label><input type="text" id="f_title" maxlength="80" placeholder="' + esc(t("fNamePh")) + '" value="' + esc(v.title) + '"></div>' +
+      '<div class="two"><div class="field"><label for="f_cat">' + esc(t("fCat")) + '</label><select id="f_cat">' + catOpts + "</select></div>" +
+      '<div class="field"><label for="f_region">' + esc(t("fRegion")) + '</label><select id="f_region">' + regOpts + "</select></div></div>" +
+      '<div class="two"><div class="field"><label for="f_price">' + esc(t("fPrice")) + '</label><input type="number" id="f_price" inputmode="decimal" min="0" step="any" placeholder="' + esc(t("fPricePh")) + '" value="' + esc(v.price > 0 ? v.price : "") + '"></div>' +
+      '<div class="field"><label for="f_unit">' + esc(t("fUnit")) + '</label><select id="f_unit">' + unitOpts + "</select></div></div>" +
+      '<div class="two"><div class="field"><label for="f_qty">' + esc(t("fQty")) + '</label><input type="number" id="f_qty" inputmode="decimal" min="0" step="any" value="' + esc(v.qty > 0 ? v.qty : "") + '"></div>' +
+      '<div class="field"><label for="f_harvest">' + esc(t("fHarvest")) + '</label><input type="date" id="f_harvest" max="' + todayStr() + '" value="' + esc(v.harvest || "") + '"></div></div>' +
+      '<div class="field"><label for="f_desc">' + esc(t("fDesc")) + '</label><textarea id="f_desc" maxlength="400" placeholder="' + esc(t("fDescPh")) + '">' + esc(v.desc || "") + "</textarea></div>" +
+      '<label class="check" for="f_own"><input type="checkbox" id="f_own"' + (v.own ? " checked" : "") + "><span>" + esc(t("fOwn")) + "</span></label>" +
+      '<p class="err" id="f_err" role="alert"></p>' +
+      '<div class="row"><button type="submit" class="btn" id="f_save">' + esc(l ? t("save") : t("publish")) + '</button><button type="button" class="btn ghost" data-act="close">' + esc(t("cancel")) + "</button></div></form>");
+    $("listingForm").addEventListener("submit", function (e) { e.preventDefault(); saveListing(l); });
+    $("f_photo").addEventListener("change", onPhoto);
+  }
+  function shrinkImage(file) {
+    return new Promise(function (resolve, reject) {
+      var url = URL.createObjectURL(file), img = new Image();
+      img.onload = function () {
+        try {
+          var side = 720, q = 0.78, out = "";
+          for (var round = 0; round < 6; round++) {
+            var r = Math.min(1, side / Math.max(img.width, img.height));
+            var c = document.createElement("canvas");
+            c.width = Math.max(1, Math.round(img.width * r)); c.height = Math.max(1, Math.round(img.height * r));
+            c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+            out = c.toDataURL("image/jpeg", q);
+            if (out.length < 90000) break;
+            q = Math.max(0.5, q - 0.08); side = Math.round(side * 0.85);
+          }
+          URL.revokeObjectURL(url);
+          out.length < 180000 ? resolve(out) : reject(new Error("big"));
+        } catch (e) { reject(e); }
+      };
+      img.onerror = function () { URL.revokeObjectURL(url); reject(new Error("img")); };
+      img.src = url;
+    });
+  }
+  function onPhoto(e) {
+    var f = e.target.files && e.target.files[0];
+    if (!f) return;
+    shrinkImage(f).then(function (data) {
+      pendingPhoto = data;
+      $("f_drop").innerHTML = '<img src="' + data + '" alt=""><input type="file" id="f_photo" accept="image/*">';
+      $("f_photo").addEventListener("change", onPhoto);
+      $("f_err").textContent = "";
+    }).catch(function () { $("f_err").textContent = t("photoErr"); });
+  }
+  async function saveListing(old) {
+    var err = $("f_err");
+    var title = $("f_title").value.trim(), region = $("f_region").value, qty = parseFloat($("f_qty").value), price = parseFloat($("f_price").value);
+    if (title.length < 2) { err.textContent = t("eName"); $("f_title").focus(); return; }
+    if (!region) { err.textContent = t("eRegion"); $("f_region").focus(); return; }
+    if (!(qty > 0)) { err.textContent = t("eQty"); $("f_qty").focus(); return; }
+    if (!$("f_own").checked) { err.textContent = t("eOwn"); $("f_own").focus(); return; }
+    var ref = old ? db.doc("listings/" + old.id) : db.collection("listings").doc();
+    var data = {
+      sellerId: uid, title: title, category: $("f_cat").value, price: price > 0 ? price : 0, unit: $("f_unit").value, qty: qty,
+      region: region, harvest: $("f_harvest").value || "", desc: $("f_desc").value.trim(), own: true, status: old ? (old.status || "active") : "active",
+      photo: pendingPhoto || (old && old.photo) || "", createdAt: old ? old.createdAt : Date.now(), updatedAt: Date.now()
+    };
+    $("f_save").disabled = true;
+    try { await ref.set(data); closeModal(); } catch (e) {
+      err.textContent = (e && e.code === "invalid_argument") ? t("noWrite") : (e && e.code === "quota_exceeded" ? t("saveErr") : t("saveErr"));
+      $("f_save").disabled = false;
+    }
+  }
+
+  function contactModal(l) {
+    var body;
+    if (l.example) body = '<p class="sub">' + esc(t("cExample")) + "</p>";
+    else {
+      var s = sellers[l.sellerId];
+      if (!s || !s.phone) body = '<p class="sub">' + esc(t("cNone")) + "</p>";
+      else {
+        body = '<p class="kv">' + esc(t("cProduct")) + ": <b>" + esc(l.title) + "</b><br>" + esc(t("seller")) + ": <b>" + esc(s.name) + "</b>" +
+          (l.region ? "<br>" + esc(regionLabel(l.region)) : "") + "</p>" +
+          '<div class="kv">' + esc(t("cPhone")) + '</div><div class="phone" id="c_phone">' + esc(fmtPhone(s.phone)) + "</div>" +
+          '<div class="row"><button type="button" class="btn ghost" data-act="copy" data-v="' + esc(fmtPhone(s.phone)) + '" id="c_copy">' + esc(t("cCopy")) + "</button>" +
+          '<a class="btn" href="tel:+' + esc(s.phone) + '">' + esc(t("cCall")) + "</a></div>" +
+          '<div class="row" style="margin-top:10px"><a class="btn yolk" href="https://wa.me/' + esc(s.phone) + '" target="_blank" rel="noopener">' + esc(t("cWa")) + "</a>" +
+          (s.telegram ? '<a class="btn yolk" href="https://t.me/' + esc(s.telegram) + '" target="_blank" rel="noopener">' + esc(t("cTg")) + "</a>" : "") + "</div>" +
+          '<p class="kv" style="margin-top:14px">' + esc(t("cNote")) + "</p>";
+      }
+    }
+    openModal('<h2 id="mtitle">' + esc(t("cTitle")) + "</h2>" + body);
+  }
+  function copyPhone(btn) {
+    var txt = btn.getAttribute("data-v");
+    var done = function () { btn.textContent = t("cCopied"); setTimeout(function () { btn.textContent = t("cCopy"); }, 1600); };
+    var fallback = function () { var el = $("c_phone"); if (el) { var r = document.createRange(); r.selectNodeContents(el); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); } };
+    try { navigator.clipboard.writeText(txt).then(done, fallback); } catch (e) { fallback(); }
+  }
+
+  /* ---------- Actions ---------- */
+  function onCta() {
+    if (!db || !uid) { infoModal(t("needLogin")); return; }
+    if (canWrite === false) { infoModal(t("noWrite")); return; }
+    if (!mySeller()) { F.afterRegister = true; profileModal(); return; }
+    listingModal(null);
+  }
+  function byId(id) { for (var i = 0; i < listings.length; i++) if (listings[i].id === id) return listings[i]; return null; }
+  async function patch(id, data) { try { await db.doc("listings/" + id).update(data); } catch (e) { infoModal(t("saveErr")); } }
+
+  document.addEventListener("click", function (e) {
+    if (e.target === modal) { closeModal(); return; }
+    var el = e.target.closest("[data-act]");
+    if (!el) return;
+    var act = el.getAttribute("data-act"), id = el.getAttribute("data-id");
+    if (act !== "del" && pendingDel) { pendingDel = null; if (act !== "delok") renderGrid(); }
+    switch (act) {
+      case "lang-ru": case "lang-kk":
+        lang = act === "lang-kk" ? "kk" : "ru";
+        try { localStorage.setItem("ur_lang", lang); } catch (x) {}
+        applyLang(); renderAll(); break;
+      case "cta": onCta(); break;
+      case "cat": F.cat = el.getAttribute("data-v"); renderChips(); renderGrid(); break;
+      case "mine": F.mine = !F.mine; renderChips(); renderGrid(); break;
+      case "close": closeModal(); break;
+      case "contact": var it = byId(id); if (!it) { for (var i = 0; i < DEMOS.length; i++) if (DEMOS[i].id === id) it = { example: true }; } if (it) contactModal(it); break;
+      case "copy": copyPhone(el); break;
+      case "edit": var o = byId(id); if (o) listingModal(o); break;
+      case "sold": patch(id, { status: "sold" }); break;
+      case "reopen": patch(id, { status: "active" }); break;
+      case "del": pendingDel = id; renderGrid(); break;
+      case "delok": pendingDel = null; db.doc("listings/" + id).delete().catch(function () { infoModal(t("saveErr")); }); break;
+    }
+  });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !modal.hidden) closeModal(); });
+  $("q").addEventListener("input", function (e) { F.q = e.target.value; renderGrid(); });
+  $("regionSel").addEventListener("change", function (e) { F.region = e.target.value; renderGrid(); });
+  $("sortSel").addEventListener("change", function (e) { F.sort = e.target.value; renderGrid(); });
+  /* The profile button in the header opens the profile editor. */
+  $("who").style.cursor = "pointer";
+  $("who").setAttribute("role", "button"); $("who").setAttribute("tabindex", "0");
+  $("who").addEventListener("click", function () { if (mySeller()) profileModal(); });
+  $("who").addEventListener("keydown", function (e) { if ((e.key === "Enter" || e.key === " ") && mySeller()) { e.preventDefault(); profileModal(); } });
+
+  /* ---------- Boot ---------- */
+  async function boot() {
+    applyLang(); renderAll();
+    var c = window.claude;
+    if (!c || !c.use) { dbState = "off"; renderAll(); return; }
+    try { user = await c.use("user"); } catch (e) {}
+    try { db = await c.use("db"); } catch (e) {}
+    if (user) {
+      try { var me = await user.me(); uid = me.id; meName = me.name || ""; } catch (e) {}
+      try { canWrite = await user.can("data.write"); } catch (e) {}
+    }
+    if (!db) { dbState = "off"; renderAll(); return; }
+    dbState = "ok"; renderAll();
+    db.collection("listings").orderBy("createdAt", "desc").limit(60).onSnapshot(function (snap) {
+      listings = snap.docs.map(function (d) { var x = d.data() || {}; x.id = d.id; return x; });
+      renderAll();
+    }, function () { dbState = "error"; renderAll(); });
+    db.collection("sellers").limit(500).onSnapshot(function (snap) {
+      var m = {}; snap.docs.forEach(function (d) { m[d.id] = d.data(); }); sellers = m; renderAll();
+    }, function () {});
+  }
+  boot();
+})();
+</script>
+
+</body></html>
