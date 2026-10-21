@@ -314,6 +314,27 @@ footer { padding-bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
   .two { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+.tools { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 2px; }
+.linkbtn { background: none; border: 0; padding: 2px 0; font-size: 15px; color: var(--ink-soft); text-decoration: underline; text-underline-offset: 3px; }
+.rate { color: #b9770e; font-weight: 700; white-space: nowrap; }
+.stars { color: #d79a1b; letter-spacing: 1px; }
+.tag.flash { outline: 3px solid var(--yolk); outline-offset: 2px; }
+.rev { padding: 8px 0; border-top: 1px solid var(--line); }
+.rev:first-of-type { border-top: 0; }
+.rev b { overflow-wrap: anywhere; }
+.rev p { margin: 2px 0 0; overflow-wrap: anywhere; white-space: pre-wrap; }
+.rtime { color: var(--ink-soft); font-size: 14px; margin-left: 6px; }
+.starpick { display: flex; gap: 4px; margin: 6px 0 8px; }
+.starpick button { background: none; border: 0; font-size: 32px; line-height: 1; padding: 0 2px; color: #d79a1b; }
+.reasons { display: grid; gap: 8px; margin: 8px 0 12px; }
+.reasons label { display: flex; gap: 10px; align-items: center; font-weight: 600; }
+.reasons input { width: 20px; height: 20px; accent-color: var(--leaf); }
+.sgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 12px 0; }
+.sbox { background: var(--bg); border-radius: 12px; padding: 10px 6px; text-align: center; }
+.sbox b { display: block; font-family: var(--font-display); font-size: 26px; line-height: 1.1; }
+.sbox span { font-size: 14px; color: var(--ink-soft); }
+.about h3 { font-family: var(--font-display); font-size: 17px; margin: 14px 0 4px; }
+.about p { margin: 0 0 6px; }
 </style>
 <script>
 (function () {
@@ -460,7 +481,7 @@ window.FIREBASE_CONFIG = {
       sell: "Егінді орналастыру", become: "Сатушы болу", myProfile: "Менің профилім",
       statAds: "Хабарландыру: {n}", statSellers: "Сатушы: {n}",
       searchPh: "Не іздейсіз? Картоп, алма…", all: "Барлығы", allRegions: "Барлық өңір",
-      sortNew: "Алдымен жаңа хабарламалар", sortCheap: "Арзанырақтары", mine: "Менің хабарландыруларым", found: "Табылды: {n}",
+      sortNew: "Алдымен жаңалары", sortCheap: "Арзанырақтары", mine: "Менің хабарландыруларым", found: "Табылды: {n}",
       emptyT: "Әзірге ештеңе табылмады", emptyX: "Басқа сұрау енгізіңіз немесе барлық өңірді таңдаңыз.",
       examplesNote: "Әзірге хабарландыру жоқ. Карточкалар былай көрінеді, бұл мысалдар.",
       offNote: "Қазір мысалдар көрсетілген. Нақты хабарландыруларды көру және өзіңіздікін қою үшін сайтты аккаунтпен кіріп ашыңыз.",
@@ -556,6 +577,17 @@ window.FIREBASE_CONFIG = {
     roleSeller: "Продавец", roleBuyer: "Покупатель",
     myAds: "Мои объявления", settings: "Настройки", editProfile: "Изменить профиль", langLabel: "Язык",
     themeLabel: "Тема", themeLight: "Светлая", themeDark: "Тёмная",
+    share: "Поделиться", report: "Пожаловаться", linkCopied: "Ссылка скопирована",
+    reportTitle: "Пожаловаться на объявление", reportWhy: "Причина", rNotOwn: "Это не собственный урожай", rSpam: "Спам или мошенничество",
+    rPrice: "Неверная цена или описание", rOther: "Другое", reportText: "Комментарий (необязательно)", reportSend: "Отправить жалобу",
+    reportSent: "Жалоба отправлена. Спасибо!", reportErr: "Выберите причину",
+    revTitle: "Отзывы о продавце", revNone: "Отзывов пока нет", revYour: "Ваш отзыв", revYourEdit: "Изменить ваш отзыв",
+    revPh: "Что понравилось? Как прошла покупка?", revSend: "Отправить отзыв", revSent: "Отзыв сохранён", revErrRate: "Поставьте оценку от 1 до 5",
+    aboutBtn: "О проекте", aboutTitle: "О проекте DeeHan Online",
+    aboutProbT: "Проблема", aboutProb: "Люди, которые выращивают овощи, фрукты и ягоды на своём участке или в хозяйстве, часто не знают, как найти покупателя без посредников. А покупатели не могут быстро найти свежий урожай рядом и связаться с тем, кто его вырастил.",
+    aboutSolT: "Решение", aboutSol: "DeeHan Online — онлайн-площадка только для собственного урожая. Продавец публикует объявление за пару минут, покупатель находит его по категории и региону, пишет в чат на сайте, звонит или пишет в Telegram. Отзывы и рейтинг помогают доверять продавцу.",
+    aboutHowT: "Как это работает", aboutHow1: "1. Войдите через Google и создайте профиль.", aboutHow2: "2. Продавец публикует урожай с фото и ценой.", aboutHow3: "3. Покупатель сохраняет понравившееся и договаривается напрямую.",
+    aboutSellers: "Продавцов", aboutAds: "Объявлений", aboutReviews: "Отзывов",
     noAds: "Вы ещё ничего не публиковали. Нажмите «Создать» внизу.",
     sent: "Отправлено", read: "Прочитано"
   });
@@ -568,6 +600,17 @@ window.FIREBASE_CONFIG = {
     roleSeller: "Сатушы", roleBuyer: "Сатып алушы",
     myAds: "Менің хабарландыруларым", settings: "Баптаулар", editProfile: "Профильді өзгерту", langLabel: "Тіл",
     themeLabel: "Тақырып", themeLight: "Ашық", themeDark: "Қараңғы",
+    share: "Бөлісу", report: "Шағымдану", linkCopied: "Сілтеме көшірілді",
+    reportTitle: "Хабарландыруға шағымдану", reportWhy: "Себебі", rNotOwn: "Бұл өз егіні емес", rSpam: "Спам немесе алаяқтық",
+    rPrice: "Баға немесе сипаттама дұрыс емес", rOther: "Басқа", reportText: "Пікір (міндетті емес)", reportSend: "Шағым жіберу",
+    reportSent: "Шағым жіберілді. Рахмет!", reportErr: "Себебін таңдаңыз",
+    revTitle: "Сатушы туралы пікірлер", revNone: "Әзірге пікір жоқ", revYour: "Сіздің пікіріңіз", revYourEdit: "Пікірді өзгерту",
+    revPh: "Не ұнады? Сатып алу қалай өтті?", revSend: "Пікір жіберу", revSent: "Пікір сақталды", revErrRate: "1-ден 5-ке дейін баға қойыңыз",
+    aboutBtn: "Жоба туралы", aboutTitle: "DeeHan Online жобасы туралы",
+    aboutProbT: "Мәселе", aboutProb: "Өз телімінде немесе шаруашылығында көкөніс, жеміс, жидек өсіретін адамдар делдалсыз сатып алушыны қалай табуды көбіне білмейді. Ал сатып алушылар жақын жерден жаңа піскен өнімді тез тауып, оны өсірген адаммен байланыса алмайды.",
+    aboutSolT: "Шешім", aboutSol: "DeeHan Online — тек өз егініне арналған онлайн-алаң. Сатушы хабарландыруды бірнеше минутта жариялайды, сатып алушы оны санат пен өңір бойынша табады, сайттағы чатқа жазады, қоңырау шалады немесе Telegram арқылы жазады. Пікірлер мен рейтинг сатушыға сенім артуға көмектеседі.",
+    aboutHowT: "Қалай жұмыс істейді", aboutHow1: "1. Google арқылы кіріп, профиль жасаңыз.", aboutHow2: "2. Сатушы егінін фотосы мен бағасымен жариялайды.", aboutHow3: "3. Сатып алушы ұнағанын сақтап, тікелей келіседі.",
+    aboutSellers: "Сатушы", aboutAds: "Хабарландыру", aboutReviews: "Пікір",
     noAds: "Сіз әлі ештеңе жарияламадыңыз. Төмендегі «Қосу» түймесін басыңыз.",
     sent: "Жіберілді", read: "Оқылды"
   });
@@ -794,8 +837,9 @@ window.FIREBASE_CONFIG = {
     } else {
       acts = '<button type="button" class="btn" data-act="contact" data-id="' + esc(l.id) + '">' + esc(t("contact")) + "</button>";
     }
-    return '<article class="tag"><div class="photo">' + photo + price + badge + sold + heart + '</div><div class="tbody"><h3>' + esc(l.title) + '</h3><div class="meta">' + meta + "</div>" +
-      (l.desc ? '<p class="desc">' + esc(l.desc) + "</p>" : "") + '<div class="seller">' + (sp && sp.name ? avImg(sp, "xs") : "") + "<span>" + esc(sn) + '</span></div><div class="actions">' + acts + "</div></div></article>";
+    var tools = l.example ? "" : '<div class="tools"><button type="button" class="linkbtn" data-act="share" data-id="' + esc(l.id) + '">' + esc(t("share")) + "</button>" + (mine ? "" : '<button type="button" class="linkbtn" data-act="report" data-id="' + esc(l.id) + '">' + esc(t("report")) + "</button>") + "</div>";
+    return '<article class="tag' + (flashId === l.id ? " flash" : "") + '" id="card-' + esc(l.id) + '"><div class="photo">' + photo + price + badge + sold + heart + '</div><div class="tbody"><h3>' + esc(l.title) + '</h3><div class="meta">' + meta + "</div>" +
+      (l.desc ? '<p class="desc">' + esc(l.desc) + "</p>" : "") + '<div class="seller">' + (sp && sp.name ? avImg(sp, "xs") : "") + "<span>" + esc(sn) + (l.example ? "" : ratingBadge(l.sellerId)) + '</span></div><div class="actions">' + acts + "</div>" + tools + "</div></article>";
   }
   function renderGrid() {
     var items = viewItems();
@@ -828,7 +872,7 @@ window.FIREBASE_CONFIG = {
         return '<button type="button" class="chip" data-act="theme-' + x[0] + '" aria-pressed="' + (cth === x[0]) + '">' + esc(t(x[1])) + "</button>";
       }).join("") + "</div>";
       inner = '<div class="pset"><div class="kv">' + esc(t("langLabel")) + '</div><div class="chips"><button type="button" class="chip" data-act="lang-ru" aria-pressed="' + (lang === "ru") + '">Русский</button><button type="button" class="chip" data-act="lang-kk" aria-pressed="' + (lang === "kk") + '">Қазақша</button></div>' +
-        themes + '<div class="row"><button type="button" class="btn" data-act="editprof">' + esc(t("editProfile")) + '</button><button type="button" class="btn danger" data-act="logout">' + esc(t("logout")) + "</button></div></div>";
+        themes + '<div class="row"><button type="button" class="btn ghost" data-act="about">' + esc(t("aboutBtn")) + '</button></div><div class="row"><button type="button" class="btn" data-act="editprof">' + esc(t("editProfile")) + '</button><button type="button" class="btn danger" data-act="logout">' + esc(t("logout")) + "</button></div></div>";
     }
     box.innerHTML = head + tabs + inner;
   }
@@ -859,7 +903,89 @@ window.FIREBASE_CONFIG = {
     openModal('<h2 id="mtitle">' + esc(t("brand")) + '</h2><p class="sub">' + esc(msg) + '</p><div class="row"><button type="button" class="btn" data-act="close">' + esc(t("ok")) + "</button></div>");
   }
 
-  var auth = null, cfgMissing = false, sellersUnsub = null, chatsUnsub = null;
+  var auth = null, cfgMissing = false, sellersUnsub = null, chatsUnsub = null, reviewsUnsub = null, reviews = [], hashDone = false, flashId = null;
+  function ratingOf(sid) { var n = 0, sum = 0; reviews.forEach(function (r) { if (r.sellerId === sid) { n++; sum += Number(r.rating) || 0; } }); return { n: n, avg: n ? sum / n : 0 }; }
+  function ratingBadge(sid) { var r = ratingOf(sid); return r.n ? ' <span class="rate">★ ' + r.avg.toFixed(1) + " (" + r.n + ")</span>" : ""; }
+  function starsStr(n) { n = Math.max(0, Math.min(5, Math.round(n))); return "★★★★★".slice(0, n) + "☆☆☆☆☆".slice(0, 5 - n); }
+  function myReview(sid) { for (var i = 0; i < reviews.length; i++) if (reviews[i].sellerId === sid && reviews[i].authorId === uid) return reviews[i]; return null; }
+  function reviewsBlock(l) {
+    var sid = l.sellerId, r = ratingOf(sid);
+    var list = reviews.filter(function (x) { return x.sellerId === sid; }).sort(function (a, b) { return (b.createdAt || 0) - (a.createdAt || 0); }).slice(0, 6);
+    var h = '<div class="cblock" id="revbox"><div class="kv"><b>' + esc(t("revTitle")) + "</b>" + (r.n ? ' <span class="rate">★ ' + r.avg.toFixed(1) + " (" + r.n + ")</span>" : "") + "</div>";
+    h += list.length ? list.map(function (x) {
+      return '<div class="rev"><b>' + esc(x.authorName || "") + '</b> <span class="stars">' + starsStr(x.rating) + '</span><span class="rtime">' + esc(fmtTime(x.createdAt)) + "</span>" + (x.text ? "<p>" + esc(x.text) + "</p>" : "") + "</div>";
+    }).join("") : '<p class="kv">' + esc(t("revNone")) + "</p>";
+    if (uid && uid !== sid) {
+      var mine = myReview(sid);
+      F.rate = mine ? Number(mine.rating) || 0 : 0;
+      h += '<div class="kv" style="margin-top:10px"><b>' + esc(t(mine ? "revYourEdit" : "revYour")) + '</b></div><div class="starpick" id="starpick" role="group">';
+      for (var i = 1; i <= 5; i++) h += '<button type="button" data-act="star" data-v="' + i + '" aria-label="' + i + '">' + (i <= F.rate ? "★" : "☆") + "</button>";
+      h += '</div><div class="field"><textarea id="rv_text" maxlength="500" placeholder="' + esc(t("revPh")) + '">' + esc(mine ? mine.text || "" : "") + '</textarea></div>' +
+        '<p class="err" id="rv_err"></p><div class="row"><button type="button" class="btn yolk" data-act="revsend" data-sid="' + esc(sid) + '" data-id="' + esc(l.id) + '">' + esc(t("revSend")) + "</button></div>";
+    }
+    return h + "</div>";
+  }
+  async function sendReview(sid, lid) {
+    var me = mySeller();
+    if (!uid || !me || uid === sid) return;
+    var err = $("rv_err");
+    if (!(F.rate >= 1 && F.rate <= 5)) { err.textContent = t("revErrRate"); return; }
+    var data = { sellerId: sid, authorId: uid, authorName: me.name || "", avatar: me.avatar != null ? me.avatar : 0, rating: F.rate, text: ($("rv_text").value || "").trim().slice(0, 500), createdAt: Date.now() };
+    try {
+      await db.doc("reviews/" + sid + "_" + uid).set(data);
+      reviews = reviews.filter(function (x) { return !(x.sellerId === sid && x.authorId === uid); }).concat([Object.assign({ id: sid + "_" + uid }, data)]);
+      toast(t("revSent")); renderAll();
+      var l = byId(lid); if (l) contactModal(l); else closeModal();
+    } catch (e) { err.textContent = t("saveErr") + (e && e.code ? " [" + e.code + "]" : ""); }
+  }
+  function copyText(text, done) {
+    var fb = function () { var ta = document.createElement("textarea"); ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.appendChild(ta); ta.select(); try { document.execCommand("copy"); } catch (e) {} document.body.removeChild(ta); done(); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, fb); else fb();
+  }
+  function shareListing(id) {
+    var l = byId(id); if (!l) return;
+    var url = location.href.split("#")[0] + "#l=" + encodeURIComponent(id);
+    var data = { title: l.title + " — " + t("brand"), text: l.title + (l.price > 0 ? ", " + fmtMoney(l.price) + " ₸" : ""), url: url };
+    if (navigator.share) { navigator.share(data).catch(function () {}); return; }
+    copyText(url, function () { toast(t("linkCopied")); });
+  }
+  function jumpToHash() {
+    if (hashDone) return;
+    var m = /[#&]l=([^&]+)/.exec(location.hash || "");
+    if (!m) { hashDone = true; return; }
+    var id = decodeURIComponent(m[1]);
+    if (!byId(id)) return;
+    hashDone = true;
+    flashId = id; renderAll();
+    var card = document.getElementById("card-" + id);
+    if (card) { try { card.scrollIntoView({ block: "center" }); } catch (e) {} }
+    setTimeout(function () { flashId = null; renderAll(); }, 4000);
+  }
+  function reportModal(id) {
+    var l = byId(id); if (!l) return;
+    if (!uid) { gateModal(); return; }
+    var rs = [["notown", "rNotOwn"], ["spam", "rSpam"], ["price", "rPrice"], ["other", "rOther"]].map(function (x, i) {
+      return '<label><input type="radio" name="rr" value="' + x[0] + '"' + (i === 0 ? "" : "") + "> " + esc(t(x[1])) + "</label>";
+    }).join("");
+    openModal('<h2 id="mtitle">' + esc(t("reportTitle")) + '</h2><p class="sub">' + esc(l.title) + '</p><form id="reportForm"><div class="kv"><b>' + esc(t("reportWhy")) + '</b></div><div class="reasons">' + rs +
+      '</div><div class="field"><textarea id="rp_text" maxlength="500" placeholder="' + esc(t("reportText")) + '"></textarea></div><p class="err" id="rp_err"></p><div class="row"><button type="submit" class="btn">' + esc(t("reportSend")) + '</button><button type="button" class="btn ghost" data-act="close">' + esc(t("cancel")) + "</button></div></form>");
+    $("reportForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      var r = document.querySelector('input[name="rr"]:checked');
+      if (!r) { $("rp_err").textContent = t("reportErr"); return; }
+      try {
+        await db.collection("reports").add({ listingId: id, sellerId: l.sellerId, reporterId: uid, reason: r.value, text: ($("rp_text").value || "").trim().slice(0, 500), createdAt: Date.now() });
+        closeModal(); toast(t("reportSent"));
+      } catch (x) { $("rp_err").textContent = t("saveErr") + (x && x.code ? " [" + x.code + "]" : ""); }
+    });
+  }
+  function aboutModal() {
+    var act = listings.filter(function (l) { return l.status !== "sold"; }).length;
+    var sn = Object.keys(sellers).length;
+    openModal('<div class="about"><h2 id="mtitle">' + esc(t("aboutTitle")) + '</h2><h3>' + esc(t("aboutProbT")) + "</h3><p>" + esc(t("aboutProb")) + "</p><h3>" + esc(t("aboutSolT")) + "</h3><p>" + esc(t("aboutSol")) + "</p>" +
+      '<div class="sgrid"><div class="sbox"><b id="ab_s">' + sn + "</b><span>" + esc(t("aboutSellers")) + '</span></div><div class="sbox"><b id="ab_a">' + act + "</b><span>" + esc(t("aboutAds")) + '</span></div><div class="sbox"><b id="ab_r">' + reviews.length + "</b><span>" + esc(t("aboutReviews")) + "</span></div></div>" +
+      "<h3>" + esc(t("aboutHowT")) + "</h3><p>" + esc(t("aboutHow1")) + "</p><p>" + esc(t("aboutHow2")) + "</p><p>" + esc(t("aboutHow3")) + '</p></div><div class="row" style="margin-top:12px"><button type="button" class="btn" data-act="close">' + esc(t("close")) + "</button></div>");
+  }
   function gateModal(msg) {
     var main = cfgMissing
       ? '<p class="sub">' + esc(t("cfgText")) + "</p>"
@@ -1028,7 +1154,7 @@ window.FIREBASE_CONFIG = {
           '<div class="row"><button type="button" class="btn ghost" data-act="copy" data-v="' + esc(fmtPhone(s.phone)) + '" id="c_copy">' + esc(t("cCopy")) + "</button>" +
           '<a class="btn" href="tel:+' + esc(s.phone) + '">' + esc(t("cCall")) + "</a></div>" +
           '<div class="row" style="margin-top:10px"><a class="btn yolk" href="https://wa.me/' + esc(s.phone) + '" target="_blank" rel="noopener">' + esc(t("cWa")) + "</a></div></div>";
-        body += '<p class="kv" style="margin-top:14px">' + esc(t("cNote")) + "</p>";
+        body += '<p class="kv" style="margin-top:14px">' + esc(t("cNote")) + "</p>" + reviewsBlock(l);
       }
     }
     openModal('<h2 id="mtitle">' + esc(t("cTitle")) + "</h2>" + body);
@@ -1165,6 +1291,14 @@ window.FIREBASE_CONFIG = {
     var act = el.getAttribute("data-act"), id = el.getAttribute("data-id");
     if (act !== "del" && pendingDel) { pendingDel = null; if (act !== "delok") renderAll(); }
     switch (act) {
+      case "share": shareListing(id); break;
+      case "report": reportModal(id); break;
+      case "about": aboutModal(); break;
+      case "star":
+        F.rate = Number(el.getAttribute("data-v"));
+        document.querySelectorAll("#starpick button").forEach(function (b, i) { b.textContent = i < F.rate ? "★" : "☆"; });
+        break;
+      case "revsend": sendReview(el.getAttribute("data-sid"), id); break;
       case "theme-light": case "theme-dark":
         var nt = act.slice(6);
         try { localStorage.setItem("ur_theme", nt); } catch (x) {}
@@ -1212,12 +1346,14 @@ window.FIREBASE_CONFIG = {
     dbState = "ok"; renderAll();
     db.collection("listings").orderBy("createdAt", "desc").limit(60).onSnapshot(function (snap) {
       listings = snap.docs.map(function (d) { var x = d.data() || {}; x.id = d.id; return x; });
-      renderAll();
+      renderAll(); jumpToHash();
     }, function () { dbState = "error"; renderAll(); });
     auth.onAuthStateChanged(function (u) {
       if (sellersUnsub) { sellersUnsub(); sellersUnsub = null; }
       if (chatsUnsub) { chatsUnsub(); chatsUnsub = null; }
       if (favsUnsub) { favsUnsub(); favsUnsub = null; }
+      if (reviewsUnsub) { reviewsUnsub(); reviewsUnsub = null; }
+      reviews = [];
       if (!modal.hidden) closeModal();
       chatLeave();
       sellers = {}; chats = {}; favs = []; gateDone = false;
@@ -1237,6 +1373,9 @@ window.FIREBASE_CONFIG = {
           renderChatList();
           if (chatState.id) { markSeen(chatState.id); renderMsgs(false); }
         }
+      }, function () {});
+      reviewsUnsub = db.collection("reviews").limit(1000).onSnapshot(function (snap) {
+        reviews = snap.docs.map(function (d) { var x = d.data() || {}; x.id = d.id; return x; }); renderAll();
       }, function () {});
       favsUnsub = db.doc("favorites/" + u.uid).onSnapshot(function (snap) {
         if (!snap.exists) return;
