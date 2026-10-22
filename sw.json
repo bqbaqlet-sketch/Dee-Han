@@ -1,5 +1,5 @@
 var CACHE = "deehan-v1";
-var SHELL = ["./", "index.html", "manifest.json", "icon-192.png"];
+var SHELL = ["./", "index.html", "manifest.json", "IMG_3094.png"];
 
 self.addEventListener("install", function (e) {
   self.skipWaiting();
