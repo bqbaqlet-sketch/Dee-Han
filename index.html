@@ -1,5 +1,13 @@
 <!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>DeeHan Online</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#6b4a2f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="DeeHan">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:wght@400;500;700&family=Bitter:wght@600;800&family=Caveat:wght@600;700&display=swap">
 <style>
@@ -630,6 +638,7 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
     supSent: "Сообщение отправлено. Спасибо!", supErrShort: "Напишите хотя бы несколько слов", supWait: "Подождите немного перед следующим сообщением",
     legalTerms: "Условия использования", legalPriv: "Политика конфиденциальности", legalDate: "Редакция от 22 октября 2026 г.", legalBack: "Назад", gAgree: "Входя, вы принимаете",  gAnd: "и",
     sellerSince: "На сайте с", sellerItems: "Товары продавца", sellerNoItems: "Пока нет объявлений", sellerAbout: "О себе", sellerNoRating: "Нет оценок", sellerGone: "Профиль не найден",
+    installBtn: "Установить приложение", installIos: "Чтобы установить на iPhone: в Safari нажмите «Поделиться» → «На экран «Домой»».",
     themeLabel: "Тема", themeLight: "Светлая", themeDark: "Тёмная",
     chatTooMany: "Не больше 4 фото в одном сообщении", chatTooBig: "Фото слишком большие, отправьте меньше", chatPhoto: "Фото", chatAttach: "Прикрепить фото", chatPhotoErr: "Не удалось отправить фото. Выберите другое.",
     share: "Поделиться", report: "Пожаловаться", linkCopied: "Ссылка скопирована",
@@ -668,6 +677,7 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
     supSent: "Хабарлама жіберілді. Рахмет!", supErrShort: "Бірнеше сөз жазыңыз", supWait: "Келесі хабарламаға дейін аздап күтіңіз",
     legalTerms: "Пайдалану шарттары", legalPriv: "Құпиялылық саясаты", legalDate: "2026 жылғы 22 қазандағы редакция", legalBack: "Артқа", gAgree: "Кіру арқылы сіз келесілермен келісесіз:", gAnd: "және",
     sellerSince: "Сайтта тіркелген күні", sellerItems: "Сатушының тауарлары", sellerNoItems: "Әзірге хабарландыру жоқ", sellerAbout: "Өзі туралы", sellerNoRating: "Баға жоқ", sellerGone: "Профиль табылмады",
+    installBtn: "Қолданбаны орнату", installIos: "iPhone-ға орнату үшін: Safari-де «Бөлісу» → «Басты экранға» түймесін басыңыз.",
     themeLabel: "Тақырып", themeLight: "Ашық", themeDark: "Қараңғы",
     chatTooMany: "Бір хабарламада 4 фотодан көп емес", chatTooBig: "Фотолар тым үлкен, азырақ жіберіңіз", chatPhoto: "Фото", chatAttach: "Фото тіркеу", chatPhotoErr: "Фото жіберілмеді. Басқасын таңдаңыз.",
     share: "Бөлісу", report: "Шағымдану", linkCopied: "Сілтеме көшірілді",
@@ -824,6 +834,13 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
     if (cw) cw.classList.remove("show-thread");
   }
 
+  function installRowHtml() {
+    var sa = (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) || window.navigator.standalone;
+    if (sa) return "";
+    if (deferredInstall) return '<div class="row"><button type="button" class="btn yolk" data-act="install">' + esc(t("installBtn")) + "</button></div>";
+    if (/iphone|ipad|ipod/i.test(navigator.userAgent)) return '<p class="kv">' + esc(t("installIos")) + "</p>";
+    return "";
+  }
   function mySeller() { return uid && sellers[uid] ? sellers[uid] : null; }
   function isReal() { return dbState === "ok" && listings.length > 0; }
 
@@ -872,7 +889,7 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
     else if (dbState === "ok" && marketListings().length === 0) m = t("examplesNote");
     $("notice").innerHTML = m ? '<p class="note">' + esc(m) + "</p>" : "";
   }
-  var rndKeys = {};
+  var rndKeys = {}, deferredInstall = null;
   function rk(id) { if (rndKeys[id] === undefined) rndKeys[id] = Math.random(); return rndKeys[id]; }
   function isHoney(l) { return l && l.kind === "honey"; }
   function marketListings() { return listings.filter(function (l) { return (F.market === "honey") === isHoney(l); }); }
@@ -966,7 +983,7 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
         return '<button type="button" class="chip" data-act="theme-' + x[0] + '" aria-pressed="' + (cth === x[0]) + '">' + esc(t(x[1])) + "</button>";
       }).join("") + "</div>";
       inner = '<div class="pset"><div class="kv">' + esc(t("langLabel")) + '</div><div class="chips"><button type="button" class="chip" data-act="lang-ru" aria-pressed="' + (lang === "ru") + '">Русский</button><button type="button" class="chip" data-act="lang-kk" aria-pressed="' + (lang === "kk") + '">Қазақша</button></div>' +
-        themes + '<div class="row"><button type="button" class="btn ghost" data-act="about">' + esc(t("aboutBtn")) + '</button><button type="button" class="btn ghost" data-act="support">' + esc(t("supBtn")) + '</button></div><div class="row"><button type="button" class="btn ghost" data-act="terms">' + esc(t("legalTerms")) + '</button><button type="button" class="btn ghost" data-act="privacy">' + esc(t("legalPriv")) + '</button></div><div class="row"><button type="button" class="btn" data-act="editprof">' + esc(t("editProfile")) + '</button><button type="button" class="btn danger" data-act="logout">' + esc(t("logout")) + "</button></div></div>";
+        themes + installRowHtml() + '<div class="row"><button type="button" class="btn ghost" data-act="about">' + esc(t("aboutBtn")) + '</button><button type="button" class="btn ghost" data-act="support">' + esc(t("supBtn")) + '</button></div><div class="row"><button type="button" class="btn ghost" data-act="terms">' + esc(t("legalTerms")) + '</button><button type="button" class="btn ghost" data-act="privacy">' + esc(t("legalPriv")) + '</button></div><div class="row"><button type="button" class="btn" data-act="editprof">' + esc(t("editProfile")) + '</button><button type="button" class="btn danger" data-act="logout">' + esc(t("logout")) + "</button></div></div>";
     }
     box.innerHTML = head + tabs + inner;
   }
@@ -1419,6 +1436,8 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
   }
   var BOTX = {"ru": {"sub": "Автоответчик, не ИИ", "list": "Автоответчик · частые вопросы", "role": "Бот", "pick": "Выберите вопрос:", "hello": "Привет! Я BeeBot 🐝, автоответчик сайта DeeHan Online. Я не искусственный интеллект: просто даю готовые ответы на частые вопросы. Выберите вопрос ниже.", "qa": [["Как опубликовать объявление?", "Нажмите «Создать» (плюс) в нижней панели. Выберите раздел «Урожай» или «Улей», добавьте фото, название, цену, количество и регион, поставьте отметку, что это ваш урожай, и нажмите «Опубликовать». Объявление сразу увидят все посетители."], ["Как связаться с продавцом?", "Откройте объявление и нажмите «Связаться»: там телефон, Telegram и кнопка для чата на сайте (если продавец включил чат). Нажмите на ник продавца, чтобы посмотреть его профиль, товары и отзывы."], ["Как проходит покупка?", "Договоритесь с продавцом в чате. Затем покупатель нажимает «Купить», продавец подтверждает кнопкой «Продать», после получения товара покупатель нажимает «Товар получен», и только после этого продавец может отметить «Продано». Оплату и доставку вы согласуете между собой."], ["Как оставить отзыв?", "Откройте объявление, нажмите «Связаться», внизу окна поставьте звёзды от 1 до 5, напишите комментарий и нажмите «Отправить отзыв». На одного продавца можно оставить один отзыв, его можно изменить."], ["Как пожаловаться на объявление?", "На карточке объявления нажмите «Пожаловаться», выберите причину и отправьте. Жалоба придёт владельцу сайта. На свои объявления пожаловаться нельзя."], ["Как сохранить объявление?", "Нажмите на сердечко на карточке: объявление попадёт во вкладку «Корзина» и останется там даже после перезахода. Нажмите на сердечко ещё раз, чтобы убрать."], ["Как отправить фото в чате?", "В чате с человеком нажмите скрепку слева от поля сообщения, выберите до 4 фото, при желании напишите подпись и отправьте."], ["Как сменить язык, тему или профиль?", "Откройте вкладку «Профиль» → «Настройки». Там можно выбрать язык (русский или казахский), тему (светлая или тёмная), изменить профиль (ник, город, аватар, контакты) и выйти из аккаунта."], ["Что такое «Улей»?", "Это раздел для мёда с вашей пасеки. Переключатель «Урожай / Улей» находится вверху главной страницы. Для мёда указывают вид, натуральность («Натуральный» или «Добавлен сахар»), вес упаковки, цвет, консистенцию и год сбора."], ["Можно ли продавать купленный товар?", "Нет. На сайте можно продавать только то, что вы вырастили или произвели сами. Перепродажа запрещена правилами. Если заметили такое объявление, нажмите «Пожаловаться»."], ["Кто видит мои контакты?", "Телефон и Telegram видят вошедшие пользователи, когда открывают ваше объявление и нажимают «Связаться». Адрес вашей почты Google другим пользователям не показывается."], ["Как удалить объявление или аккаунт?", "Объявление: Профиль → «Мои объявления» → «Удалить». Чтобы удалить аккаунт и данные, напишите в «Поддержку». Подробности есть в «Политике конфиденциальности» (Профиль → Настройки)."], ["Это бесплатно?", "Да, сейчас пользоваться сайтом и публиковать объявления можно бесплатно."], ["Как написать в поддержку?", "Профиль → Настройки → «Поддержка». Выберите тему, опишите вопрос и отправьте. Ответ придёт на вашу почту Google или в чат."]]}, "kk": {"sub": "Автожауапшы, ЖИ емес", "list": "Автожауапшы · жиі қойылатын сұрақтар", "role": "Бот", "pick": "Сұрақты таңдаңыз:", "hello": "Сәлем! Мен BeeBot 🐝, DeeHan Online сайтының автожауапшысымын. Мен жасанды интеллект емеспін: жиі қойылатын сұрақтарға дайын жауап беремін. Төменнен сұрақты таңдаңыз.", "qa": [["Хабарландыруды қалай жариялауға болады?", "Төменгі панельдегі «Қосу» (плюс) түймесін басыңыз. «Егін» немесе «Омарта» бөлімін таңдап, фото, атауы, бағасы, көлемі мен өңірін енгізіңіз, бұл өз егініңіз екеніне белгі қойып, «Жариялау» түймесін басыңыз. Хабарландыруды бірден барлық келушілер көреді."], ["Сатушымен қалай байланысуға болады?", "Хабарландыруда «Байланысу» түймесін басыңыз: онда телефон, Telegram және сайттағы чатқа арналған түйме бар (сатушы чатты қосқан болса). Сатушының профилін, тауарлары мен пікірлерін көру үшін оның лақап атын басыңыз."], ["Сатып алу қалай өтеді?", "Чатта сатушымен келісіңіз. Содан кейін сатып алушы «Сатып алу» түймесін басады, сатушы «Сату» түймесімен растайды, тауарды алғасын сатып алушы «Тауар алынды» түймесін басады, тек содан кейін сатушы «Сатылды» деп белгілей алады. Төлем мен жеткізуді өзара келісесіздер."], ["Пікірді қалай қалдыруға болады?", "Хабарландыруда «Байланысу» түймесін басып, терезенің төменгі жағында 1-ден 5-ке дейін жұлдыз қойыңыз, пікір жазып, «Пікір жіберу» түймесін басыңыз. Бір сатушыға бір пікір қалдыруға болады, оны өзгертуге болады."], ["Хабарландыруға қалай шағымдануға болады?", "Хабарландыру карточкасында «Шағымдану» түймесін басып, себебін таңдап, жіберіңіз. Шағым сайт иесіне түседі. Өз хабарландыруларыңызға шағымдануға болмайды."], ["Хабарландыруды қалай сақтауға болады?", "Карточкадағы жүрекшені басыңыз: хабарландыру «Себет» бөліміне түседі және сайтқа қайта кірсеңіз де сақталады. Алып тастау үшін жүрекшені тағы басыңыз."], ["Чатта фотоны қалай жіберуге болады?", "Адаммен чатта хабарлама жолының сол жағындағы қыстырғышты басып, 4 фотоға дейін таңдаңыз, қаласаңыз жазу қосып, жіберіңіз."], ["Тілді, тақырыпты немесе профильді қалай өзгертуге болады?", "«Профиль» → «Баптаулар» бөлімін ашыңыз. Мұнда тілді (орысша немесе қазақша), тақырыпты (ашық немесе қараңғы) таңдауға, профильді (лақап ат, қала, аватар, байланыстар) өзгертуге және аккаунттан шығуға болады."], ["«Омарта» деген не?", "Бұл өз омартаңыздағы балға арналған бөлім. «Егін / Омарта» ауыстырғышы басты беттің жоғарғы жағында. Бал үшін түрі, табиғилығы («Табиғи» немесе «Қант қосылған»), орама салмағы, түсі, консистенциясы және жиналған жылы көрсетіледі."], ["Сатып алынған тауарды сатуға бола ма?", "Жоқ. Сайтта тек өзіңіз өсірген немесе өндірген өнімді сатуға болады. Қайта сатуға ережелер бойынша тыйым салынады. Мұндай хабарландыруды байқасаңыз, «Шағымдану» түймесін басыңыз."], ["Менің байланыстарымды кім көреді?", "Телефон мен Telegram-ды сіздің хабарландыруыңызды ашып, «Байланысу» түймесін басқан кірген пайдаланушылар көреді. Google поштаңыздың мекенжайы басқа пайдаланушыларға көрсетілмейді."], ["Хабарландыруды немесе аккаунтты қалай жоюға болады?", "Хабарландыру: Профиль → «Менің хабарландыруларым» → «Жою». Аккаунт пен деректерді жою үшін «Қолдау» арқылы жазыңыз. Толығырақ «Құпиялылық саясатында» (Профиль → Баптаулар)."], ["Бұл тегін бе?", "Иә, қазір сайтты пайдалану және хабарландыру жариялау тегін."], ["Қолдау қызметіне қалай жазуға болады?", "Профиль → Баптаулар → «Қолдау». Тақырыпты таңдап, сұрағыңызды сипаттап, жіберіңіз. Жауап Google поштаңызға немесе чатқа келеді."]]}};
   var BOT_AV = "data:image/svg+xml;charset=utf-8," + encodeURIComponent("<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 96 96\"><defs><radialGradient id=\"g\" cx=\"50%\" cy=\"40%\" r=\"70%\"><stop offset=\"0\" stop-color=\"#fff3c4\"/><stop offset=\"1\" stop-color=\"#ffc83d\"/></radialGradient><clipPath id=\"c\"><ellipse cx=\"52\" cy=\"56\" rx=\"23\" ry=\"17\"/></clipPath></defs><rect width=\"96\" height=\"96\" fill=\"url(#g)\"/><path d=\"M48 8l33 19v38L48 84 15 65V27z\" fill=\"#ffe08a\" opacity=\".55\"/><ellipse cx=\"44\" cy=\"34\" rx=\"11\" ry=\"17\" fill=\"#e8f6ff\" stroke=\"#8fbfe0\" stroke-width=\"2\" transform=\"rotate(-25 44 34)\"/><ellipse cx=\"60\" cy=\"33\" rx=\"11\" ry=\"17\" fill=\"#e8f6ff\" stroke=\"#8fbfe0\" stroke-width=\"2\" transform=\"rotate(20 60 33)\"/><ellipse cx=\"52\" cy=\"56\" rx=\"23\" ry=\"17\" fill=\"#ffb300\"/><g clip-path=\"url(#c)\"><rect x=\"47\" y=\"30\" width=\"7\" height=\"50\" fill=\"#3e2723\"/><rect x=\"60\" y=\"30\" width=\"7\" height=\"50\" fill=\"#3e2723\"/></g><ellipse cx=\"52\" cy=\"56\" rx=\"23\" ry=\"17\" fill=\"none\" stroke=\"#3e2723\" stroke-width=\"3\"/><path d=\"M75 56l9-3v6z\" fill=\"#3e2723\"/><circle cx=\"30\" cy=\"54\" r=\"11\" fill=\"#3e2723\"/><circle cx=\"26\" cy=\"51\" r=\"3.2\" fill=\"#fff\"/><circle cx=\"26.8\" cy=\"51.4\" r=\"1.4\" fill=\"#3e2723\"/><circle cx=\"35\" cy=\"51\" r=\"3.2\" fill=\"#fff\"/><circle cx=\"35.8\" cy=\"51.4\" r=\"1.4\" fill=\"#3e2723\"/><path d=\"M27 59q4 4 8 0\" stroke=\"#fff\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\"/><path d=\"M26 44q-3-9-9-11M34 44q1-9 7-12\" stroke=\"#3e2723\" stroke-width=\"2.5\" fill=\"none\" stroke-linecap=\"round\"/><circle cx=\"17\" cy=\"33\" r=\"2.5\" fill=\"#3e2723\"/><circle cx=\"41\" cy=\"32\" r=\"2.5\" fill=\"#3e2723\"/></svg>");
+  BOTX.ru.qa.push(["Как установить сайт как приложение?", "Android (Chrome): Профиль → Настройки → «Установить приложение», либо меню браузера → «Установить приложение». iPhone (Safari): нажмите «Поделиться» → «На экран «Домой»». После этого иконка DeeHan появится на экране телефона."]);
+  BOTX.kk.qa.push(["Сайтты қолданба ретінде қалай орнатуға болады?", "Android (Chrome): Профиль → Баптаулар → «Қолданбаны орнату» немесе браузер мәзірі → «Қолданбаны орнату». iPhone (Safari): «Бөлісу» → «Басты экранға» түймесін басыңыз. Содан кейін DeeHan белгішесі телефон экранында пайда болады."]);
   var botLog = [{ who: "bot", k: "hello" }];
   function botT() { return BOTX[lang] || BOTX.ru; }
   function botHead() {
@@ -1675,6 +1694,7 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
       case "inbox": setTab("chat"); break;
       case "chat": startChat(id); break;
       case "chat-open": if (chats[id]) selectChat(id, chats[id]); break;
+      case "install": if (deferredInstall) { deferredInstall.prompt(); deferredInstall = null; renderProfile(); } break;
       case "bot-open": openBot(); break;
       case "bot-q": botAsk(Number(el.getAttribute("data-v"))); break;
       case "chat-back": leaveChat(); renderChatList(); break;
@@ -1742,6 +1762,9 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
       }, function () {});
     });
   }
+  window.addEventListener("beforeinstallprompt", function (e) { e.preventDefault(); deferredInstall = e; if (F.tab === "profile") renderProfile(); });
+  window.addEventListener("appinstalled", function () { deferredInstall = null; if (F.tab === "profile") renderProfile(); });
+  if ("serviceWorker" in navigator && /^https?:$/.test(location.protocol)) window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js").catch(function () {}); });
   boot();
 })();
 </script>
