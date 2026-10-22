@@ -359,6 +359,20 @@ footer { padding-bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .dealbar .row { flex: 0 1 auto; flex-wrap: nowrap; }
 .dealbar .btn { flex: 0 0 auto; }
 .sysmsg { align-self: center; text-align: center; font-size: 14.5px; color: var(--ink-soft); background: var(--paper); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; max-width: 92%; overflow-wrap: anywhere; }
+.nicklink { background: none; border: 0; padding: 0; margin: 0; font: inherit; font-weight: 800; color: inherit; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; text-align: left; }
+.seller[data-act] { cursor: pointer; }
+.srow { display: flex; gap: 12px; align-items: center; padding: 8px 0; border-top: 1px solid var(--line); }
+.srow:first-of-type { border-top: 0; }
+.srow .sth { width: 56px; height: 56px; border-radius: 8px; object-fit: cover; flex: none; background: var(--bg); display: grid; place-items: center; font-size: 26px; }
+.srow .sinfo { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.srow .sinfo b { display: block; }
+.srow .sinfo span { color: var(--ink-soft); font-size: 15px; }
+.srow .btn { flex: none; }
+.citem.bot { background: var(--paper); }
+.citem.bot.on { outline: 2px solid var(--leaf); outline-offset: -2px; }
+.faq { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px 12px; border-top: 1.5px solid var(--line); max-height: 40%; overflow-y: auto; background: var(--paper); }
+.faq .chip { white-space: normal; text-align: left; font-size: 15.5px; }
+.faq .fqt { flex: 1 0 100%; font-weight: 700; color: var(--ink-soft); }
 </style>
 <script>
 (function () {
@@ -452,7 +466,7 @@ window.FIREBASE_CONFIG = {
   messagingSenderId: "318161333317",
   appId: "1:318161333317:web:6c7dced679d951146e872c"
 };
-window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbxNAXdGan8Y0PjPJ2ZgCh3PYHoVTiaFgpaqqCwb8dXZO5yVMkBhV5Pn7Vb-wEdsS4iF/exec";
+window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTUE5cJew5s3ns4d-4azKAa5IJPrjhNiXvccJtv7-_aySZKg9MYi/exec";
 </script>
 <script>
 (function () {
@@ -466,7 +480,7 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbxNAXdGan8Y0PjPJ2Z
       sell: "Выставить урожай", become: "Стать продавцом", myProfile: "Мой профиль",
       statAds: "Объявлений: {n}", statSellers: "Продавцов: {n}",
       searchPh: "Что ищете? Картофель, яблоки…", all: "Всё", allRegions: "Все регионы",
-      sortNew: "Сначала новые", sortCheap: "Подешевле", mine: "Мои объявления", found: "Найдено: {n}",
+      sortRand: "Случайные", sortNew: "Сначала новые", sortCheap: "Подешевле", mine: "Мои объявления", found: "Найдено: {n}",
       emptyT: "Пока ничего не нашлось", emptyX: "Попробуйте другой запрос или выберите все регионы.",
       examplesNote: "Пока нет объявлений. Так будут выглядеть карточки, это примеры.",
       offNote: "Сейчас показаны примеры. Чтобы видеть реальные объявления и публиковать свои, откройте сайт, войдя в аккаунт.",
@@ -507,7 +521,7 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbxNAXdGan8Y0PjPJ2Z
       sell: "Егінді орналастыру", become: "Сатушы болу", myProfile: "Менің профилім",
       statAds: "Хабарландыру: {n}", statSellers: "Сатушы: {n}",
       searchPh: "Не іздейсіз? Картоп, алма…", all: "Барлығы", allRegions: "Барлық өңір",
-      sortNew: "Алдымен жаңалары", sortCheap: "Арзанырақтары", mine: "Менің хабарландыруларым", found: "Табылды: {n}",
+      sortRand: "Кездейсоқ", sortNew: "Алдымен жаңалары", sortCheap: "Арзанырақтары", mine: "Менің хабарландыруларым", found: "Табылды: {n}",
       emptyT: "Әзірге ештеңе табылмады", emptyX: "Басқа сұрау енгізіңіз немесе барлық өңірді таңдаңыз.",
       examplesNote: "Әзірге хабарландыру жоқ. Карточкалар былай көрінеді, бұл мысалдар.",
       offNote: "Қазір мысалдар көрсетілген. Нақты хабарландыруларды көру және өзіңіздікін қою үшін сайтты аккаунтпен кіріп ашыңыз.",
@@ -615,6 +629,7 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbxNAXdGan8Y0PjPJ2Z
     supT1: "Вопрос", supT2: "Ошибка на сайте", supT3: "Предложение", supT4: "Другое", supText: "Сообщение", supPh: "Что случилось?", supSend: "Отправить",
     supSent: "Сообщение отправлено. Спасибо!", supErrShort: "Напишите хотя бы несколько слов", supWait: "Подождите немного перед следующим сообщением",
     legalTerms: "Условия использования", legalPriv: "Политика конфиденциальности", legalDate: "Редакция от 22 октября 2026 г.", legalBack: "Назад", gAgree: "Входя, вы принимаете",  gAnd: "и",
+    sellerSince: "На сайте с", sellerItems: "Товары продавца", sellerNoItems: "Пока нет объявлений", sellerAbout: "О себе", sellerNoRating: "Нет оценок", sellerGone: "Профиль не найден",
     themeLabel: "Тема", themeLight: "Светлая", themeDark: "Тёмная",
     chatTooMany: "Не больше 4 фото в одном сообщении", chatTooBig: "Фото слишком большие, отправьте меньше", chatPhoto: "Фото", chatAttach: "Прикрепить фото", chatPhotoErr: "Не удалось отправить фото. Выберите другое.",
     share: "Поделиться", report: "Пожаловаться", linkCopied: "Ссылка скопирована",
@@ -652,6 +667,7 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbxNAXdGan8Y0PjPJ2Z
     supT1: "Сұрақ", supT2: "Сайттағы қате", supT3: "Ұсыныс", supT4: "Басқа", supText: "Хабарлама", supPh: "Не болды?", supSend: "Жіберу",
     supSent: "Хабарлама жіберілді. Рахмет!", supErrShort: "Бірнеше сөз жазыңыз", supWait: "Келесі хабарламаға дейін аздап күтіңіз",
     legalTerms: "Пайдалану шарттары", legalPriv: "Құпиялылық саясаты", legalDate: "2026 жылғы 22 қазандағы редакция", legalBack: "Артқа", gAgree: "Кіру арқылы сіз келесілермен келісесіз:", gAnd: "және",
+    sellerSince: "Сайтта тіркелген күні", sellerItems: "Сатушының тауарлары", sellerNoItems: "Әзірге хабарландыру жоқ", sellerAbout: "Өзі туралы", sellerNoRating: "Баға жоқ", sellerGone: "Профиль табылмады",
     themeLabel: "Тақырып", themeLight: "Ашық", themeDark: "Қараңғы",
     chatTooMany: "Бір хабарламада 4 фотодан көп емес", chatTooBig: "Фотолар тым үлкен, азырақ жіберіңіз", chatPhoto: "Фото", chatAttach: "Фото тіркеу", chatPhotoErr: "Фото жіберілмеді. Басқасын таңдаңыз.",
     share: "Бөлісу", report: "Шағымдану", linkCopied: "Сілтеме көшірілді",
@@ -749,7 +765,7 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbxNAXdGan8Y0PjPJ2Z
 
   var db = null, user = null, uid = null, canWrite = null, meName = "";
   var listings = [], sellers = {}, dbState = "loading";
-  var F = { market: "harvest", q: "", cat: "all", region: "all", sort: "new", mine: false, tab: "home", ptab: "ads", av: 0, gateOn: false };
+  var F = { market: "harvest", q: "", cat: "all", region: "all", sort: "random", mine: false, tab: "home", ptab: "ads", av: 0, gateOn: false };
   var pendingDel = null, pendingPhoto = null, editing = null;
   var modal = $("modal");
   var chats = {}, chatState = { id: null, meta: null, msgs: [], unsub: null, pending: [] }, gateDone = false;
@@ -819,7 +835,7 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbxNAXdGan8Y0PjPJ2Z
     rs.innerHTML = '<option value="all">' + esc(t("allRegions")) + "</option>" + REGIONS.map(function (r) { return '<option value="' + r[0] + '">' + esc(L(r)) + "</option>"; }).join("");
     rs.value = F.region;
     var ss = $("sortSel");
-    ss.innerHTML = '<option value="new">' + esc(t("sortNew")) + '</option><option value="cheap">' + esc(t("sortCheap")) + "</option>";
+    ss.innerHTML = '<option value="random">' + esc(t("sortRand")) + '</option><option value="new">' + esc(t("sortNew")) + '</option><option value="cheap">' + esc(t("sortCheap")) + "</option>";
     ss.value = F.sort;
     $("q").setAttribute("aria-label", t("searchPh"));
     $("regionSel").setAttribute("aria-label", t("fRegion"));
@@ -856,6 +872,8 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbxNAXdGan8Y0PjPJ2Z
     else if (dbState === "ok" && marketListings().length === 0) m = t("examplesNote");
     $("notice").innerHTML = m ? '<p class="note">' + esc(m) + "</p>" : "";
   }
+  var rndKeys = {};
+  function rk(id) { if (rndKeys[id] === undefined) rndKeys[id] = Math.random(); return rndKeys[id]; }
   function isHoney(l) { return l && l.kind === "honey"; }
   function marketListings() { return listings.filter(function (l) { return (F.market === "honey") === isHoney(l); }); }
   function viewItems() {
@@ -877,7 +895,8 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbxNAXdGan8Y0PjPJ2Z
       return true;
     });
     if (F.sort === "cheap") out.sort(function (a, b) { return (a.price > 0 ? a.price : 1e12) - (b.price > 0 ? b.price : 1e12); });
-    else out.sort(function (a, b) { return (b.createdAt || 0) - (a.createdAt || 0); });
+    else if (F.sort === "new") out.sort(function (a, b) { return (b.createdAt || 0) - (a.createdAt || 0); });
+    else out.sort(function (a, b) { return rk(a.id) - rk(b.id); });
     return out;
   }
   function cardHtml(l) {
@@ -914,7 +933,7 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbxNAXdGan8Y0PjPJ2Z
     }
     var tools = l.example ? "" : '<div class="tools"><button type="button" class="linkbtn" data-act="share" data-id="' + esc(l.id) + '">' + esc(t("share")) + "</button>" + (mine ? "" : '<button type="button" class="linkbtn" data-act="report" data-id="' + esc(l.id) + '">' + esc(t("report")) + "</button>") + "</div>";
     return '<article class="tag' + (flashId === l.id ? " flash" : "") + '" id="card-' + esc(l.id) + '"><div class="photo">' + photo + price + badge + sold + heart + '</div><div class="tbody"><h3>' + esc(l.title) + '</h3><div class="meta">' + meta + "</div>" +
-      (l.desc ? '<p class="desc">' + esc(l.desc) + "</p>" : "") + '<div class="seller">' + (sp && sp.name ? avImg(sp, "xs") : "") + "<span>" + esc(sn) + (l.example ? "" : ratingBadge(l.sellerId)) + '</span></div><div class="actions">' + acts + "</div>" + tools + "</div></article>";
+      (l.desc ? '<p class="desc">' + esc(l.desc) + "</p>" : "") + '<div class="seller"' + (l.example ? "" : ' data-act="seller" data-id="' + esc(l.sellerId) + '"') + ">" + (sp && sp.name ? avImg(sp, "xs") : "") + "<span>" + esc(sn) + (l.example ? "" : ratingBadge(l.sellerId)) + '</span></div><div class="actions">' + acts + "</div>" + tools + "</div></article>";
   }
   function renderGrid() {
     var items = viewItems();
@@ -1142,6 +1161,36 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbxNAXdGan8Y0PjPJ2Z
     openModal('<div class="about"><h2 id="mtitle">' + esc(t(kind === "terms" ? "legalTerms" : "legalPriv")) + '</h2><p class="sub">' + esc(t("legalDate")) + "</p>" + body + '</div><div class="row" style="margin-top:12px">' +
       (fromGate ? '<button type="button" class="btn" data-act="login">' + esc(t("legalBack")) + "</button>" : '<button type="button" class="btn" data-act="close">' + esc(t("close")) + "</button>") + "</div>", "wide");
   }
+  function regTs() {
+    var u = auth && auth.currentUser, ct = u && u.metadata && u.metadata.creationTime ? Date.parse(u.metadata.creationTime) : NaN;
+    return isNaN(ct) ? Date.now() : ct;
+  }
+  function fmtFullDate(ts) {
+    try { return new Date(ts).toLocaleDateString(lang === "kk" ? "kk-KZ" : "ru-RU", { day: "numeric", month: "long", year: "numeric" }); } catch (e) { return ""; }
+  }
+  function sellerModal(sid) {
+    var p = sellers[sid];
+    if (!p) { infoModal(t("sellerGone")); return; }
+    var r = ratingOf(sid), self = sid === uid;
+    var items = listings.filter(function (l) { return l.sellerId === sid; }).sort(function (a, b) {
+      return ((a.status === "sold") - (b.status === "sold")) || ((b.createdAt || 0) - (a.createdAt || 0));
+    });
+    var revs = reviews.filter(function (x) { return x.sellerId === sid; }).sort(function (a, b) { return (b.createdAt || 0) - (a.createdAt || 0); }).slice(0, 20);
+    var head = '<div class="pcard sm">' + avImg(p, "lg") + '<div><div class="pname">' + esc(p.name || "") + '</div><div class="psub">' + esc(p.city || "") + "</div>" +
+      (p.createdAt ? '<div class="psub">' + esc(t("sellerSince")) + ": <b>" + esc(fmtFullDate(p.createdAt)) + "</b></div>" : "") +
+      '<div class="psub">' + (r.n ? '<span class="rate">★ ' + r.avg.toFixed(1) + " (" + r.n + ")</span>" : esc(t("sellerNoRating"))) + "</div></div></div>" +
+      (p.about ? '<p class="kv"><b>' + esc(t("sellerAbout")) + ":</b> " + esc(p.about) + "</p>" : "");
+    var rows = items.length ? items.map(function (l) {
+      var th = l.photo ? '<img class="sth" src="' + esc(l.photo) + '" alt="">' : '<span class="sth" aria-hidden="true">' + (isHoney(l) ? "🍯" : "🌾") + "</span>";
+      var pr = l.price > 0 ? fmtMoney(l.price) + " ₸ / " + unitLabel(l.unit) : t("priceNeg");
+      return '<div class="srow">' + th + '<div class="sinfo"><b>' + esc(l.title) + "</b><span>" + esc(pr) + (l.status === "sold" ? " · " + esc(t("sold")) : "") + "</span></div>" +
+        (self || l.status === "sold" ? "" : '<button type="button" class="btn small" data-act="contact" data-id="' + esc(l.id) + '">' + esc(t("contact")) + "</button>") + "</div>";
+    }).join("") : '<p class="kv">' + esc(t("sellerNoItems")) + "</p>";
+    var rv = revs.length ? revs.map(function (x) {
+      return '<div class="rev"><b>' + esc(x.authorName || "") + '</b> <span class="stars">' + starsStr(x.rating) + '</span><span class="rtime">' + esc(fmtTime(x.createdAt)) + "</span>" + (x.text ? "<p>" + esc(x.text) + "</p>" : "") + "</div>";
+    }).join("") : '<p class="kv">' + esc(t("revNone")) + "</p>";
+    openModal('<div class="about"><h2 id="mtitle">' + esc(p.name || "") + "</h2>" + head + "<h3>" + esc(t("sellerItems")) + "</h3>" + rows + "<h3>" + esc(t("revTitle")) + "</h3>" + rv + '</div><div class="row" style="margin-top:12px"><button type="button" class="btn" data-act="close">' + esc(t("close")) + "</button></div>");
+  }
   function aboutModal() {
     var act = listings.filter(function (l) { return l.status !== "sold"; }).length;
     var sn = Object.keys(sellers).length;
@@ -1209,7 +1258,7 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbxNAXdGan8Y0PjPJ2Z
     if (tg && tg.length < 5) { err.textContent = t("eTg"); $("p_tg").focus(); return; }
     if (!ph && !tg && !chatOn) { err.textContent = t("eNoContact"); return; }
     $("p_save").disabled = true;
-    var data = { name: name, city: city, avatar: F.av, phone: ph, telegram: tg, chatOn: chatOn, about: $("p_about").value.trim(), updatedAt: Date.now() };
+    var data = { createdAt: (sellers[uid] && sellers[uid].createdAt) || regTs(), name: name, city: city, avatar: F.av, phone: ph, telegram: tg, chatOn: chatOn, about: $("p_about").value.trim(), updatedAt: Date.now() };
     try {
       await db.doc("sellers/" + uid).set(data);
       sellers[uid] = data;
@@ -1368,7 +1417,41 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbxNAXdGan8Y0PjPJ2Z
     var p = {}; p["seen." + uid] = Date.now();
     db.doc("chats/" + id).update(p).catch(function () {});
   }
+  var BOTX = {"ru": {"sub": "Автоответчик, не ИИ", "list": "Автоответчик · частые вопросы", "role": "Бот", "pick": "Выберите вопрос:", "hello": "Привет! Я BeeBot 🐝, автоответчик сайта DeeHan Online. Я не искусственный интеллект: просто даю готовые ответы на частые вопросы. Выберите вопрос ниже.", "qa": [["Как опубликовать объявление?", "Нажмите «Создать» (плюс) в нижней панели. Выберите раздел «Урожай» или «Улей», добавьте фото, название, цену, количество и регион, поставьте отметку, что это ваш урожай, и нажмите «Опубликовать». Объявление сразу увидят все посетители."], ["Как связаться с продавцом?", "Откройте объявление и нажмите «Связаться»: там телефон, Telegram и кнопка для чата на сайте (если продавец включил чат). Нажмите на ник продавца, чтобы посмотреть его профиль, товары и отзывы."], ["Как проходит покупка?", "Договоритесь с продавцом в чате. Затем покупатель нажимает «Купить», продавец подтверждает кнопкой «Продать», после получения товара покупатель нажимает «Товар получен», и только после этого продавец может отметить «Продано». Оплату и доставку вы согласуете между собой."], ["Как оставить отзыв?", "Откройте объявление, нажмите «Связаться», внизу окна поставьте звёзды от 1 до 5, напишите комментарий и нажмите «Отправить отзыв». На одного продавца можно оставить один отзыв, его можно изменить."], ["Как пожаловаться на объявление?", "На карточке объявления нажмите «Пожаловаться», выберите причину и отправьте. Жалоба придёт владельцу сайта. На свои объявления пожаловаться нельзя."], ["Как сохранить объявление?", "Нажмите на сердечко на карточке: объявление попадёт во вкладку «Корзина» и останется там даже после перезахода. Нажмите на сердечко ещё раз, чтобы убрать."], ["Как отправить фото в чате?", "В чате с человеком нажмите скрепку слева от поля сообщения, выберите до 4 фото, при желании напишите подпись и отправьте."], ["Как сменить язык, тему или профиль?", "Откройте вкладку «Профиль» → «Настройки». Там можно выбрать язык (русский или казахский), тему (светлая или тёмная), изменить профиль (ник, город, аватар, контакты) и выйти из аккаунта."], ["Что такое «Улей»?", "Это раздел для мёда с вашей пасеки. Переключатель «Урожай / Улей» находится вверху главной страницы. Для мёда указывают вид, натуральность («Натуральный» или «Добавлен сахар»), вес упаковки, цвет, консистенцию и год сбора."], ["Можно ли продавать купленный товар?", "Нет. На сайте можно продавать только то, что вы вырастили или произвели сами. Перепродажа запрещена правилами. Если заметили такое объявление, нажмите «Пожаловаться»."], ["Кто видит мои контакты?", "Телефон и Telegram видят вошедшие пользователи, когда открывают ваше объявление и нажимают «Связаться». Адрес вашей почты Google другим пользователям не показывается."], ["Как удалить объявление или аккаунт?", "Объявление: Профиль → «Мои объявления» → «Удалить». Чтобы удалить аккаунт и данные, напишите в «Поддержку». Подробности есть в «Политике конфиденциальности» (Профиль → Настройки)."], ["Это бесплатно?", "Да, сейчас пользоваться сайтом и публиковать объявления можно бесплатно."], ["Как написать в поддержку?", "Профиль → Настройки → «Поддержка». Выберите тему, опишите вопрос и отправьте. Ответ придёт на вашу почту Google или в чат."]]}, "kk": {"sub": "Автожауапшы, ЖИ емес", "list": "Автожауапшы · жиі қойылатын сұрақтар", "role": "Бот", "pick": "Сұрақты таңдаңыз:", "hello": "Сәлем! Мен BeeBot 🐝, DeeHan Online сайтының автожауапшысымын. Мен жасанды интеллект емеспін: жиі қойылатын сұрақтарға дайын жауап беремін. Төменнен сұрақты таңдаңыз.", "qa": [["Хабарландыруды қалай жариялауға болады?", "Төменгі панельдегі «Қосу» (плюс) түймесін басыңыз. «Егін» немесе «Омарта» бөлімін таңдап, фото, атауы, бағасы, көлемі мен өңірін енгізіңіз, бұл өз егініңіз екеніне белгі қойып, «Жариялау» түймесін басыңыз. Хабарландыруды бірден барлық келушілер көреді."], ["Сатушымен қалай байланысуға болады?", "Хабарландыруда «Байланысу» түймесін басыңыз: онда телефон, Telegram және сайттағы чатқа арналған түйме бар (сатушы чатты қосқан болса). Сатушының профилін, тауарлары мен пікірлерін көру үшін оның лақап атын басыңыз."], ["Сатып алу қалай өтеді?", "Чатта сатушымен келісіңіз. Содан кейін сатып алушы «Сатып алу» түймесін басады, сатушы «Сату» түймесімен растайды, тауарды алғасын сатып алушы «Тауар алынды» түймесін басады, тек содан кейін сатушы «Сатылды» деп белгілей алады. Төлем мен жеткізуді өзара келісесіздер."], ["Пікірді қалай қалдыруға болады?", "Хабарландыруда «Байланысу» түймесін басып, терезенің төменгі жағында 1-ден 5-ке дейін жұлдыз қойыңыз, пікір жазып, «Пікір жіберу» түймесін басыңыз. Бір сатушыға бір пікір қалдыруға болады, оны өзгертуге болады."], ["Хабарландыруға қалай шағымдануға болады?", "Хабарландыру карточкасында «Шағымдану» түймесін басып, себебін таңдап, жіберіңіз. Шағым сайт иесіне түседі. Өз хабарландыруларыңызға шағымдануға болмайды."], ["Хабарландыруды қалай сақтауға болады?", "Карточкадағы жүрекшені басыңыз: хабарландыру «Себет» бөліміне түседі және сайтқа қайта кірсеңіз де сақталады. Алып тастау үшін жүрекшені тағы басыңыз."], ["Чатта фотоны қалай жіберуге болады?", "Адаммен чатта хабарлама жолының сол жағындағы қыстырғышты басып, 4 фотоға дейін таңдаңыз, қаласаңыз жазу қосып, жіберіңіз."], ["Тілді, тақырыпты немесе профильді қалай өзгертуге болады?", "«Профиль» → «Баптаулар» бөлімін ашыңыз. Мұнда тілді (орысша немесе қазақша), тақырыпты (ашық немесе қараңғы) таңдауға, профильді (лақап ат, қала, аватар, байланыстар) өзгертуге және аккаунттан шығуға болады."], ["«Омарта» деген не?", "Бұл өз омартаңыздағы балға арналған бөлім. «Егін / Омарта» ауыстырғышы басты беттің жоғарғы жағында. Бал үшін түрі, табиғилығы («Табиғи» немесе «Қант қосылған»), орама салмағы, түсі, консистенциясы және жиналған жылы көрсетіледі."], ["Сатып алынған тауарды сатуға бола ма?", "Жоқ. Сайтта тек өзіңіз өсірген немесе өндірген өнімді сатуға болады. Қайта сатуға ережелер бойынша тыйым салынады. Мұндай хабарландыруды байқасаңыз, «Шағымдану» түймесін басыңыз."], ["Менің байланыстарымды кім көреді?", "Телефон мен Telegram-ды сіздің хабарландыруыңызды ашып, «Байланысу» түймесін басқан кірген пайдаланушылар көреді. Google поштаңыздың мекенжайы басқа пайдаланушыларға көрсетілмейді."], ["Хабарландыруды немесе аккаунтты қалай жоюға болады?", "Хабарландыру: Профиль → «Менің хабарландыруларым» → «Жою». Аккаунт пен деректерді жою үшін «Қолдау» арқылы жазыңыз. Толығырақ «Құпиялылық саясатында» (Профиль → Баптаулар)."], ["Бұл тегін бе?", "Иә, қазір сайтты пайдалану және хабарландыру жариялау тегін."], ["Қолдау қызметіне қалай жазуға болады?", "Профиль → Баптаулар → «Қолдау». Тақырыпты таңдап, сұрағыңызды сипаттап, жіберіңіз. Жауап Google поштаңызға немесе чатқа келеді."]]}};
+  var BOT_AV = "data:image/svg+xml;charset=utf-8," + encodeURIComponent("<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 96 96\"><defs><radialGradient id=\"g\" cx=\"50%\" cy=\"40%\" r=\"70%\"><stop offset=\"0\" stop-color=\"#fff3c4\"/><stop offset=\"1\" stop-color=\"#ffc83d\"/></radialGradient><clipPath id=\"c\"><ellipse cx=\"52\" cy=\"56\" rx=\"23\" ry=\"17\"/></clipPath></defs><rect width=\"96\" height=\"96\" fill=\"url(#g)\"/><path d=\"M48 8l33 19v38L48 84 15 65V27z\" fill=\"#ffe08a\" opacity=\".55\"/><ellipse cx=\"44\" cy=\"34\" rx=\"11\" ry=\"17\" fill=\"#e8f6ff\" stroke=\"#8fbfe0\" stroke-width=\"2\" transform=\"rotate(-25 44 34)\"/><ellipse cx=\"60\" cy=\"33\" rx=\"11\" ry=\"17\" fill=\"#e8f6ff\" stroke=\"#8fbfe0\" stroke-width=\"2\" transform=\"rotate(20 60 33)\"/><ellipse cx=\"52\" cy=\"56\" rx=\"23\" ry=\"17\" fill=\"#ffb300\"/><g clip-path=\"url(#c)\"><rect x=\"47\" y=\"30\" width=\"7\" height=\"50\" fill=\"#3e2723\"/><rect x=\"60\" y=\"30\" width=\"7\" height=\"50\" fill=\"#3e2723\"/></g><ellipse cx=\"52\" cy=\"56\" rx=\"23\" ry=\"17\" fill=\"none\" stroke=\"#3e2723\" stroke-width=\"3\"/><path d=\"M75 56l9-3v6z\" fill=\"#3e2723\"/><circle cx=\"30\" cy=\"54\" r=\"11\" fill=\"#3e2723\"/><circle cx=\"26\" cy=\"51\" r=\"3.2\" fill=\"#fff\"/><circle cx=\"26.8\" cy=\"51.4\" r=\"1.4\" fill=\"#3e2723\"/><circle cx=\"35\" cy=\"51\" r=\"3.2\" fill=\"#fff\"/><circle cx=\"35.8\" cy=\"51.4\" r=\"1.4\" fill=\"#3e2723\"/><path d=\"M27 59q4 4 8 0\" stroke=\"#fff\" stroke-width=\"2\" fill=\"none\" stroke-linecap=\"round\"/><path d=\"M26 44q-3-9-9-11M34 44q1-9 7-12\" stroke=\"#3e2723\" stroke-width=\"2.5\" fill=\"none\" stroke-linecap=\"round\"/><circle cx=\"17\" cy=\"33\" r=\"2.5\" fill=\"#3e2723\"/><circle cx=\"41\" cy=\"32\" r=\"2.5\" fill=\"#3e2723\"/></svg>");
+  var botLog = [{ who: "bot", k: "hello" }];
+  function botT() { return BOTX[lang] || BOTX.ru; }
+  function botHead() {
+    return '<div class="thead"><button type="button" class="btn small ghost back" data-act="chat-back" aria-label="' + esc(t("chatBack")) + '">←</button><img class="av md" src="' + BOT_AV + '" alt="BeeBot"><div><b>BeeBot <span class="role">[' + esc(botT().role) + ']</span></b><div class="tsub">' + esc(botT().sub) + "</div></div></div>";
+  }
+  function openBot() {
+    if (chatState.unsub) { chatState.unsub(); chatState.unsub = null; }
+    if (chatState.id) markSeen(chatState.id);
+    chatState.id = null; chatState.meta = null; chatState.msgs = []; chatState.pending = []; chatState.bot = true;
+    $("thread").innerHTML = botHead() + '<div class="msgs" id="msgs" role="log" aria-live="polite"></div><div class="faq" id="faq"></div>';
+    $("chatwrap").classList.add("show-thread");
+    document.body.classList.add("in-thread");
+    renderBot(true); renderChatList();
+  }
+  function renderBot(scroll) {
+    var el = $("msgs"), fq = $("faq");
+    if (!el || !chatState.bot) return;
+    var b = botT();
+    el.innerHTML = botLog.map(function (m) {
+      var txt = m.who === "me" ? b.qa[m.q][0] : (m.k === "hello" ? b.hello : b.qa[m.a][1]);
+      return '<div class="msg ' + (m.who === "me" ? "me" : "them") + '"><div class="bub">' + esc(txt) + "</div></div>";
+    }).join("");
+    fq.innerHTML = '<span class="fqt">' + esc(b.pick) + "</span>" + b.qa.map(function (x, i) { return '<button type="button" class="chip" data-act="bot-q" data-v="' + i + '">' + esc(x[0]) + "</button>"; }).join("");
+    if (scroll !== false) el.scrollTop = el.scrollHeight;
+  }
+  function botAsk(i) {
+    if (!chatState.bot) return;
+    botLog.push({ who: "me", q: i });
+    renderBot();
+    setTimeout(function () { if (!chatState.bot) return; botLog.push({ who: "bot", a: i }); renderBot(); }, 450);
+  }
   function chatLeave() {
+    chatState.bot = false;
     if (chatState.unsub) { chatState.unsub(); chatState.unsub = null; }
     document.body.classList.remove("in-thread");
     if (chatState.id) { var id = chatState.id; chatState.id = null; chatState.meta = null; chatState.msgs = []; markSeen(id); }
@@ -1378,11 +1461,12 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbxNAXdGan8Y0PjPJ2Z
     if (!el) return;
     var arr = Object.keys(chats).map(function (k) { return chats[k]; }).filter(function (c) { return c.lastAt; });
     arr.sort(function (a, b) { return (b.lastAt || 0) - (a.lastAt || 0); });
-    el.innerHTML = arr.length ? arr.map(function (c) {
+    var botItem = '<button type="button" class="citem bot' + (chatState.bot ? " on" : "") + '" data-act="bot-open"><span class="crow"><img class="av md" src="' + BOT_AV + '" alt=""><span class="ctext"><b>BeeBot <span class="role">[' + esc(botT().role) + ']</span></b><span class="l2">' + esc(botT().list) + "</span></span></span></button>";
+    el.innerHTML = botItem + (arr.length ? arr.map(function (c) {
       return '<button type="button" class="citem' + (c.id === chatState.id ? " on" : "") + '" data-act="chat-open" data-id="' + esc(c.id) + '"><span class="crow">' + avImg(partnerProfile(c), "md") +
         '<span class="ctext"><b>' + nickHtml(c) + '</b><span class="l2">' + esc(c.listingTitle || "") + '</span><span class="l3">' + esc(c.lastText || "") + "</span></span>" +
         (isUnread(c) ? '<i class="dot sm" aria-hidden="true"></i>' : "") + "</span></button>";
-    }).join("") : '<p class="chatnone">' + esc(t("chatEmpty")) + "</p>";
+    }).join("") : '<p class="chatnone">' + esc(t("chatEmpty")) + "</p>");
   }
   function subscribeMsgs(cid) {
     if (chatState.unsub) { chatState.unsub(); chatState.unsub = null; }
@@ -1395,10 +1479,10 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbxNAXdGan8Y0PjPJ2Z
   function selectChat(cid, meta) {
     if (chatState.unsub) { chatState.unsub(); chatState.unsub = null; }
     if (chatState.id && chatState.id !== cid) markSeen(chatState.id);
-    chatState.id = cid; chatState.meta = meta; chatState.msgs = []; chatState.pending = [];
+    chatState.id = cid; chatState.meta = meta; chatState.msgs = []; chatState.pending = []; chatState.bot = false;
     var c = meta || {};
     $("thread").innerHTML = '<div class="thead"><button type="button" class="btn small ghost back" data-act="chat-back" aria-label="' + esc(t("chatBack")) + '">←</button>' + avImg(partnerProfile(c), "md") +
-      '<div><b>' + nickHtml(c) + '</b><div class="tsub">' + esc(t("chatAbout")) + " " + esc(c.listingTitle || "") + "</div></div></div>" +
+      '<div><b><button type="button" class="nicklink" data-act="seller" data-id="' + esc(chatPartner(c)) + '">' + esc(partnerName(c)) + '</button> <span class="role">[' + esc(partnerRole(c)) + ']</span></b><div class="tsub">' + esc(t("chatAbout")) + " " + esc(c.listingTitle || "") + "</div></div></div>" +
       '<div class="dealbar" id="dealbar" hidden></div>' +
       '<div class="msgs" id="msgs" role="log" aria-live="polite"></div>' +
       '<div class="tray" id="tray" hidden></div><form class="composer" id="composer"><button type="button" class="btn ghost attach" id="c_attach" aria-label="' + esc(t("chatAttach")) + '"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.5l-8.6 8.6a5.5 5.5 0 0 1-7.8-7.8l9-9a3.7 3.7 0 0 1 5.2 5.2l-9 9a1.8 1.8 0 0 1-2.6-2.6l8.3-8.3"/></svg></button><input type="file" id="c_file" accept="image/*" multiple style="display:none"><textarea id="c_text" rows="2" maxlength="1000" aria-label="' + esc(t("chatPh")) + '" placeholder="' + esc(t("chatPh")) + '"></textarea><button type="submit" class="btn" id="c_send">' + esc(t("chatSend")) + "</button></form>" +
@@ -1554,6 +1638,7 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbxNAXdGan8Y0PjPJ2Z
       case "report": reportModal(id); break;
       case "about": aboutModal(); break;
       case "support": supportModal(); break;
+      case "seller": sellerModal(id); break;
       case "terms": legalModal("terms", el.getAttribute("data-g") === "1"); break;
       case "privacy": legalModal("privacy", el.getAttribute("data-g") === "1"); break;
       case "star":
@@ -1569,7 +1654,7 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbxNAXdGan8Y0PjPJ2Z
       case "lang-ru": case "lang-kk":
         lang = act === "lang-kk" ? "kk" : "ru";
         try { localStorage.setItem("ur_lang", lang); } catch (x) {}
-        applyLang(); renderAll(); if (F.gateOn) gateModal(); break;
+        applyLang(); renderAll(); if (chatState.bot) { $("thread").firstChild && ($("thread").querySelector(".thead").outerHTML = botHead()); renderBot(false); } if (F.gateOn) gateModal(); break;
       case "cta": onCta(); break;
       case "market": F.market = el.getAttribute("data-v"); F.cat = "all"; renderChips(); renderNotice(); renderGrid(); break;
       case "fmode": listingModal(null, el.getAttribute("data-v")); break;
@@ -1590,6 +1675,8 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbxNAXdGan8Y0PjPJ2Z
       case "inbox": setTab("chat"); break;
       case "chat": startChat(id); break;
       case "chat-open": if (chats[id]) selectChat(id, chats[id]); break;
+      case "bot-open": openBot(); break;
+      case "bot-q": botAsk(Number(el.getAttribute("data-v"))); break;
       case "chat-back": leaveChat(); renderChatList(); break;
       case "edit": var o = byId(id); if (o) listingModal(o); break;
       case "sold": var rc = receivedDealChat(id); if (rc) dealStep("done", rc); else infoModal(t("soldNeedDeal")); break;
@@ -1631,8 +1718,10 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbxNAXdGan8Y0PjPJ2Z
       if (!u && F.tab !== "home") setTab("home");
       renderAll();
       if (!u) { decideGate(); return; }
+      var sellerFilled = false;
       sellersUnsub = db.collection("sellers").limit(500).onSnapshot(function (snap) {
         var m = {}; snap.docs.forEach(function (d) { m[d.id] = d.data(); }); sellers = m; renderAll();
+        if (sellers[u.uid] && !sellers[u.uid].createdAt && !sellerFilled) { sellerFilled = true; db.doc("sellers/" + u.uid).update({ createdAt: regTs() }).catch(function () {}); }
         decideGate();
       }, function () { decideGate(); });
       chatsUnsub = db.collection("chats").where("participants", "array-contains", u.uid).limit(200).onSnapshot(function (snap) {
