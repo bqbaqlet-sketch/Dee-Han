@@ -452,6 +452,7 @@ window.FIREBASE_CONFIG = {
   messagingSenderId: "318161333317",
   appId: "1:318161333317:web:6c7dced679d951146e872c"
 };
+window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTUE5cJew5s3ns4d-4azKAa5IJPrjhNiXvccJtv7-_aySZKg9MYi/exec";
 </script>
 <script>
 (function () {
@@ -610,6 +611,9 @@ window.FIREBASE_CONFIG = {
     dBuy: "Купить", dSell: "Продать", dRecv: "Товар получен", dDone: "Продано", dCancel: "Отменить",
     dWaitSeller: "Ждём подтверждения продавца", dWaitRecv: "Ждём, пока покупатель подтвердит получение", dWaitDone: "Ждём, пока продавец отметит «Продано»", dAskSell: "Покупатель хочет купить. Подтвердите продажу", dAskRecv: "Продавец готов. Получили товар?", dAskDone: "Товар получен покупателем. Можно отметить «Продано»", dFinished: "Сделка завершена ✓", dSoldAlready: "Этот товар уже продан",
     soldNeedDeal: "Отметить «Продано» можно после сделки в чате: покупатель нажимает «Товар получен», и тогда кнопка «Продано» появится у вас в чате.",
+    supBtn: "Поддержка", supTitle: "Написать в поддержку", supSub: "Опишите вопрос или проблему. Мы ответим на вашу почту Google или в чат.", supTopic: "Тема",
+    supT1: "Вопрос", supT2: "Ошибка на сайте", supT3: "Предложение", supT4: "Другое", supText: "Сообщение", supPh: "Что случилось?", supSend: "Отправить",
+    supSent: "Сообщение отправлено. Спасибо!", supErrShort: "Напишите хотя бы несколько слов", supWait: "Подождите немного перед следующим сообщением",
     themeLabel: "Тема", themeLight: "Светлая", themeDark: "Тёмная",
     chatTooMany: "Не больше 4 фото в одном сообщении", chatTooBig: "Фото слишком большие, отправьте меньше", chatPhoto: "Фото", chatAttach: "Прикрепить фото", chatPhotoErr: "Не удалось отправить фото. Выберите другое.",
     share: "Поделиться", report: "Пожаловаться", linkCopied: "Ссылка скопирована",
@@ -643,6 +647,9 @@ window.FIREBASE_CONFIG = {
     dBuy: "Сатып алу", dSell: "Сату", dRecv: "Тауар алынды", dDone: "Сатылды", dCancel: "Бас тарту",
     dWaitSeller: "Сатушының растауын күтеміз", dWaitRecv: "Сатып алушының алғанын растауын күтеміз", dWaitDone: "Сатушы «Сатылды» деп белгілегенше күтеміз", dAskSell: "Сатып алушы сатып алғысы келеді. Сатуды растаңыз", dAskRecv: "Сатушы дайын. Тауарды алдыңыз ба?", dAskDone: "Сатып алушы тауарды алды. «Сатылды» деп белгілеуге болады", dFinished: "Мәміле аяқталды ✓", dSoldAlready: "Бұл тауар сатылып қойған",
     soldNeedDeal: "«Сатылды» деп чаттағы мәміледен кейін белгілеуге болады: сатып алушы «Тауар алынды» түймесін басады, сонда «Сатылды» түймесі чатта пайда болады.",
+    supBtn: "Қолдау", supTitle: "Қолдау қызметіне жазу", supSub: "Сұрағыңыз бен мәселеңізді сипаттаңыз. Google поштаңызға немесе чатқа жауап береміз.", supTopic: "Тақырып",
+    supT1: "Сұрақ", supT2: "Сайттағы қате", supT3: "Ұсыныс", supT4: "Басқа", supText: "Хабарлама", supPh: "Не болды?", supSend: "Жіберу",
+    supSent: "Хабарлама жіберілді. Рахмет!", supErrShort: "Бірнеше сөз жазыңыз", supWait: "Келесі хабарламаға дейін аздап күтіңіз",
     themeLabel: "Тақырып", themeLight: "Ашық", themeDark: "Қараңғы",
     chatTooMany: "Бір хабарламада 4 фотодан көп емес", chatTooBig: "Фотолар тым үлкен, азырақ жіберіңіз", chatPhoto: "Фото", chatAttach: "Фото тіркеу", chatPhotoErr: "Фото жіберілмеді. Басқасын таңдаңыз.",
     share: "Бөлісу", report: "Шағымдану", linkCopied: "Сілтеме көшірілді",
@@ -938,7 +945,7 @@ window.FIREBASE_CONFIG = {
         return '<button type="button" class="chip" data-act="theme-' + x[0] + '" aria-pressed="' + (cth === x[0]) + '">' + esc(t(x[1])) + "</button>";
       }).join("") + "</div>";
       inner = '<div class="pset"><div class="kv">' + esc(t("langLabel")) + '</div><div class="chips"><button type="button" class="chip" data-act="lang-ru" aria-pressed="' + (lang === "ru") + '">Русский</button><button type="button" class="chip" data-act="lang-kk" aria-pressed="' + (lang === "kk") + '">Қазақша</button></div>' +
-        themes + '<div class="row"><button type="button" class="btn ghost" data-act="about">' + esc(t("aboutBtn")) + '</button></div><div class="row"><button type="button" class="btn" data-act="editprof">' + esc(t("editProfile")) + '</button><button type="button" class="btn danger" data-act="logout">' + esc(t("logout")) + "</button></div></div>";
+        themes + '<div class="row"><button type="button" class="btn ghost" data-act="about">' + esc(t("aboutBtn")) + '</button><button type="button" class="btn ghost" data-act="support">' + esc(t("supBtn")) + '</button></div><div class="row"><button type="button" class="btn" data-act="editprof">' + esc(t("editProfile")) + '</button><button type="button" class="btn danger" data-act="logout">' + esc(t("logout")) + "</button></div></div>";
     }
     box.innerHTML = head + tabs + inner;
   }
@@ -1045,6 +1052,30 @@ window.FIREBASE_CONFIG = {
         closeModal(); toast(t("reportSent"));
       } catch (x) { $("rp_err").textContent = t("saveErr") + (x && x.code ? " [" + x.code + "]" : ""); }
     });
+  }
+  var SUP_TOPICS = ["Вопрос", "Ошибка на сайте", "Предложение", "Другое"];
+  function supportModal() {
+    var opts = [1, 2, 3, 4].map(function (i) { return '<option value="' + (i - 1) + '">' + esc(t("supT" + i)) + "</option>"; }).join("");
+    openModal('<h2 id="mtitle">' + esc(t("supTitle")) + '</h2><p class="sub">' + esc(t("supSub")) + '</p><form class="form" id="supForm" novalidate><div class="field"><label for="s_topic">' + esc(t("supTopic")) + '</label><select id="s_topic">' + opts + '</select></div>' +
+      '<div class="field"><label for="s_text">' + esc(t("supText")) + '</label><textarea id="s_text" maxlength="1000" placeholder="' + esc(t("supPh")) + '"></textarea></div><p class="err" id="s_err" role="alert"></p>' +
+      '<div class="row"><button type="submit" class="btn" id="s_send">' + esc(t("supSend")) + '</button><button type="button" class="btn ghost" data-act="close">' + esc(t("cancel")) + "</button></div></form>");
+    $("supForm").addEventListener("submit", function (e) { e.preventDefault(); sendSupport(); });
+  }
+  async function sendSupport() {
+    var err = $("s_err"), text = $("s_text").value.trim();
+    if (text.length < 5) { err.textContent = t("supErrShort"); return; }
+    var last = 0; try { last = Number(localStorage.getItem("ur_sup_ts")) || 0; } catch (e) {}
+    if (Date.now() - last < 30000) { err.textContent = t("supWait"); return; }
+    var me = mySeller() || {}, u = auth && auth.currentUser;
+    var data = { uid: uid, name: me.name || meName || "", email: (u && u.email) || "", city: me.city || "", phone: me.phone || "", telegram: me.telegram || "", topic: SUP_TOPICS[Number($("s_topic").value)] || "", text: text.slice(0, 1000), lang: lang, createdAt: Date.now() };
+    $("s_send").disabled = true;
+    try {
+      var ref = await db.collection("support").add(data);
+      try { localStorage.setItem("ur_sup_ts", String(Date.now())); } catch (e) {}
+      var url = window.SUPPORT_URL;
+      if (url && /^https:/.test(url)) { try { fetch(url, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(Object.assign({ id: ref.id }, data)) }).catch(function () {}); } catch (e) {} }
+      closeModal(); toast(t("supSent"));
+    } catch (e) { err.textContent = t("saveErr") + (e && e.code ? " [" + e.code + "]" : ""); $("s_send").disabled = false; }
   }
   function aboutModal() {
     var act = listings.filter(function (l) { return l.status !== "sold"; }).length;
@@ -1456,6 +1487,7 @@ window.FIREBASE_CONFIG = {
       case "share": shareListing(id); break;
       case "report": reportModal(id); break;
       case "about": aboutModal(); break;
+      case "support": supportModal(); break;
       case "star":
         F.rate = Number(el.getAttribute("data-v"));
         document.querySelectorAll("#starpick button").forEach(function (b, i) { b.textContent = i < F.rate ? "★" : "☆"; });
