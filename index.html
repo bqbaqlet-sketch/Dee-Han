@@ -295,6 +295,8 @@ footer { padding-bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .psub { color: var(--ink-soft); overflow-wrap: anywhere; }
 .pset { display: grid; gap: 10px; padding-block: 8px 24px; }
 .pset .chips { padding-bottom: 4px; }
+.pset .row { display: grid; grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); }
+.pset .row .btn { min-width: 0; }
 .avpick { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
 .avopt { padding: 2px; border: 3px solid transparent; border-radius: 50%; background: transparent; line-height: 0; }
 .avopt img { width: 100%; aspect-ratio: 1; border-radius: 50%; display: block; }
