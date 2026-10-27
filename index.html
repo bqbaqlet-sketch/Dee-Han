@@ -358,8 +358,8 @@ footer { padding-bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .mgrid .mimg { width: 100%; height: 130px; object-fit: cover; max-height: none; }
 .mgrid.n1 .mimg { height: auto; max-height: 260px; object-fit: contain; }
 .cap { padding: 6px 8px 3px; white-space: pre-wrap; overflow-wrap: anywhere; }
-.seg { display: flex; gap: 8px; }
-.seg .chip { flex: 1; text-align: center; font-size: 18px; padding: 10px 8px; }
+.seg { display: flex; flex-wrap: wrap; gap: 8px; }
+.seg .chip { flex: 1 1 auto; text-align: center; font-size: 16px; padding: 10px 8px; }
 .form .seg { margin-bottom: 2px; }
 .dealbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding: 8px 12px; border-bottom: 1px solid var(--line); background: var(--paper); }
 .dealbar[hidden] { display: none; }
@@ -629,6 +629,14 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
     hPrice: "Цена за 1 кг, ₸", hPack: "Вес упаковки", hQty: "Объём в наличии, кг", hYear: "Год сбора урожая", hColor: "Цвет", hCons: "Консистенция",
     hDesc: "Аромат и вкусовые особенности", hDescPh: "Например, лёгкий липовый аромат, нежный вкус без горчинки", hOwn: "Подтверждаю: это мёд с моей пасеки",
     eYear: "Укажите год сбора", eOwnHoney: "Поставьте отметку, что это мёд с вашей пасеки", hPackShort: "Упаковка", hYearCard: "Урожай", hYearEnd: "г.", hEmptyHive: "В этом разделе пока нет объявлений.",
+    segFarm: "Сельское хозяйство", fSub: "Что продаёте", fSubFeed: "Корм", fSubHay: "Сено",
+    fFName: "Название корма", fFNamePh: "Например, ячмень кормовой", fHName: "Название (необязательно)", fHNamePh: "Например, люцерна первого укоса",
+    fFType: "Вид корма", fHType: "Вид сена и соломы", fPackF: "Упаковка", fPriceL: "Цена, ₸", fPriceUnit: "Цена указана за",
+    fWeightF: "Вес, кг", fWeightH: "Вес одного тюка, кг", fStockF: "Объём в наличии (в тех же единицах: кг или тонны)", fBales: "Количество тюков",
+    fComp: "Состав", fCompPh: "Например, ячмень 100%, без добавок", fProt: "Содержание белка, % (необязательно)", fMoist: "Влажность", fMoistPick: "Выберите от 10 до 20 %",
+    fVit: "Содержание витаминов", fVitPh: "Например, A, D3, E", fYearOpt: "Год производства (необязательно)", fOwnFarm: "Подтверждаю: это мой собственный товар",
+    ePriceF: "Укажите цену", eWeight: "Укажите вес", eComp: "Напишите состав", eMoist: "Выберите влажность", eVit: "Укажите, какие витамины добавлены", eProt: "Белок: число от 0 до 100", eYearF: "Проверьте год производства",
+    pBag: "В мешках", pBulk: "Насыпью", cWeight: "Вес", cBale: "Вес тюка", cProt: "Белок", cVit: "Витамины", cYear: "Год",
     sys_buy: "Покупатель хочет купить товар", sys_sell: "Продавец готов продать", sys_recv: "Покупатель подтвердил: товар получен", sys_done: "Сделка завершена, товар отмечен как проданный", sys_cancel: "Сделка отменена",
     dBuy: "Купить", dSell: "Продать", dRecv: "Товар получен", dDone: "Продано", dCancel: "Отменить",
     dWaitSeller: "Ждём подтверждения продавца", dWaitRecv: "Ждём, пока покупатель подтвердит получение", dWaitDone: "Ждём, пока продавец отметит «Продано»", dAskSell: "Покупатель хочет купить. Подтвердите продажу", dAskRecv: "Продавец готов. Получили товар?", dAskDone: "Товар получен покупателем. Можно отметить «Продано»", dFinished: "Сделка завершена ✓", dSoldAlready: "Этот товар уже продан",
@@ -668,6 +676,14 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
     hPrice: "1 келі бағасы, ₸", hPack: "Орамның салмағы", hQty: "Қолда бар көлемі, кг", hYear: "Жиналған жылы", hColor: "Түсі", hCons: "Консистенциясы",
     hDesc: "Хош иісі және дәмдік ерекшеліктері", hDescPh: "Мысалы, жеңіл жөке иісі, ащылығы жоқ нәзік дәм", hOwn: "Растаймын: бұл менің омартамдағы бал",
     eYear: "Жиналған жылын көрсетіңіз", eOwnHoney: "Бұл өз омартаңыздағы бал екенін белгілеңіз", hPackShort: "Орама", hYearCard: "Өнім жылы", hYearEnd: "ж.", hEmptyHive: "Бұл бөлімде әзірге хабарландыру жоқ.",
+    segFarm: "Мал шаруашылығы", fSub: "Не сатасыз", fSubFeed: "Жем", fSubHay: "Шөп",
+    fFName: "Жемнің атауы", fFNamePh: "Мысалы, жемдік арпа", fHName: "Атауы (міндетті емес)", fHNamePh: "Мысалы, жоңышқа, бірінші шабындық",
+    fFType: "Жемнің түрі", fHType: "Шөп және сабан түрі", fPackF: "Қаптамасы", fPriceL: "Бағасы, ₸", fPriceUnit: "Баға неге көрсетілген",
+    fWeightF: "Салмағы, кг", fWeightH: "Бір бумның салмағы, кг", fStockF: "Қоймадағы көлемі (сол бірлікпен: кг немесе тонна)", fBales: "Бума саны",
+    fComp: "Құрамы", fCompPh: "Мысалы, арпа 100%, қоспасыз", fProt: "Ақуыз мөлшері, % (міндетті емес)", fMoist: "Ылғалдылығы", fMoistPick: "10-нан 20 %-ға дейін таңдаңыз",
+    fVit: "Дәрумендер құрамы", fVitPh: "Мысалы, A, D3, E", fYearOpt: "Өндірілген жылы (міндетті емес)", fOwnFarm: "Растаймын: бұл менің өз тауарым",
+    ePriceF: "Бағасын көрсетіңіз", eWeight: "Салмағын көрсетіңіз", eComp: "Құрамын жазыңыз", eMoist: "Ылғалдылығын таңдаңыз", eVit: "Қандай дәрумен қосылғанын жазыңыз", eProt: "Ақуыз: 0-ден 100-ге дейінгі сан", eYearF: "Өндірілген жылын тексеріңіз",
+    pBag: "Қаппен", pBulk: "Үйінді түрінде", cWeight: "Салмағы", cBale: "Бума салмағы", cProt: "Ақуыз", cVit: "Дәрумен", cYear: "Жылы",
     sys_buy: "Сатып алушы тауарды сатып алғысы келеді", sys_sell: "Сатушы сатуға дайын", sys_recv: "Сатып алушы тауарды алғанын растады", sys_done: "Мәміле аяқталды, тауар сатылды деп белгіленді", sys_cancel: "Мәміле тоқтатылды",
     dBuy: "Сатып алу", dSell: "Сату", dRecv: "Тауар алынды", dDone: "Сатылды", dCancel: "Бас тарту",
     dWaitSeller: "Сатушының растауын күтеміз", dWaitRecv: "Сатып алушының алғанын растауын күтеміз", dWaitDone: "Сатушы «Сатылды» деп белгілегенше күтеміз", dAskSell: "Сатып алушы сатып алғысы келеді. Сатуды растаңыз", dAskRecv: "Сатушы дайын. Тауарды алдыңыз ба?", dAskDone: "Сатып алушы тауарды алды. «Сатылды» деп белгілеуге болады", dFinished: "Мәміле аяқталды ✓", dSoldAlready: "Бұл тауар сатылып қойған",
@@ -722,6 +738,18 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
     { id: "h1", t: ["Липовый мёд", "Жөке балы"], d: ["Лёгкий липовый аромат, нежный вкус.", "Жеңіл жөке иісі, нәзік дәм."], cat: "linden", price: 4500, qty: 40, region: "almaty", pure: "natural", pack: "500", color: "light", cons: "liquid", year: 2026 },
     { id: "h2", t: ["Гречишный мёд", "Қарақұмық балы"], d: ["Насыщенный вкус, тёмный цвет.", "Қою дәм, күңгірт түс."], cat: "buckwheat", price: 5200, qty: 25, region: "jetisu", pure: "natural", pack: "1000", color: "dark", cons: "creamy", year: 2026 }
   ];
+  var FTYPES = [["barley", "Ячмень", "Арпа"], ["wheat", "Пшеница", "Бидай"], ["corn", "Кукуруза", "Жүгері"], ["fmix", "Смешанный корм", "Аралас жем"], ["fvit", "Корм с витаминами", "Дәрумендер қосылған жем"]];
+  var HAYT = [["alfalfa", "Люцерна", "Жоңышқа"], ["esparcet", "Эспарцет", "Эспарцет"], ["hmix", "Смесь трав", "Аралас шөп түрлері"], ["bstraw", "Солома ячменная", "Арпа сабан"], ["wstraw", "Солома пшеничная", "Бидай сабан"]];
+  var FUNITS_FEED = [["kg", "кг", "кг"], ["t", "тонна", "тонна"]];
+  var FUNITS_HAY = [["bale", "тюк", "бума"], ["kg", "кг", "кг"], ["t", "тонна", "тонна"]];
+  var FPACKS = [["bag", "В мешках", "Қаппен"], ["bulk", "Насыпью", "Үйінді түрінде"]];
+  var MOIST = [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+  var MKTS = [["harvest", "🌾 ", "segHarvest"], ["honey", "🍯 ", "segHive"], ["farm", "🐄 ", "segFarm"]];
+  var FDEMOS = [
+    { id: "f1", t: ["Ячмень кормовой", "Жемдік арпа"], d: ["Чистое зерно, мешки по 50 кг, самовывоз.", "Таза дән, 50 келілік қаптар, өзі алып кетеді."], sub: "feed", cat: "barley", price: 120, unit: "kg", qty: 5000, qu: "kg", w: 50, pack: "bag", comp: "Ячмень 100%", moist: 14, prot: 11, year: 2026, region: "almaty" },
+    { id: "f2", t: ["Люцерна в тюках", "Жоңышқа бумада"], d: ["Первый укос, сухая, без плесени.", "Бірінші шабындық, құрғақ, көгерусіз."], sub: "hay", cat: "alfalfa", price: 2500, unit: "bale", qty: 200, qu: "bale", w: 20, comp: "Люцерна 100%", moist: 13, prot: 16, year: 2026, region: "jetisu" }
+  ];
+
   var DEMOS = [
     { id: "x1", t: ["Картофель", "Картоп"], d: ["Крупный, в мешках по 40 кг. Самовывоз с поля.", "Ірі, 40 келілік қаптарда. Өзі алып кетеді."], cat: "veg", price: 250, unit: "kg", qty: 300, region: "almaty", hv: dayStr(3) },
     { id: "x2", t: ["Томаты", "Қызанақ"], d: ["Мясистые, без химии, ящики по 10 кг.", "Етті, химиясыз, 10 келілік жәшіктерде."], cat: "veg", price: 400, unit: "kg", qty: 80, region: "turkestan", hv: dayStr(2) },
@@ -732,6 +760,8 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
   ];
 
   var ART = {
+    hay: ["#efe3b0", '<rect x="24" y="34" width="72" height="42" rx="12" fill="#d8b04a"/><path d="M24 48h72M24 62h72" stroke="#a37a1f" stroke-width="3" fill="none"/><path d="M40 34v42M80 34v42" stroke="#b8902e" stroke-width="2" fill="none"/>'],
+    feed: ["#e9dcc0", '<path d="M36 28h48l8 12v36q0 6-6 6H34q-6 0-6-6V40z" fill="#c79a52"/><path d="M36 28q24 10 48 0" stroke="#8a5a1e" stroke-width="3" fill="none"/><circle cx="60" cy="56" r="10" fill="#efe3c8"/><path d="M60 50v12M55 56h10" stroke="#8a5a1e" stroke-width="2.5" stroke-linecap="round" fill="none"/>'],
     honey: ["#f3e1a8", '<rect x="34" y="40" width="52" height="40" rx="10" fill="#e0a21c"/><rect x="38" y="30" width="44" height="12" rx="4" fill="#8a5a1e"/><rect x="42" y="52" width="36" height="16" rx="4" fill="#f6d77a"/><path d="M52 60h16" stroke="#8a5a1e" stroke-width="2.5" stroke-linecap="round" fill="none"/>'],
     veg: ["#d9e3b8", '<path d="M60 80 L46 32 Q60 26 74 32 Z" fill="#e0742a"/><path d="M52 42h10M50 54h12M54 66h8" stroke="#b85a1c" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M60 28 C50 16 44 12 40 6 C52 8 58 16 60 26 C62 16 68 8 80 6 C76 12 70 16 60 28Z" fill="#4d7a2a"/>'],
     fruit: ["#f0d9c8", '<circle cx="48" cy="52" r="24" fill="#b8332c"/><circle cx="72" cy="52" r="24" fill="#c53d33"/><path d="M60 32 q2-12 10-16" stroke="#5a3a1e" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M64 24 q12-8 20 0 q-10 8 -20 0z" fill="#5c8a33"/>'],
@@ -758,8 +788,8 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
   function L(arr) { return lang === "kk" ? arr[2] : arr[1]; }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
   function find(list, key) { for (var i = 0; i < list.length; i++) if (list[i][0] === key) return list[i]; return null; }
-  function catLabel(k) { var c = find(CATS, k) || find(HTYPES, k); return c ? L(c) : ""; }
-  function unitLabel(k) { var c = find(UNITS, k); return c ? L(c) : ""; }
+  function catLabel(k) { var c = find(CATS, k) || find(HTYPES, k) || find(FTYPES, k) || find(HAYT, k); return c ? L(c) : ""; }
+  function unitLabel(k) { var c = find(UNITS, k) || find(FUNITS_HAY, k); return c ? L(c) : ""; }
   function regionLabel(k) { var c = find(REGIONS, k); return c ? L(c) : ""; }
   function digits(s) { return String(s || "").replace(/\D/g, ""); }
   function normPhone(s) { var d = digits(s); if (d.length === 11 && d[0] === "8") d = "7" + d.slice(1); if (d.length === 10) d = "7" + d; return d; }
@@ -879,8 +909,8 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
   }
   function renderChips() {
     var segEl = $("seg");
-    if (segEl) segEl.innerHTML = [["harvest", "🌾 ", "segHarvest"], ["honey", "🍯 ", "segHive"]].map(function (x) { return '<button type="button" class="chip" data-act="market" data-v="' + x[0] + '" aria-pressed="' + (F.market === x[0]) + '">' + x[1] + esc(t(x[2])) + "</button>"; }).join("");
-    var items = [["all", t("all")]].concat((F.market === "honey" ? HTYPES : CATS).map(function (c) { return [c[0], L(c)]; }));
+    if (segEl) segEl.innerHTML = MKTS.map(function (x) { return '<button type="button" class="chip" data-act="market" data-v="' + x[0] + '" aria-pressed="' + (F.market === x[0]) + '">' + x[1] + esc(t(x[2])) + "</button>"; }).join("");
+    var items = [["all", t("all")]].concat((F.market === "farm" ? FTYPES.concat(HAYT) : F.market === "honey" ? HTYPES : CATS).map(function (c) { return [c[0], L(c)]; }));
     var h = items.map(function (c) { return '<button type="button" class="chip" data-act="cat" data-v="' + c[0] + '" aria-pressed="' + (F.cat === c[0]) + '">' + esc(c[1]) + "</button>"; }).join("");
     $("chips").innerHTML = h;
   }
@@ -894,10 +924,13 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
   var rndKeys = {}, deferredInstall = null;
   function rk(id) { if (rndKeys[id] === undefined) rndKeys[id] = Math.random(); return rndKeys[id]; }
   function isHoney(l) { return l && l.kind === "honey"; }
-  function marketListings() { return listings.filter(function (l) { return (F.market === "honey") === isHoney(l); }); }
+  function isFarm(l) { return l && l.kind === "farm"; }
+  function mkt(l) { return isFarm(l) ? "farm" : (isHoney(l) ? "honey" : "harvest"); }
+  function marketListings() { return listings.filter(function (l) { return mkt(l) === F.market; }); }
   function viewItems() {
     var real = dbState === "ok" && marketListings().length > 0;
-    var src = real ? marketListings() : (F.market === "honey" ? HDEMOS : DEMOS).map(function (d) {
+    var src = real ? marketListings() : (F.market === "farm" ? FDEMOS : F.market === "honey" ? HDEMOS : DEMOS).map(function (d) {
+      if (F.market === "farm") return { id: d.id, example: true, kind: "farm", sub: d.sub, title: lang === "kk" ? d.t[1] : d.t[0], desc: lang === "kk" ? d.d[1] : d.d[0], category: d.cat, price: d.price, unit: d.unit, qty: d.qty, qtyUnit: d.qu, region: d.region, weight: d.w, pack: d.pack || "", comp: d.comp, moist: d.moist, prot: d.prot, vit: "", year: d.year, own: true, createdAt: NOW - DAY };
       if (F.market === "honey") return { id: d.id, example: true, kind: "honey", title: lang === "kk" ? d.t[1] : d.t[0], desc: lang === "kk" ? d.d[1] : d.d[0], category: d.cat, price: d.price, unit: "kg", qty: d.qty, region: d.region, pure: d.pure, pack: d.pack, color: d.color, cons: d.cons, year: d.year, own: true, createdAt: NOW - DAY };
       return { id: d.id, example: true, title: lang === "kk" ? d.t[1] : d.t[0], desc: lang === "kk" ? d.d[1] : d.d[0], category: d.cat, price: d.price, unit: d.unit, qty: d.qty, region: d.region, harvest: d.hv, own: true, createdAt: NOW - DAY };
     });
@@ -920,9 +953,9 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
   }
   function cardHtml(l) {
     var mine = !l.example && uid && l.sellerId === uid;
-    var photo = l.photo ? '<img src="' + esc(l.photo) + '" alt="' + esc(l.title) + '" loading="lazy">' : art(isHoney(l) ? "honey" : l.category);
+    var photo = l.photo ? '<img src="' + esc(l.photo) + '" alt="' + esc(l.title) + '" loading="lazy">' : art(isHoney(l) ? "honey" : isFarm(l) ? (l.sub === "hay" ? "hay" : "feed") : l.category);
     var price = l.price > 0 ? '<div class="price">' + esc(fmtMoney(l.price)) + " ₸ <small>/ " + esc(unitLabel(l.unit)) + "</small></div>" : '<div class="price neg">' + esc(t("priceNeg")) + "</div>";
-    var badge = l.example ? '<span class="badge ex">' + esc(t("example")) + "</span>" : (isHoney(l) ? '<span class="badge' + (l.pure === "sugar" ? " ex" : "") + '">' + esc(t(l.pure === "sugar" ? "hPureSugar" : "hPureNat")) + "</span>" : (l.own ? '<span class="badge">' + esc(t("own")) + "</span>" : ""));
+    var badge = l.example ? '<span class="badge ex">' + esc(t("example")) + "</span>" : (isFarm(l) ? '<span class="badge">' + esc(t(l.sub === "hay" ? "fSubHay" : "fSubFeed")) + "</span>" : isHoney(l) ? '<span class="badge' + (l.pure === "sugar" ? " ex" : "") + '">' + esc(t(l.pure === "sugar" ? "hPureSugar" : "hPureNat")) + "</span>" : (l.own ? '<span class="badge">' + esc(t("own")) + "</span>" : ""));
     var sold = l.status === "sold" ? '<div class="soldmark"><span>' + esc(t("sold")) + "</span></div>" : "";
     var sp = l.example ? null : sellers[l.sellerId];
     var sn = l.example ? t("seller") + " (" + t("example").toLowerCase() + ")" : (sp && sp.name ? t("seller") + ": " + sp.name : t("seller"));
@@ -935,7 +968,18 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
       if (hc || hk) meta += "<span>" + esc([hc ? L(hc).toLowerCase() : "", hk ? L(hk).toLowerCase() : ""].filter(Boolean).join(", ")) + "</span>";
       if (l.year) meta += "<span>" + esc(t("hYearCard")) + " " + esc(l.year) + " " + esc(t("hYearEnd")) + "</span>";
     }
-    if (l.qty > 0) meta += "<span>" + esc(t("avail")) + ": <b>" + esc(fmtMoney(l.qty)) + " " + esc(unitLabel(l.unit)) + "</b></span>";
+    if (isFarm(l)) {
+      var fp = find(FPACKS, l.pack);
+      meta += "<span>" + esc(catLabel(l.category)) + "</span>";
+      if (fp) meta += "<span>" + esc(t("fPackF")) + ": <b>" + esc(L(fp)) + "</b></span>";
+      if (l.weight > 0) meta += "<span>" + esc(t(l.sub === "hay" ? "cBale" : "cWeight")) + ": <b>" + esc(fmtMoney(l.weight)) + " " + esc(unitLabel("kg")) + "</b></span>";
+      if (l.moist) meta += "<span>" + esc(t("fMoist")) + ": " + esc(l.moist) + " %</span>";
+      if (l.prot > 0) meta += "<span>" + esc(t("cProt")) + ": " + esc(l.prot) + " %</span>";
+      if (l.vit) meta += "<span>" + esc(t("cVit")) + ": " + esc(l.vit) + "</span>";
+      if (l.comp) meta += "<span>" + esc(t("fComp")) + ": " + esc(l.comp) + "</span>";
+      if (l.year) meta += "<span>" + esc(t("cYear")) + " " + esc(l.year) + " " + esc(t("hYearEnd")) + "</span>";
+    }
+    if (l.qty > 0) meta += "<span>" + esc(t("avail")) + ": <b>" + esc(fmtMoney(l.qty)) + " " + esc(unitLabel(l.qtyUnit || l.unit)) + "</b></span>";
     if (l.region) meta += "<span>" + esc(regionLabel(l.region)) + "</span>";
     if (l.harvest && !isHoney(l)) meta += "<span>" + esc(t("harvested")) + ": " + esc(fmtDate(l.harvest)) + "</span>";
     var acts = "";
@@ -1069,7 +1113,7 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
     var id = decodeURIComponent(m[1]);
     if (!byId(id)) return;
     hashDone = true;
-    var fl = byId(id); F.market = isHoney(fl) ? "honey" : "harvest"; F.cat = "all"; F.tab !== "home" && setTab("home");
+    var fl = byId(id); F.market = mkt(fl); F.cat = "all"; F.tab !== "home" && setTab("home");
     flashId = id; renderAll();
     var card = document.getElementById("card-" + id);
     if (card) { try { card.scrollIntoView({ block: "center" }); } catch (e) {} }
@@ -1200,7 +1244,7 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
       '<div class="psub">' + (r.n ? '<span class="rate">★ ' + r.avg.toFixed(1) + " (" + r.n + ")</span>" : esc(t("sellerNoRating"))) + "</div></div></div>" +
       (p.about ? '<p class="kv"><b>' + esc(t("sellerAbout")) + ":</b> " + esc(p.about) + "</p>" : "");
     var rows = items.length ? items.map(function (l) {
-      var th = l.photo ? '<img class="sth" src="' + esc(l.photo) + '" alt="">' : '<span class="sth" aria-hidden="true">' + (isHoney(l) ? "🍯" : "🌾") + "</span>";
+      var th = l.photo ? '<img class="sth" src="' + esc(l.photo) + '" alt="">' : '<span class="sth" aria-hidden="true">' + (isFarm(l) ? "🐄" : isHoney(l) ? "🍯" : "🌾") + "</span>";
       var pr = l.price > 0 ? fmtMoney(l.price) + " ₸ / " + unitLabel(l.unit) : t("priceNeg");
       return '<div class="srow">' + th + '<div class="sinfo"><b>' + esc(l.title) + "</b><span>" + esc(pr) + (l.status === "sold" ? " · " + esc(t("sold")) : "") + "</span></div>" +
         (self || l.status === "sold" ? "" : '<button type="button" class="btn small" data-act="contact" data-id="' + esc(l.id) + '">' + esc(t("contact")) + "</button>") + "</div>";
@@ -1301,18 +1345,41 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
   }
 
   function opts(list, cur) { return list.map(function (c) { return '<option value="' + c[0] + '"' + (cur === c[0] ? " selected" : "") + ">" + esc(L(c)) + "</option>"; }).join(""); }
-  function listingModal(l, mode) {
+  function farmFields(v, sub, regOpts) {
+    var hay = sub === "hay";
+    var moOpts = '<option value="">' + esc(t("fMoistPick")) + "</option>" + MOIST.map(function (m) { return '<option value="' + m + '"' + (String(v.moist) === String(m) ? " selected" : "") + ">" + m + " %</option>"; }).join("");
+    var num = function (id, lab, val) { return '<div class="field"><label for="' + id + '">' + esc(t(lab)) + '</label><input type="number" id="' + id + '" inputmode="decimal" min="0" step="any" value="' + esc(val > 0 ? val : "") + '"></div>'; };
+    var unitSel = '<div class="field"><label for="f_unit">' + esc(t("fPriceUnit")) + '</label><select id="f_unit">' + opts(hay ? FUNITS_HAY : FUNITS_FEED, v.unit) + "</select></div>";
+    var typeSel = '<div class="field"><label for="f_cat">' + esc(t(hay ? "fHType" : "fFType")) + '</label><select id="f_cat">' + opts(hay ? HAYT : FTYPES, v.category) + "</select></div>";
+    var head = '<div class="field"><label for="f_title">' + esc(t(hay ? "fHName" : "fFName")) + '</label><input type="text" id="f_title" maxlength="80" placeholder="' + esc(t(hay ? "fHNamePh" : "fFNamePh")) + '" value="' + esc(v.title) + '"></div>';
+    var rows;
+    if (hay) rows = '<div class="two">' + typeSel + unitSel + "</div>" + '<div class="two">' + num("f_price", "fPriceL", v.price) + num("f_weight", "fWeightH", v.weight) + "</div>" + num("f_qty", "fBales", v.qty);
+    else rows = '<div class="two">' + typeSel + '<div class="field"><label for="f_pack">' + esc(t("fPackF")) + '</label><select id="f_pack">' + opts(FPACKS, v.pack) + "</select></div></div>" +
+      '<div class="two">' + num("f_price", "fPriceL", v.price) + unitSel + "</div>" + '<div class="two">' + num("f_weight", "fWeightF", v.weight) + num("f_qty", "fStockF", v.qty) + "</div>";
+    return head + rows +
+      '<div class="field"><label for="f_comp">' + esc(t("fComp")) + '</label><input type="text" id="f_comp" maxlength="200" placeholder="' + esc(t("fCompPh")) + '" value="' + esc(v.comp || "") + '"></div>' +
+      '<div class="two">' + num("f_prot", "fProt", v.prot) + '<div class="field"><label for="f_moist">' + esc(t("fMoist")) + '</label><select id="f_moist">' + moOpts + "</select></div></div>" +
+      (hay ? "" : '<div class="field" id="vit_f"><label for="f_vit">' + esc(t("fVit")) + '</label><input type="text" id="f_vit" maxlength="120" placeholder="' + esc(t("fVitPh")) + '" value="' + esc(v.vit || "") + '"></div>') +
+      '<div class="two"><div class="field"><label for="f_region">' + esc(t("fRegion")) + '</label><select id="f_region">' + regOpts + "</select></div>" +
+      '<div class="field"><label for="f_year">' + esc(t("fYearOpt")) + '</label><input type="number" id="f_year" inputmode="numeric" min="1990" max="' + new Date().getFullYear() + '" value="' + esc(v.year || "") + '"></div></div>' +
+      '<div class="field"><label for="f_desc">' + esc(t("fDesc")) + '</label><textarea id="f_desc" maxlength="400" placeholder="' + esc(t("fDescPh")) + '">' + esc(v.desc || "") + "</textarea></div>" +
+      '<label class="check" for="f_own"><input type="checkbox" id="f_own"' + (v.own ? " checked" : "") + "><span>" + esc(t("fOwnFarm")) + "</span></label>";
+  }
+  function listingModal(l, mode, sub) {
     editing = l ? l.id : null;
     pendingPhoto = null;
-    mode = l ? (isHoney(l) ? "honey" : "harvest") : (mode || F.market);
-    var honey = mode === "honey", yr = new Date().getFullYear();
-    var v = l || (honey ? { title: "", category: "flower", price: "", unit: "kg", qty: "", region: (mySeller() && mySeller().region) || "", desc: "", own: false, pure: "natural", pack: "500", color: "golden", cons: "liquid", year: yr }
+    mode = l ? mkt(l) : (mode || F.market);
+    var honey = mode === "honey", farm = mode === "farm", yr = new Date().getFullYear();
+    sub = l ? (l.sub === "hay" ? "hay" : "feed") : (sub === "hay" ? "hay" : "feed");
+    var v = l || (farm ? { title: "", category: sub === "hay" ? "alfalfa" : "barley", price: "", unit: sub === "hay" ? "bale" : "kg", qty: "", region: (mySeller() && mySeller().region) || "", desc: "", own: false, weight: "", pack: "bag", comp: "", prot: "", moist: "", vit: "", year: "" } : honey ? { title: "", category: "flower", price: "", unit: "kg", qty: "", region: (mySeller() && mySeller().region) || "", desc: "", own: false, pure: "natural", pack: "500", color: "golden", cons: "liquid", year: yr }
       : { title: "", category: "veg", price: "", unit: "kg", qty: "", region: (mySeller() && mySeller().region) || "", harvest: todayStr(), desc: "", own: false });
     var regOpts = '<option value="">' + esc(t("fRegionPick")) + "</option>" + REGIONS.map(function (c) { return '<option value="' + c[0] + '"' + (v.region === c[0] ? " selected" : "") + ">" + esc(L(c)) + "</option>"; }).join("");
     var cur = l && l.photo ? '<img src="' + esc(l.photo) + '" alt="">' : '<span>' + esc(t("fPhotoHint")) + "</span>";
-    var seg = l ? "" : '<div class="field"><label>' + esc(t("fMode")) + '</label><div class="seg" role="group">' + [["harvest", "🌾 ", "segHarvest"], ["honey", "🍯 ", "segHive"]].map(function (x) { return '<button type="button" class="chip" data-act="fmode" data-v="' + x[0] + '" aria-pressed="' + (mode === x[0]) + '">' + x[1] + esc(t(x[2])) + "</button>"; }).join("") + "</div></div>";
+    var seg = l ? "" : '<div class="field"><label>' + esc(t("fMode")) + '</label><div class="seg" role="group">' + MKTS.map(function (x) { return '<button type="button" class="chip" data-act="fmode" data-v="' + x[0] + '" aria-pressed="' + (mode === x[0]) + '">' + x[1] + esc(t(x[2])) + "</button>"; }).join("") + "</div></div>";
+    var subseg = (farm && !l) ? '<div class="field"><label>' + esc(t("fSub")) + '</label><div class="seg" role="group">' + [["feed", "fSubFeed"], ["hay", "fSubHay"]].map(function (x) { return '<button type="button" class="chip" data-act="fsub" data-v="' + x[0] + '" aria-pressed="' + (sub === x[0]) + '">' + esc(t(x[1])) + "</button>"; }).join("") + "</div></div>" : "";
     var fields;
-    if (honey) {
+    if (farm) fields = farmFields(v, sub, regOpts);
+    else if (honey) {
       fields = '<div class="field"><label for="f_title">' + esc(t("hName")) + '</label><input type="text" id="f_title" maxlength="80" placeholder="' + esc(t("hNamePh")) + '" value="' + esc(v.title) + '"></div>' +
         '<div class="two"><div class="field"><label for="f_cat">' + esc(t("hType")) + '</label><select id="f_cat">' + opts(HTYPES, v.category) + "</select></div>" +
         '<div class="field"><label for="f_pure">' + esc(t("hPure")) + '</label><select id="f_pure"><option value="natural"' + (v.pure !== "sugar" ? " selected" : "") + ">" + esc(t("hPureNat")) + '</option><option value="sugar"' + (v.pure === "sugar" ? " selected" : "") + ">" + esc(t("hPureSugar")) + "</option></select></div></div>" +
@@ -1337,12 +1404,13 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
         '<label class="check" for="f_own"><input type="checkbox" id="f_own"' + (v.own ? " checked" : "") + "><span>" + esc(t("fOwn")) + "</span></label>";
     }
     openModal('<h2 id="mtitle">' + esc(l ? t("fTitleEdit") : t("fTitleNew")) + "</h2>" +
-      '<form class="form" id="listingForm" novalidate data-mode="' + mode + '">' + seg +
+      '<form class="form" id="listingForm" novalidate data-mode="' + mode + '" data-sub="' + sub + '">' + seg + subseg +
       '<div class="field"><label for="f_photo">' + esc(t("fPhoto")) + '</label><label class="drop" id="f_drop" for="f_photo">' + cur + '<input type="file" id="f_photo" accept="image/*"></label></div>' + fields +
       '<p class="err" id="f_err" role="alert"></p>' +
       '<div class="row"><button type="submit" class="btn" id="f_save">' + esc(l ? t("save") : t("publish")) + '</button><button type="button" class="btn ghost" data-act="close">' + esc(t("cancel")) + "</button></div></form>");
     $("listingForm").addEventListener("submit", function (e) { e.preventDefault(); saveListing(l); });
     $("f_photo").addEventListener("change", onPhoto);
+    if (farm && sub === "feed") { var vt = function () { $("vit_f").style.display = $("f_cat").value === "fvit" ? "" : "none"; }; $("f_cat").addEventListener("change", vt); vt(); }
   }
   function shrinkImage(file) {
     return new Promise(function (resolve, reject) {
@@ -1379,21 +1447,38 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
   }
   async function saveListing(old) {
     var err = $("f_err");
-    var honey = $("listingForm").getAttribute("data-mode") === "honey";
+    var honey = $("listingForm").getAttribute("data-mode") === "honey", farm = $("listingForm").getAttribute("data-mode") === "farm", sub = $("listingForm").getAttribute("data-sub");
     var title = $("f_title").value.trim(), region = $("f_region").value, qty = parseFloat($("f_qty").value), price = parseFloat($("f_price").value);
+    if (farm && sub === "hay" && !title) title = L(find(HAYT, $("f_cat").value) || ["", "", ""]);
     if (title.length < 2) { err.textContent = t("eName"); $("f_title").focus(); return; }
     if (!region) { err.textContent = t("eRegion"); $("f_region").focus(); return; }
     if (!(qty > 0)) { err.textContent = t("eQty"); $("f_qty").focus(); return; }
     var yearV = honey ? parseInt($("f_year").value, 10) : 0;
     if (honey && !(yearV >= 2000 && yearV <= new Date().getFullYear())) { err.textContent = t("eYear"); $("f_year").focus(); return; }
-    if (!$("f_own").checked) { err.textContent = t(honey ? "eOwnHoney" : "eOwn"); $("f_own").focus(); return; }
+    var fw = 0, fprot = 0, fmo = "", fvit = "", fcomp = "", fyear = 0;
+    if (farm) {
+      if (!(price > 0)) { err.textContent = t("ePriceF"); $("f_price").focus(); return; }
+      fw = parseFloat($("f_weight").value);
+      if (!(fw > 0)) { err.textContent = t("eWeight"); $("f_weight").focus(); return; }
+      fcomp = $("f_comp").value.trim();
+      if (fcomp.length < 2) { err.textContent = t("eComp"); $("f_comp").focus(); return; }
+      fmo = $("f_moist").value;
+      if (!fmo) { err.textContent = t("eMoist"); $("f_moist").focus(); return; }
+      if (sub === "feed" && $("f_cat").value === "fvit") { fvit = $("f_vit").value.trim(); if (fvit.length < 2) { err.textContent = t("eVit"); $("f_vit").focus(); return; } }
+      var pv = $("f_prot").value;
+      if (pv !== "") { fprot = parseFloat(pv); if (!(fprot >= 0 && fprot <= 100)) { err.textContent = t("eProt"); $("f_prot").focus(); return; } }
+      var yv = $("f_year").value;
+      if (yv !== "") { fyear = parseInt(yv, 10); if (!(fyear >= 1990 && fyear <= new Date().getFullYear())) { err.textContent = t("eYearF"); $("f_year").focus(); return; } }
+    }
+    if (!$("f_own").checked) { err.textContent = t(farm ? "eOwnFarm" : honey ? "eOwnHoney" : "eOwn"); $("f_own").focus(); return; }
     var ref = old ? db.doc("listings/" + old.id) : db.collection("listings").doc();
     var data = {
       sellerId: uid, title: title, category: $("f_cat").value, price: price > 0 ? price : 0, unit: honey ? "kg" : $("f_unit").value, qty: qty,
-      region: region, harvest: honey ? "" : ($("f_harvest").value || ""), desc: $("f_desc").value.trim(), own: true, status: old ? (old.status || "active") : "active",
+      region: region, harvest: (honey || farm) ? "" : ($("f_harvest").value || ""), desc: $("f_desc").value.trim(), own: true, status: old ? (old.status || "active") : "active",
       photo: pendingPhoto || (old && old.photo) || "", createdAt: old ? old.createdAt : Date.now(), updatedAt: Date.now()
     };
     if (honey) { data.kind = "honey"; data.pure = $("f_pure").value; data.pack = $("f_pack").value; data.color = $("f_color").value; data.cons = $("f_cons").value; data.year = yearV; }
+    if (farm) { data.kind = "farm"; data.sub = sub; data.qtyUnit = sub === "hay" ? "bale" : $("f_unit").value; data.weight = fw; data.pack = sub === "feed" ? $("f_pack").value : ""; data.comp = fcomp; data.prot = fprot; data.moist = parseInt(fmo, 10); data.vit = fvit; data.year = fyear; }
     $("f_save").disabled = true;
     try { await ref.set(data); closeModal(); } catch (e) {
       err.textContent = (e && e.code === "invalid_argument") ? t("noWrite") : (e && e.code === "quota_exceeded" ? t("saveErr") : t("saveErr"));
@@ -1688,6 +1773,7 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
       case "cta": onCta(); break;
       case "market": F.market = el.getAttribute("data-v"); F.cat = "all"; renderChips(); renderNotice(); renderGrid(); break;
       case "fmode": listingModal(null, el.getAttribute("data-v")); break;
+      case "fsub": listingModal(null, "farm", el.getAttribute("data-v")); break;
       case "cat": F.cat = el.getAttribute("data-v"); renderChips(); renderGrid(); break;
       case "mine": F.mine = !F.mine; renderChips(); renderGrid(); break;
       case "close": closeModal(); break;
