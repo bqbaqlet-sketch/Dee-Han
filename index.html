@@ -349,6 +349,15 @@ footer { padding-bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .attach svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; display: block; }
 .bub.photo { padding: 4px; }
 .mimg { display: block; max-width: 100%; max-height: 260px; border-radius: 8px; cursor: zoom-in; }
+.galimg { cursor: zoom-in; }
+.pcnt { position: absolute; left: 8px; bottom: 8px; background: rgba(0,0,0,.62); color: #fff; border-radius: 10px; padding: 2px 9px; font-size: 14px; font-weight: 700; pointer-events: none; }
+.pgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 8px; margin-bottom: 8px; }
+.pgrid:empty { display: none; }
+.pth { position: relative; aspect-ratio: 1; border-radius: 6px; overflow: hidden; border: 2px solid rgba(0,0,0,.25); }
+.pth img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pth button { position: absolute; top: 2px; right: 2px; width: 26px; height: 26px; border-radius: 50%; border: 0; background: rgba(0,0,0,.7); color: #fff; font-size: 16px; line-height: 1; cursor: pointer; }
+.pth .cv { position: absolute; left: 0; bottom: 0; right: 0; background: rgba(0,0,0,.6); color: #fff; font-size: 12px; text-align: center; padding: 1px 0; }
+.galbar { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 10px; }
 .zoomimg { display: block; max-width: 100%; max-height: 78vh; margin: 8px auto 0; border-radius: 8px; }
 .tray { display: flex; gap: 10px; padding: 10px 14px 2px; overflow-x: auto; background: var(--paper); }
 .tray[hidden] { display: none; }
@@ -498,7 +507,7 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
       own: "Свой урожай", sold: "Продано", example: "Пример", priceNeg: "Цена договорная",
       avail: "В наличии", harvested: "Собрано", contact: "Связаться", edit: "Изменить", del: "Удалить",
       delSure: "Точно удалить?", markSold: "Продано", reopen: "Вернуть в продажу", seller: "Продавец",
-      fTitleNew: "Новое объявление", fTitleEdit: "Изменить объявление", fPhoto: "Фото урожая",
+      fTitleNew: "Новое объявление", fTitleEdit: "Изменить объявление", fPhoto: "Фото (до 7 штук)", fPhotoAdd: "＋ Добавить фото ({n} из 7)", fPhotoCover: "Первое фото будет на обложке объявления.", photosMax: "Можно прикрепить не более 7 фото", photosBig: "Фото слишком тяжёлые: уберите несколько или выберите поменьше", rmPhoto: "Убрать фото",
       fPhotoHint: "Нажмите, чтобы выбрать фото", fName: "Что продаёте", fNamePh: "Например, картофель «Невский»",
       fCat: "Категория", fPrice: "Цена за единицу, ₸", fPricePh: "Пусто: договорная", fUnit: "Единица",
       fQty: "Сколько в наличии", fRegion: "Регион", fRegionPick: "Выберите регион", fHarvest: "Дата сбора", fDesc: "Описание",
@@ -539,7 +548,7 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
       own: "Өз егінім", sold: "Сатылды", example: "Мысал", priceNeg: "Бағасы келісім бойынша",
       avail: "Бар", harvested: "Жиналған", contact: "Байланысу", edit: "Өзгерту", del: "Жою",
       delSure: "Растайсыз ба?", markSold: "Сатылды", reopen: "Қайта сатылымға шығару", seller: "Сатушы",
-      fTitleNew: "Жаңа хабарландыру", fTitleEdit: "Хабарландыруды өзгерту", fPhoto: "Егін суреті",
+      fTitleNew: "Жаңа хабарландыру", fTitleEdit: "Хабарландыруды өзгерту", fPhoto: "Суреттер (7-ге дейін)", fPhotoAdd: "＋ Сурет қосу ({n} / 7)", fPhotoCover: "Бірінші сурет хабарландыру мұқабасында болады.", photosMax: "7 суреттен артық қосуға болмайды", photosBig: "Суреттер тым ауыр: бірнешеуін алып тастаңыз немесе кішірегін таңдаңыз", rmPhoto: "Суретті алып тастау",
       fPhotoHint: "Суретті таңдау үшін басыңыз", fName: "Не сатасыз", fNamePh: "Мысалы, «Невский» картобы",
       fCat: "Санат", fPrice: "Бір бірлік бағасы, ₸", fPricePh: "Бос болса: келісім бойынша", fUnit: "Бірлік",
       fQty: "Қанша бар", fRegion: "Өңір", fRegionPick: "Өңірді таңдаңыз", fHarvest: "Жиналған күні", fDesc: "Сипаттама",
@@ -787,9 +796,9 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
     { id: "d2", t: ["Курт сушёный", "Кептірілген құрт"], d: ["Солёный, сушёный на солнце.", "Тұздалған, күнде кептірілген."], cat: "qurt", price: 3500, unit: "kg", qty: 12, nat: "yes", animal: "sheep", made: dayStr(10), shelf: 180, fat: 0, store: "room", origin: "", region: "turkestan" }
   ];
 
-  var MTYPES = [["beef", "Говядина", "Сиыр еті"], ["mutton", "Баранина", "Қой еті"], ["horse", "Конина", "Жылқы еті"], ["camel", "Верблюжатина", "Түйе еті"], ["mgoat", "Козлятина", "Ешкі еті"], ["pork", "Свинина", "Шошқа еті"], ["chicken", "Курятина", "Тауық еті"], ["turkey", "Индейка", "Күрке тауық еті"], ["goose", "Гусь", "Қаз еті"], ["duck", "Утка", "Үйрек еті"], ["rabbit", "Кролик", "Қоян еті"]];
+  var MTYPES = [["beef", "Говядина", "Сиыр еті"], ["mutton", "Баранина", "Қой еті"], ["horse", "Конина", "Жылқы еті"], ["camel", "Верблюжатина", "Түйе еті"], ["mgoat", "Козлятина", "Ешкі еті"], ["chicken", "Курятина", "Тауық еті"], ["turkey", "Индейка", "Күрке тауық еті"], ["goose", "Гусь", "Қаз еті"], ["duck", "Утка", "Үйрек еті"], ["rabbit", "Кролик", "Қоян еті"]];
   var MPARTS = [["whole", "Туша целиком", "Тұтас сойыс"], ["hind", "Задняя часть (окорок)", "Сан еті"], ["shoulder", "Лопатка", "Жауырын"], ["brisket", "Грудинка", "Төс"], ["ribs", "Рёбра", "Қабырға"], ["loin", "Спинная часть, вырезка", "Жұмсақ ет, бел"], ["neck", "Шея", "Мойын"], ["shank", "Голяшка", "Жіліншік"], ["mince", "Фарш", "Фарш"], ["offal", "Субпродукты", "Ішкі мүшелер"], ["breast", "Грудка (птица)", "Төс еті (құс)"], ["wleg", "Бедро, голень (птица)", "Сан, жіліншік (құс)"], ["wing", "Крылья (птица)", "Қанат (құс)"], ["other", "Другое", "Басқа"]];
-  var MCOND = [["fresh", "Свежее", "Балғын"], ["chilled", "Охлаждённое", "Салқындатылған"], ["frozen", "Замороженное", "Мұздатылған"]];
+  var MCOND = [["fresh", "Свежее", "Жаңа"], ["chilled", "Охлаждённое", "Салқындатылған"], ["frozen", "Замороженное", "Мұздатылған"]];
   var MBONE = [["bone", "С костью", "Сүйегімен"], ["boneless", "Без кости", "Сүйексіз"], ["mixed", "Частично с костью", "Жартылай сүйекті"]];
   var MFAT = [["lean", "Нежирное", "Майсыз"], ["mid", "Средней жирности", "Орташа майлы"], ["fatty", "Жирное", "Майлы"]];
   var MDEMOS = [
@@ -855,7 +864,8 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
   var db = null, user = null, uid = null, canWrite = null, meName = "";
   var listings = [], sellers = {}, dbState = "loading";
   var F = { market: "harvest", q: "", cat: "all", region: "all", sort: "random", mine: false, tab: "home", ptab: "ads", av: 0, gateOn: false };
-  var pendingDel = null, pendingPhoto = null, editing = null;
+  var pendingDel = null, pendingPhotos = [], galState = { list: [], i: 0 }, editing = null;
+  function photosOf(l) { return l && Array.isArray(l.photos) && l.photos.length ? l.photos : (l && l.photo ? [l.photo] : []); }
   var modal = $("modal");
   var chats = {}, chatState = { id: null, meta: null, msgs: [], unsub: null, pending: [] }, gateDone = false;
 
@@ -1007,7 +1017,8 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
   }
   function cardHtml(l) {
     var mine = !l.example && uid && l.sellerId === uid;
-    var photo = l.photo ? '<img src="' + esc(l.photo) + '" alt="' + esc(l.title) + '" loading="lazy">' : art(isMeat(l) ? "meat" : isDairy(l) ? "dairy" : isHoney(l) ? "honey" : isFarm(l) ? (l.sub === "hay" ? "hay" : "feed") : l.category);
+    var gl = photosOf(l);
+    var photo = gl.length ? '<img class="galimg" data-act="gal" data-id="' + esc(l.id) + '" src="' + esc(gl[0]) + '" alt="' + esc(l.title) + '" loading="lazy">' + (gl.length > 1 ? '<span class="pcnt">📷 ' + gl.length + "</span>" : "") : art(isMeat(l) ? "meat" : isDairy(l) ? "dairy" : isHoney(l) ? "honey" : isFarm(l) ? (l.sub === "hay" ? "hay" : "feed") : l.category);
     var price = l.price > 0 ? '<div class="price">' + esc(fmtMoney(l.price)) + " ₸ <small>/ " + esc(unitLabel(l.unit)) + "</small></div>" : '<div class="price neg">' + esc(t("priceNeg")) + "</div>";
     var badge = l.example ? '<span class="badge ex">' + esc(t("example")) + "</span>" : (isMeat(l) ? '<span class="badge' + (l.cond === "frozen" ? " ex" : "") + '">' + esc(L(find(MCOND, l.cond) || ["", "", ""])) + "</span>" : isDairy(l) ? '<span class="badge' + (l.nat === "add" ? " ex" : "") + '">' + esc(t(l.nat === "add" ? "dNatAdd" : "dNatYes")) + "</span>" : isFarm(l) ? '<span class="badge">' + esc(t(l.sub === "hay" ? "fSubHay" : "fSubFeed")) + "</span>" : isHoney(l) ? '<span class="badge' + (l.pure === "sugar" ? " ex" : "") + '">' + esc(t(l.pure === "sugar" ? "hPureSugar" : "hPureNat")) + "</span>" : (l.own ? '<span class="badge">' + esc(t("own")) + "</span>" : ""));
     var sold = l.status === "sold" ? '<div class="soldmark"><span>' + esc(t("sold")) + "</span></div>" : "";
@@ -1128,7 +1139,7 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
   function closeModal() {
     F.gateOn = false;
     modal.hidden = true; modal.innerHTML = ""; document.body.classList.remove("lock");
-    pendingPhoto = null; editing = null; F.after = null; F.afterRegister = false;
+    pendingPhotos = []; editing = null; F.after = null; F.afterRegister = false;
     renderTop();
   }
 
@@ -1473,14 +1484,13 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
   }
   function listingModal(l, mode, sub) {
     editing = l ? l.id : null;
-    pendingPhoto = null;
+    pendingPhotos = l ? photosOf(l).slice() : (pendingPhotos || []);
     mode = l ? mkt(l) : (mode || F.market);
     var honey = mode === "honey", farm = mode === "farm", dairy = mode === "dairy", meat = mode === "meat", yr = new Date().getFullYear();
     sub = l ? (l.sub === "hay" ? "hay" : "feed") : (sub === "hay" ? "hay" : "feed");
     var v = l || (meat ? { title: "", category: "mutton", part: "whole", price: "", unit: "kg", qty: "", minq: "", cond: "fresh", bone: "bone", fat: "mid", slaughter: todayStr(), shelf: "", place: "", vet: false, region: (mySeller() && mySeller().region) || "", desc: "", own: false } : dairy ? { title: "", category: "milk", price: "", unit: "l", qty: "", region: (mySeller() && mySeller().region) || "", desc: "", own: false, nat: "yes", animal: "cow", made: todayStr(), shelf: "", fat: "", store: "cold", origin: "" } : farm ? { title: "", category: sub === "hay" ? "alfalfa" : "barley", price: "", unit: sub === "hay" ? "bale" : "kg", qty: "", region: (mySeller() && mySeller().region) || "", desc: "", own: false, weight: "", pack: "bag", comp: "", prot: "", moist: "", vit: "", year: "" } : honey ? { title: "", category: "flower", price: "", unit: "kg", qty: "", region: (mySeller() && mySeller().region) || "", desc: "", own: false, pure: "natural", pack: "500", color: "golden", cons: "liquid", year: yr }
       : { title: "", category: "veg", price: "", unit: "kg", qty: "", region: (mySeller() && mySeller().region) || "", harvest: todayStr(), desc: "", own: false });
     var regOpts = '<option value="">' + esc(t("fRegionPick")) + "</option>" + REGIONS.map(function (c) { return '<option value="' + c[0] + '"' + (v.region === c[0] ? " selected" : "") + ">" + esc(L(c)) + "</option>"; }).join("");
-    var cur = l && l.photo ? '<img src="' + esc(l.photo) + '" alt="">' : '<span>' + esc(t("fPhotoHint")) + "</span>";
     var seg = l ? "" : '<div class="field"><label>' + esc(t("fMode")) + '</label><div class="seg" role="group">' + MKTS.map(function (x) { return '<button type="button" class="chip" data-act="fmode" data-v="' + x[0] + '" aria-pressed="' + (mode === x[0]) + '">' + x[1] + esc(t(x[2])) + "</button>"; }).join("") + "</div></div>";
     var subseg = (farm && !l) ? '<div class="field"><label>' + esc(t("fSub")) + '</label><div class="seg" role="group">' + [["feed", "fSubFeed"], ["hay", "fSubHay"]].map(function (x) { return '<button type="button" class="chip" data-act="fsub" data-v="' + x[0] + '" aria-pressed="' + (sub === x[0]) + '">' + esc(t(x[1])) + "</button>"; }).join("") + "</div></div>" : "";
     var fields;
@@ -1513,11 +1523,12 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
     }
     openModal('<h2 id="mtitle">' + esc(l ? t("fTitleEdit") : t("fTitleNew")) + "</h2>" +
       '<form class="form" id="listingForm" novalidate data-mode="' + mode + '" data-sub="' + sub + '">' + seg + subseg +
-      '<div class="field"><label for="f_photo">' + esc(t("fPhoto")) + '</label><label class="drop" id="f_drop" for="f_photo">' + cur + '<input type="file" id="f_photo" accept="image/*"></label></div>' + fields +
+      '<div class="field"><label for="f_photo">' + esc(t("fPhoto")) + '</label><div class="pgrid" id="f_pgrid"></div><label class="drop" id="f_drop" for="f_photo"><span id="f_padd"></span><input type="file" id="f_photo" accept="image/*" multiple></label><p class="sub" id="f_pnote">' + esc(t("fPhotoCover")) + "</p></div>" + fields +
       '<p class="err" id="f_err" role="alert"></p>' +
       '<div class="row"><button type="submit" class="btn" id="f_save">' + esc(l ? t("save") : t("publish")) + '</button><button type="button" class="btn ghost" data-act="close">' + esc(t("cancel")) + "</button></div></form>");
     $("listingForm").addEventListener("submit", function (e) { e.preventDefault(); saveListing(l); });
     $("f_photo").addEventListener("change", onPhoto);
+    renderPhotoGrid();
     if (farm && sub === "feed") { var vt = function () { $("vit_f").style.display = $("f_cat").value === "fvit" ? "" : "none"; }; $("f_cat").addEventListener("change", vt); vt(); }
   }
   function shrinkImage(file) {
@@ -1543,15 +1554,27 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
       img.src = url;
     });
   }
+  function renderPhotoGrid() {
+    var g = $("f_pgrid"); if (!g) return;
+    g.innerHTML = pendingPhotos.map(function (p, i) { return '<div class="pth"><img src="' + p + '" alt="">' + (i === 0 && pendingPhotos.length > 1 ? '<span class="cv">1</span>' : "") + '<button type="button" data-act="rmphoto" data-v="' + i + '" aria-label="' + esc(t("rmPhoto")) + '">×</button></div>'; }).join("");
+    var add = $("f_padd"), drop = $("f_drop");
+    if (add) add.textContent = t("fPhotoAdd", { n: pendingPhotos.length });
+    if (drop) drop.style.display = pendingPhotos.length >= 7 ? "none" : "";
+  }
   function onPhoto(e) {
-    var f = e.target.files && e.target.files[0];
-    if (!f) return;
-    shrinkImage(f).then(function (data) {
-      pendingPhoto = data;
-      $("f_drop").innerHTML = '<img src="' + data + '" alt=""><input type="file" id="f_photo" accept="image/*">';
-      $("f_photo").addEventListener("change", onPhoto);
-      $("f_err").textContent = "";
-    }).catch(function () { $("f_err").textContent = t("photoErr"); });
+    var files = Array.prototype.slice.call((e.target.files || []));
+    e.target.value = "";
+    if (!files.length) return;
+    var room = 7 - pendingPhotos.length;
+    if (room <= 0) { $("f_err").textContent = t("photosMax"); return; }
+    var tooMany = files.length > room;
+    files = files.slice(0, room);
+    Promise.all(files.map(function (f) { return shrinkImage(f).catch(function () { return null; }); })).then(function (arr) {
+      var good = arr.filter(Boolean);
+      good.forEach(function (d) { if (pendingPhotos.length < 7) pendingPhotos.push(d); });
+      renderPhotoGrid();
+      $("f_err").textContent = good.length < arr.length ? t("photoErr") : (tooMany ? t("photosMax") : "");
+    });
   }
   async function saveListing(old) {
     var err = $("f_err");
@@ -1601,11 +1624,13 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
       if (freshDays(mslaughter) > mshelf) { err.textContent = t("eExpired"); $("f_shelf").focus(); return; }
     }
     if (!$("f_own").checked) { err.textContent = t(meat ? "eOwnMeat" : dairy ? "eOwnDairy" : farm ? "eOwnFarm" : honey ? "eOwnHoney" : "eOwn"); $("f_own").focus(); return; }
+    var ptotal = 0; pendingPhotos.forEach(function (x) { ptotal += x.length; });
+    if (ptotal > 880000) { err.textContent = t("photosBig"); return; }
     var ref = old ? db.doc("listings/" + old.id) : db.collection("listings").doc();
     var data = {
       sellerId: uid, title: title, category: $("f_cat").value, price: price > 0 ? price : 0, unit: (honey || meat) ? "kg" : $("f_unit").value, qty: qty,
       region: region, harvest: (honey || farm || dairy || meat) ? "" : ($("f_harvest").value || ""), desc: $("f_desc").value.trim(), own: true, status: old ? (old.status || "active") : "active",
-      photo: pendingPhoto || (old && old.photo) || "", createdAt: old ? old.createdAt : Date.now(), updatedAt: Date.now()
+      photo: pendingPhotos[0] || "", photos: pendingPhotos.slice(), createdAt: old ? old.createdAt : Date.now(), updatedAt: Date.now()
     };
     if (honey) { data.kind = "honey"; data.pure = $("f_pure").value; data.pack = $("f_pack").value; data.color = $("f_color").value; data.cons = $("f_cons").value; data.year = yearV; }
     if (meat) { data.kind = "meat"; data.unit = "kg"; data.qtyUnit = "kg"; data.part = $("f_part").value; data.minq = mminq; data.cond = $("f_cond").value; data.bone = $("f_bone").value; data.fat = $("f_fat").value; data.slaughter = mslaughter; data.shelf = mshelf; data.place = $("f_place").value.trim(); data.vet = $("f_vet").checked; }
@@ -1869,6 +1894,11 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
     if (!mySeller()) { F.afterRegister = true; profileModal(); return; }
     listingModal(null);
   }
+  function galShow() {
+    var m = $("gal_main"); if (!m) return;
+    m.src = galState.list[galState.i];
+    var n = $("gal_n"); if (n) n.textContent = (galState.i + 1) + " / " + galState.list.length;
+  }
   function byId(id) { for (var i = 0; i < listings.length; i++) if (listings[i].id === id) return listings[i]; return null; }
   async function patch(id, data) { try { await db.doc("listings/" + id).update(data); } catch (e) { infoModal(t("saveErr")); } }
 
@@ -1880,6 +1910,15 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
     if (act !== "del" && pendingDel) { pendingDel = null; if (act !== "delok") renderAll(); }
     switch (act) {
       case "unstage": chatState.pending.splice(Number(el.getAttribute("data-v")), 1); renderTray(); break;
+      case "gal": {
+        var gl2 = photosOf(byId(id)); if (!gl2.length) break;
+        galState = { list: gl2, i: 0 };
+        openModal('<div class="gal"><img id="gal_main" class="zoomimg" src="" alt="">' + (gl2.length > 1 ? '<div class="galbar"><button type="button" class="btn small ghost" data-act="galprev" aria-label="‹">‹</button><span id="gal_n"></span><button type="button" class="btn small ghost" data-act="galnext" aria-label="›">›</button></div>' : "") + "</div>");
+        galShow(); break;
+      }
+      case "galprev": galState.i = (galState.i + galState.list.length - 1) % galState.list.length; galShow(); break;
+      case "galnext": galState.i = (galState.i + 1) % galState.list.length; galShow(); break;
+      case "rmphoto": pendingPhotos.splice(Number(el.getAttribute("data-v")), 1); renderPhotoGrid(); break;
       case "zoom": openModal('<img class="zoomimg" src="' + el.getAttribute("src") + '" alt="">'); break;
       case "share": shareListing(id); break;
       case "report": reportModal(id); break;
