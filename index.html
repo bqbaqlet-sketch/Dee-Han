@@ -968,9 +968,11 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
   }
   function renderChips() {
     var segEl = $("seg");
-    if (segEl) segEl.innerHTML = MKTS.map(function (x) { return '<button type="button" class="chip" data-act="market" data-v="' + x[0] + '" aria-pressed="' + (F.market === x[0]) + '">' + x[1] + esc(t(x[2])) + "</button>"; }).join("");
+    var mc = {}, cc = {}, ctot = 0;
+    listings.forEach(function (l) { if (l.status === "sold") return; var m = mkt(l); mc[m] = (mc[m] || 0) + 1; if (m === F.market) { cc[l.category] = (cc[l.category] || 0) + 1; ctot++; } });
+    if (segEl) segEl.innerHTML = MKTS.map(function (x) { return '<button type="button" class="chip" data-act="market" data-v="' + x[0] + '" aria-pressed="' + (F.market === x[0]) + '">' + x[1] + esc(t(x[2])) + " (" + (mc[x[0]] || 0) + ")</button>"; }).join("");
     var items = [["all", t("all")]].concat((F.market === "meat" ? MTYPES : F.market === "dairy" ? DTYPES : F.market === "farm" ? FTYPES.concat(HAYT) : F.market === "honey" ? HTYPES : CATS).map(function (c) { return [c[0], L(c)]; }));
-    var h = items.map(function (c) { return '<button type="button" class="chip" data-act="cat" data-v="' + c[0] + '" aria-pressed="' + (F.cat === c[0]) + '">' + esc(c[1]) + "</button>"; }).join("");
+    var h = items.map(function (c) { return '<button type="button" class="chip" data-act="cat" data-v="' + c[0] + '" aria-pressed="' + (F.cat === c[0]) + '">' + esc(c[1]) + " (" + (c[0] === "all" ? ctot : (cc[c[0]] || 0)) + ")</button>"; }).join("");
     $("chips").innerHTML = h;
   }
   function renderNotice() {
