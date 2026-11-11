@@ -1,5 +1,5 @@
-var CACHE = "deehan-v1";
-var SHELL = ["./", "index.html", "manifest.json", "IMG_3094.png"];
+var CACHE = "deehan-v3";
+var SHELL = ["./", "index.html", "manifest.json", "icon-192.png"];
 
 self.addEventListener("install", function (e) {
   self.skipWaiting();
@@ -19,6 +19,12 @@ self.addEventListener("fetch", function (e) {
   if (req.method !== "GET") return;
   var url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
+  if (url.pathname.indexOf("/nsfw/") !== -1) {
+    e.respondWith(caches.match(req).then(function (r) {
+      return r || fetch(req).then(function (res) { var cp = res.clone(); caches.open(CACHE).then(function (c) { c.put(req, cp); }); return res; });
+    }));
+    return;
+  }
   e.respondWith(
     fetch(req).then(function (res) {
       var copy = res.clone();
