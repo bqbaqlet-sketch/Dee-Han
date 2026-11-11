@@ -507,7 +507,7 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
       own: "Свой урожай", sold: "Продано", example: "Пример", priceNeg: "Цена договорная",
       avail: "В наличии", harvested: "Собрано", contact: "Связаться", edit: "Изменить", del: "Удалить",
       delSure: "Точно удалить?", markSold: "Продано", reopen: "Вернуть в продажу", seller: "Продавец",
-      fTitleNew: "Новое объявление", fTitleEdit: "Изменить объявление", fPhoto: "Фото (до 7 штук)", fPhotoAdd: "＋ Добавить фото ({n} из 7)", fPhotoCover: "Первое фото будет на обложке объявления.", photosMax: "Можно прикрепить не более 7 фото", photosBig: "Фото слишком тяжёлые: уберите несколько или выберите поменьше", rmPhoto: "Убрать фото",
+      fTitleNew: "Новое объявление", fTitleEdit: "Изменить объявление", fPhoto: "Фото (до 7 штук)", fPhotoAdd: "＋ Добавить фото ({n} из 7)", fPhotoCover: "Первое фото будет на обложке объявления.", photosMax: "Можно прикрепить не более 7 фото", photosBig: "Фото слишком тяжёлые: уберите несколько или выберите поменьше", rmPhoto: "Убрать фото", photoNsfw: "Это фото нельзя загрузить: на нём может быть контент 18+. Выберите другое.", photoCheck: "Проверяем фото…", modBlock: "Нельзя отправить: текст содержит запрещённое содержимое ({c}). Измените текст.", mod_adult: "18+", mod_drugs: "наркотики", mod_weapons: "оружие", mod_insult: "оскорбления", mod_scam: "мошенничество",
       fPhotoHint: "Нажмите, чтобы выбрать фото", fName: "Что продаёте", fNamePh: "Например, картофель «Невский»",
       fCat: "Категория", fPrice: "Цена за единицу, ₸", fPricePh: "Пусто: договорная", fUnit: "Единица",
       fQty: "Сколько в наличии", fRegion: "Регион", fRegionPick: "Выберите регион", fHarvest: "Дата сбора", fDesc: "Описание",
@@ -548,7 +548,7 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
       own: "Өз егінім", sold: "Сатылды", example: "Мысал", priceNeg: "Бағасы келісім бойынша",
       avail: "Бар", harvested: "Жиналған", contact: "Байланысу", edit: "Өзгерту", del: "Жою",
       delSure: "Растайсыз ба?", markSold: "Сатылды", reopen: "Қайта сатылымға шығару", seller: "Сатушы",
-      fTitleNew: "Жаңа хабарландыру", fTitleEdit: "Хабарландыруды өзгерту", fPhoto: "Суреттер (7-ге дейін)", fPhotoAdd: "＋ Сурет қосу ({n} / 7)", fPhotoCover: "Бірінші сурет хабарландыру мұқабасында болады.", photosMax: "7 суреттен артық қосуға болмайды", photosBig: "Суреттер тым ауыр: бірнешеуін алып тастаңыз немесе кішірегін таңдаңыз", rmPhoto: "Суретті алып тастау",
+      fTitleNew: "Жаңа хабарландыру", fTitleEdit: "Хабарландыруды өзгерту", fPhoto: "Суреттер (7-ге дейін)", fPhotoAdd: "＋ Сурет қосу ({n} / 7)", fPhotoCover: "Бірінші сурет хабарландыру мұқабасында болады.", photosMax: "7 суреттен артық қосуға болмайды", photosBig: "Суреттер тым ауыр: бірнешеуін алып тастаңыз немесе кішірегін таңдаңыз", rmPhoto: "Суретті алып тастау", photoNsfw: "Бұл суретті жүктеуге болмайды: онда 18+ мазмұн болуы мүмкін. Басқасын таңдаңыз.", photoCheck: "Суретті тексеріп жатырмыз…", modBlock: "Жіберуге болмайды: мәтінде тыйым салынған мазмұн бар ({c}). Мәтінді өзгертіңіз.", mod_adult: "18+", mod_drugs: "есірткі", mod_weapons: "қару", mod_insult: "балағат сөз", mod_scam: "алаяқтық",
       fPhotoHint: "Суретті таңдау үшін басыңыз", fName: "Не сатасыз", fNamePh: "Мысалы, «Невский» картобы",
       fCat: "Санат", fPrice: "Бір бірлік бағасы, ₸", fPricePh: "Бос болса: келісім бойынша", fUnit: "Бірлік",
       fQty: "Қанша бар", fRegion: "Өңір", fRegionPick: "Өңірді таңдаңыз", fHarvest: "Жиналған күні", fDesc: "Сипаттама",
@@ -1176,6 +1176,8 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
     if (!uid || !me || uid === sid) return;
     var err = $("rv_err");
     if (!(F.rate >= 1 && F.rate <= 5)) { err.textContent = t("revErrRate"); return; }
+    var rcat = modFields(["rv_text"]);
+    if (rcat) { err.textContent = modMsg(rcat); return; }
     var data = { sellerId: sid, authorId: uid, authorName: me.name || "", avatar: me.avatar != null ? me.avatar : 0, rating: F.rate, text: ($("rv_text").value || "").trim().slice(0, 500), createdAt: Date.now() };
     try {
       await db.doc("reviews/" + sid + "_" + uid).set(data);
@@ -1414,6 +1416,8 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
     var chatOn = $("p_chat").checked;
     var err = $("p_err");
     if (name.length < 2) { err.textContent = t("ePName"); $("p_name").focus(); return; }
+    var pcat = modFields(["p_name", "p_about", "p_city"]);
+    if (pcat) { err.textContent = modMsg(pcat); return; }
     if (city.length < 2) { err.textContent = t("eCity"); $("p_city").focus(); return; }
     if (rawPh && (n < 10 || n > 13)) { err.textContent = t("ePPhone"); $("p_phone").focus(); return; }
     if (tg && tg.length < 5) { err.textContent = t("eTg"); $("p_tg").focus(); return; }
@@ -1533,6 +1537,141 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
     renderPhotoGrid();
     if (farm && sub === "feed") { var vt = function () { $("vit_f").style.display = $("f_cat").value === "fvit" ? "" : "none"; }; $("f_cat").addEventListener("change", vt); vt(); }
   }
+  var MOD = (function () {
+    var LET = "a-zа-яәіңғүұқөһ0-9";
+    var LAT = { a: "а", e: "е", o: "о", p: "р", c: "с", x: "х", y: "у", k: "к", m: "м", t: "т", h: "н", b: "в" };
+    function rx(list, anchored) { return new RegExp((anchored ? "^(?:" : "(?:") + list.join("|") + ")"); }
+    function set(a) { var o = {}; a.forEach(function (w) { o[w] = 1; }); return o; }
+    var C = {
+      adult: {
+        start: rx(["порн", "порев", "секс", "интим", "эскорт", "проститу", "шлюх", "эротик", "минет", "оргаз", "мастурб", "вагин", "пенис", "сиськ", "титьк", "хентай", "нюдс", "стриптиз", "камшот", "трахат", "трахн", "трахал", "жалаңаш", "жезөкше", "сексуал"], true),
+        exact: set(["анал", "нюд", "нюди", "xxx", "porn", "porno", "sex", "nude", "nudes", "escort", "hentai", "onlyfans", "nsfw", "pornhub", "xvideos"]),
+        phr: [/(?:^|[^0-9])18\s*\+/, /для\s+взрослых/, /интим\s+услуг/, /ақылы\s+жыныс/]
+      },
+      drugs: {
+        start: rx(["наркот", "героин", "кокаин", "марихуан", "гашиш", "амфетамин", "метамфетамин", "мефедрон", "экстази", "лсд", "спайс", "анаш", "опиум", "конопл", "кокнар", "псилоцибин", "есіртк", "закладчик"], true),
+        exact: set(["heroin", "cocaine", "mdma", "lsd", "marijuana", "cannabis"]),
+        phr: [/маков\S*\s+солом/]
+      },
+      weapons: {
+        start: rx(["оружи", "пистолет", "револьвер", "калашников", "винтовк", "карабин", "дробовик", "боеприпас", "гранатомет", "взрывчат", "тротил", "динамит", "детонатор", "самопал", "огнестрел", "глушител", "ружь", "ружей", "ружье", "патрон", "тапанш", "мылтық", "мылтык", "қару", "жарылғыш"], true),
+        exact: set(["pistol", "glock", "rifle", "ak47", "ak74", "grenade", "gun"]),
+        phr: [/ручн\S*\s+гранат/, /боев\S*\s+нож/, /нож\S*\s+бабочк/, /(?:^|\s)ак[\s\-]?(?:47|74|12)(?:\s|$)/, /оқ[\s\-]?дәрі/]
+      },
+      scam: {
+        start: rx(["криптовалют", "биткоин", "форекс", "казино", "букмекер", "микрозайм", "обналичи", "кардинг", "bitcoin", "forex", "casino"], true),
+        exact: set(["обнал"]),
+        phr: [/быстр\S*\s+заработ/, /легк\S*\s+деньг/, /пассивн\S*\s+доход/, /заработок\s+в\s+интернет/, /заработок\s+без\s+вложен/, /удво\S*\s+(?:ваш|деньг|вклад)/, /ставки\s+на\s+спорт/, /финансов\S*\s+пирамид/, /кредит\S*\s+без\s+(?:справок|отказ|залог)/, /поддельн\S*\s+(?:документ|справк|права|паспорт)/, /фальшив\S*\s+(?:документ|деньг|купюр|справк|паспорт)/, /жеңіл\s+ақша/, /тез\s+табыс/, /гарантированн\S*\s+доход/]
+      },
+      insult: {
+        sub: rx(["хуй", "хуе", "хуя", "пизд", "пезд", "блят", "бляд"], false),
+        start: rx(["ебат", "ебал", "ебан", "ебаш", "ебуч", "еблан", "ебыр", "ебну", "заеб", "поеб", "уеб", "наеб", "съеб", "выеб", "долбоеб", "далбаеб", "мудак", "мудил", "мудозвон", "пидор", "пидар", "пидрил", "педик", "гомик", "гандон", "гондон", "шалав", "мразь", "мразот", "ублюд", "выродок", "дебил", "идиот", "кретин", "придурок", "говн", "залуп", "мандав", "лошар", "тупиц", "сучар", "сучк", "сволоч", "қотақ", "сиктір", "сиқтір", "қаншық", "ақымақ"], true),
+        exact: set(["сука", "суки", "суке", "суку", "сукой", "тварь", "твари", "дурак", "дура", "дурачок", "лох", "лохи", "урод", "уроды", "чмо", "бля", "блять", "нах", "нахуй"])
+      }
+    };
+    var ORDER = ["adult", "drugs", "weapons", "scam", "insult"];
+    function squash(w, n) { return w.replace(new RegExp("([" + LET + "])\\1{" + (n - 1) + ",}", "g"), "$1"); }
+    function forms(tok) {
+      var f = [tok];
+      if (/[a-z]/.test(tok) && /[а-яәіңғүұқөһ]/.test(tok)) f.push(tok.replace(/[a-z]/g, function (c) { return LAT[c] || c; }));
+      if (/[a-zа-яәіңғүұқөһ]/.test(tok) && /0/.test(tok)) f.push(tok.replace(/0/g, "о"));
+      var out = [];
+      f.forEach(function (w) { out.push(w, squash(w, 3), squash(w, 2)); });
+      return out;
+    }
+    function tokens(s) {
+      var out = [], run = "", chunks = s.split(/\s+/);
+      chunks.forEach(function (ch) {
+        if (/^[a-zа-яәіңғүұқөһ]$/.test(ch)) { run += ch; return; }
+        if (run.length >= 3) out.push(run);
+        run = "";
+        var parts = ch.split(new RegExp("[^" + LET + "]+")).filter(Boolean);
+        parts.forEach(function (p) { out.push(p); });
+        var merged = ch.replace(new RegExp("[^" + LET + "]", "g"), "");
+        if (parts.length > 1 && merged) out.push(merged);
+      });
+      if (run.length >= 3) out.push(run);
+      return out;
+    }
+    function check(text) {
+      var s = String(text == null ? "" : text).toLowerCase().replace(/ё/g, "е").replace(/[​-‏⁠﻿­]/g, "");
+      if (!s.trim()) return "";
+      var s2 = s.replace(new RegExp("[^" + LET + "\\s+]", "g"), " ").replace(/\s+/g, " ");
+      var toks = tokens(s), k, i, j, c, w, fs;
+      for (k = 0; k < ORDER.length; k++) {
+        c = C[ORDER[k]];
+        if (c.phr) for (i = 0; i < c.phr.length; i++) if (c.phr[i].test(s) || c.phr[i].test(s2)) return ORDER[k];
+        for (i = 0; i < toks.length; i++) {
+          fs = forms(toks[i]);
+          for (j = 0; j < fs.length; j++) {
+            w = fs[j];
+            if (c.exact && c.exact[w]) return ORDER[k];
+            if (c.start && c.start.test(w)) return ORDER[k];
+            if (c.sub && c.sub.test(w)) return ORDER[k];
+          }
+        }
+      }
+      return "";
+    }
+    return { check: check };
+  })();
+  function modFields(ids) {
+    for (var i = 0; i < ids.length; i++) { var el = $(ids[i]); if (el && el.value) { var c = MOD.check(el.value); if (c) return c; } }
+    return "";
+  }
+  function modMsg(c) { return t("modBlock", { c: t("mod_" + c) }); }
+
+  var NSFW_TF = "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js";
+  var NSFW_LIMIT = 0.6, NSFW = { p: null, failed: false };
+  function loadScript(src) {
+    return new Promise(function (res, rej) {
+      var el = document.createElement("script"); el.src = src; el.async = true;
+      el.onload = res; el.onerror = function () { rej(new Error("script")); };
+      document.head.appendChild(el);
+    });
+  }
+  function withTimeout(p, ms) {
+    return new Promise(function (res, rej) { var tm = setTimeout(function () { rej(new Error("timeout")); }, ms); p.then(function (v) { clearTimeout(tm); res(v); }, function (e) { clearTimeout(tm); rej(e); }); });
+  }
+  function nsfwModel() {
+    if (NSFW.p) return NSFW.p;
+    NSFW.p = (window.tf ? Promise.resolve() : loadScript(window.NSFW_TF_URL || NSFW_TF))
+      .then(function () { return window.tf.loadLayersModel(window.NSFW_MODEL_URL || "nsfw/model.json"); })
+      .catch(function (e) { NSFW.p = null; throw e; });
+    return NSFW.p;
+  }
+  function nsfwCheck(dataUrl) {
+    if (window.NSFW_OFF) return Promise.resolve(false);
+    return withTimeout(nsfwModel(), 40000).then(function (model) {
+      return new Promise(function (res, rej) {
+        var im = new Image();
+        im.onload = function () {
+          try {
+            var tf = window.tf;
+            var out = tf.tidy(function () {
+              var x = tf.browser.fromPixels(im).toFloat().div(255);
+              x = tf.image.resizeBilinear(x, [224, 224], true).expandDims(0);
+              return model.predict(x);
+            });
+            out.data().then(function (d) { out.dispose(); res(d); }, rej);
+          } catch (e) { rej(e); }
+        };
+        im.onerror = function () { rej(new Error("img")); };
+        im.src = dataUrl;
+      });
+    }).then(function (d) {
+      NSFW.failed = false;
+      return (d[3] + d[1]) >= NSFW_LIMIT;
+    }).catch(function () { NSFW.failed = true; return false; });
+  }
+  function safeImage(file) {
+    return shrinkImage(file).then(function (d) {
+      return nsfwCheck(d).then(function (bad) {
+        if (bad) { var e = new Error("nsfw"); e.nsfw = true; throw e; }
+        return d;
+      });
+    });
+  }
   function shrinkImage(file) {
     return new Promise(function (resolve, reject) {
       var url = URL.createObjectURL(file), img = new Image();
@@ -1571,11 +1710,13 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
     if (room <= 0) { $("f_err").textContent = t("photosMax"); return; }
     var tooMany = files.length > room;
     files = files.slice(0, room);
-    Promise.all(files.map(function (f) { return shrinkImage(f).catch(function () { return null; }); })).then(function (arr) {
-      var good = arr.filter(Boolean);
+    $("f_err").textContent = t("photoCheck");
+    Promise.all(files.map(function (f) { return safeImage(f).catch(function (e) { return e && e.nsfw ? "nsfw" : null; }); })).then(function (arr) {
+      var good = arr.filter(function (x) { return x && x !== "nsfw"; }), bad = arr.filter(function (x) { return x === "nsfw"; }).length;
       good.forEach(function (d) { if (pendingPhotos.length < 7) pendingPhotos.push(d); });
       renderPhotoGrid();
-      $("f_err").textContent = good.length < arr.length ? t("photoErr") : (tooMany ? t("photosMax") : "");
+      var er = $("f_err"); if (!er) return;
+      er.textContent = bad ? t("photoNsfw") : (good.length < arr.length ? t("photoErr") : (tooMany ? t("photosMax") : ""));
     });
   }
   async function saveListing(old) {
@@ -1583,6 +1724,8 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
     var honey = $("listingForm").getAttribute("data-mode") === "honey", farm = $("listingForm").getAttribute("data-mode") === "farm", dairy = $("listingForm").getAttribute("data-mode") === "dairy", meat = $("listingForm").getAttribute("data-mode") === "meat", sub = $("listingForm").getAttribute("data-sub");
     var title = $("f_title").value.trim(), region = $("f_region").value, qty = parseFloat($("f_qty").value), price = parseFloat($("f_price").value);
     if (farm && sub === "hay" && !title) title = L(find(HAYT, $("f_cat").value) || ["", "", ""]);
+    var mcat = modFields(["f_title", "f_desc", "f_comp", "f_vit", "f_origin", "f_place"]);
+    if (mcat) { err.textContent = modMsg(mcat); return; }
     if (title.length < 2) { err.textContent = t("eName"); $("f_title").focus(); return; }
     if (!region) { err.textContent = t("eRegion"); $("f_region").focus(); return; }
     if (!(qty > 0)) { err.textContent = t("eQty"); $("f_qty").focus(); return; }
@@ -1770,7 +1913,8 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
       var er = $("c_err"); if (er) er.textContent = "";
       for (var k = 0; k < files.length; k++) {
         if (chatState.pending.length >= 4) { if (er) er.textContent = t("chatTooMany"); break; }
-        try { chatState.pending.push(await shrinkImage(files[k])); } catch (x) { if (er) er.textContent = t("chatPhotoErr"); }
+        if (er) er.textContent = t("photoCheck");
+        try { chatState.pending.push(await safeImage(files[k])); if (er) er.textContent = ""; } catch (x) { if (er) er.textContent = x && x.nsfw ? t("photoNsfw") : t("chatPhotoErr"); }
       }
       renderTray();
     });
@@ -1855,6 +1999,8 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
     if (!ta || !chatState.id) return;
     var text = ta.value.trim(), imgs = (chatState.pending || []).slice();
     if (!text && !imgs.length) return;
+    var ccat = MOD.check(text);
+    if (ccat) { var ce = $("c_err"); if (ce) ce.textContent = modMsg(ccat); return; }
     var cid = chatState.id, m = chatState.meta || {}, err = $("c_err"), btn = $("c_send"), now = Date.now();
     var total = 0; imgs.forEach(function (x) { total += x.length; });
     if (total > 760000) { err.textContent = t("chatTooBig"); return; }
