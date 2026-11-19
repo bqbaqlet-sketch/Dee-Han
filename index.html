@@ -358,6 +358,15 @@ footer { padding-bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
 .pth button { position: absolute; top: 2px; right: 2px; width: 26px; height: 26px; border-radius: 50%; border: 0; background: rgba(0,0,0,.7); color: #fff; font-size: 16px; line-height: 1; cursor: pointer; }
 .pth .cv { position: absolute; left: 0; bottom: 0; right: 0; background: rgba(0,0,0,.6); color: #fff; font-size: 12px; text-align: center; padding: 1px 0; }
 .galbar { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 10px; }
+html.a11y body { zoom: 1.15; }
+html.a11y { --ink: #000; --ink-soft: #1d1b14; --line: rgba(0, 0, 0, 0.7); }
+html.a11y[data-theme="dark"] { --ink: #fff; --ink-soft: #f1ecd8; --line: rgba(255, 255, 255, 0.7); }
+html.a11y :focus-visible { outline: 4px solid #1a56db; outline-offset: 2px; }
+html.a11y a { text-decoration: underline; }
+html.a11y .btn, html.a11y .chip, html.a11y .tab { min-height: 48px; }
+html.a11y *, html.a11y *::before, html.a11y *::after { animation: none !important; transition: none !important; }
+.a11yfab { position: fixed; right: 12px; bottom: 96px; z-index: 60; width: 56px; height: 56px; border-radius: 50%; border: 3px solid #fff; background: #1a56db; color: #fff; font-size: 26px; cursor: pointer; box-shadow: 0 3px 10px rgba(0,0,0,.5); }
+.a11yfab[hidden] { display: none; }
 .zoomimg { display: block; max-width: 100%; max-height: 78vh; margin: 8px auto 0; border-radius: 8px; }
 .tray { display: flex; gap: 10px; padding: 10px 14px 2px; overflow-x: auto; background: var(--paper); }
 .tray[hidden] { display: none; }
@@ -398,6 +407,7 @@ footer { padding-bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
   var t = "light";
   try { if (localStorage.getItem("ur_theme") === "dark") t = "dark"; } catch (e) {}
   document.documentElement.setAttribute("data-theme", t);
+  try { if (localStorage.getItem("ur_a11y") === "1") document.documentElement.classList.add("a11y"); } catch (e) {}
 })();
 </script>
 
@@ -471,6 +481,7 @@ footer { padding-bottom: calc(104px + env(safe-area-inset-bottom, 0px)); }
   <button type="button" class="tab" data-act="tab" data-v="profile"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20.5c0-4.1 3.6-6.5 8-6.5s8 2.4 8 6.5z"/></svg><span data-i="tabProfile"></span></button>
 </nav>
 <div class="toast" id="toast" role="status" hidden></div>
+<button type="button" class="a11yfab" id="a11yfab" data-silent data-act="a11y-read" hidden>🔊</button>
 <div class="overlay" id="modal" hidden></div>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -507,7 +518,7 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
       own: "Свой урожай", sold: "Продано", example: "Пример", priceNeg: "Цена договорная",
       avail: "В наличии", harvested: "Собрано", contact: "Связаться", edit: "Изменить", del: "Удалить",
       delSure: "Точно удалить?", markSold: "Продано", reopen: "Вернуть в продажу", seller: "Продавец",
-      fTitleNew: "Новое объявление", fTitleEdit: "Изменить объявление", fPhoto: "Фото (до 7 штук)", fPhotoAdd: "＋ Добавить фото ({n} из 7)", fPhotoCover: "Первое фото будет на обложке объявления.", photosMax: "Можно прикрепить не более 7 фото", photosBig: "Фото слишком тяжёлые: уберите несколько или выберите поменьше", rmPhoto: "Убрать фото", photoNsfw: "Это фото нельзя загрузить: на нём может быть контент 18+. Выберите другое.", photoCheck: "Проверяем фото…", modBlock: "Нельзя отправить: текст содержит запрещённое содержимое ({c}). Измените текст.", mod_adult: "18+", mod_drugs: "наркотики", mod_weapons: "оружие", mod_insult: "оскорбления", mod_scam: "мошенничество",
+      fTitleNew: "Новое объявление", fTitleEdit: "Изменить объявление", fPhoto: "Фото (до 7 штук)", fPhotoAdd: "＋ Добавить фото ({n} из 7)", fPhotoCover: "Первое фото будет на обложке объявления.", photosMax: "Можно прикрепить не более 7 фото", photosBig: "Фото слишком тяжёлые: уберите несколько или выберите поменьше", rmPhoto: "Убрать фото", photoNsfw: "Это фото нельзя загрузить: на нём может быть контент 18+. Выберите другое.", photoCheck: "Проверяем фото…", modBlock: "Нельзя отправить: текст содержит запрещённое содержимое ({c}). Измените текст.", mod_adult: "18+", mod_drugs: "наркотики", mod_weapons: "оружие", mod_insult: "оскорбления", mod_scam: "мошенничество", a11yLabel: "Режим для слабовидящих", a11yDesc: "Крупный текст, высокий контраст и озвучивание нажатий: нажмите на кнопку или объявление, и приложение скажет, что это.", a11yOnBtn: "Включить", a11yOffBtn: "Выключить", a11yTestBtn: "🔊 Проверить голос", a11yTest: "Голос работает. Это режим для слабовидящих приложения ДиХан Онлайн.", a11yOnMsg: "Режим для слабовидящих включён. Нажимайте на элементы, и я буду говорить, что это. Кнопка с динамиком внизу справа читает весь экран.", a11yOffMsg: "Режим для слабовидящих выключен.", a11yRead: "Прочитать экран вслух", a11yNoSpeech: "Озвучивание не поддерживается этим браузером. Работают крупный текст и контраст.", a11yBtn: "кнопка", a11yField: "поле ввода", a11yEmpty: "пусто", a11yValue: "введено", a11yFileBtn: "выбор файла", a11ySel: "выбрано", a11yChecked: "включено", a11yUnchecked: "выключено", a11ySelect: "список", a11yLink: "ссылка", a11yDialog: "окно", a11yAd: "Объявление",
       fPhotoHint: "Нажмите, чтобы выбрать фото", fName: "Что продаёте", fNamePh: "Например, картофель «Невский»",
       fCat: "Категория", fPrice: "Цена за единицу, ₸", fPricePh: "Пусто: договорная", fUnit: "Единица",
       fQty: "Сколько в наличии", fRegion: "Регион", fRegionPick: "Выберите регион", fHarvest: "Дата сбора", fDesc: "Описание",
@@ -548,7 +559,7 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
       own: "Өз егінім", sold: "Сатылды", example: "Мысал", priceNeg: "Бағасы келісім бойынша",
       avail: "Бар", harvested: "Жиналған", contact: "Байланысу", edit: "Өзгерту", del: "Жою",
       delSure: "Растайсыз ба?", markSold: "Сатылды", reopen: "Қайта сатылымға шығару", seller: "Сатушы",
-      fTitleNew: "Жаңа хабарландыру", fTitleEdit: "Хабарландыруды өзгерту", fPhoto: "Суреттер (7-ге дейін)", fPhotoAdd: "＋ Сурет қосу ({n} / 7)", fPhotoCover: "Бірінші сурет хабарландыру мұқабасында болады.", photosMax: "7 суреттен артық қосуға болмайды", photosBig: "Суреттер тым ауыр: бірнешеуін алып тастаңыз немесе кішірегін таңдаңыз", rmPhoto: "Суретті алып тастау", photoNsfw: "Бұл суретті жүктеуге болмайды: онда 18+ мазмұн болуы мүмкін. Басқасын таңдаңыз.", photoCheck: "Суретті тексеріп жатырмыз…", modBlock: "Жіберуге болмайды: мәтінде тыйым салынған мазмұн бар ({c}). Мәтінді өзгертіңіз.", mod_adult: "18+", mod_drugs: "есірткі", mod_weapons: "қару", mod_insult: "балағат сөз", mod_scam: "алаяқтық",
+      fTitleNew: "Жаңа хабарландыру", fTitleEdit: "Хабарландыруды өзгерту", fPhoto: "Суреттер (7-ге дейін)", fPhotoAdd: "＋ Сурет қосу ({n} / 7)", fPhotoCover: "Бірінші сурет хабарландыру мұқабасында болады.", photosMax: "7 суреттен артық қосуға болмайды", photosBig: "Суреттер тым ауыр: бірнешеуін алып тастаңыз немесе кішірегін таңдаңыз", rmPhoto: "Суретті алып тастау", photoNsfw: "Бұл суретті жүктеуге болмайды: онда 18+ мазмұн болуы мүмкін. Басқасын таңдаңыз.", photoCheck: "Суретті тексеріп жатырмыз…", modBlock: "Жіберуге болмайды: мәтінде тыйым салынған мазмұн бар ({c}). Мәтінді өзгертіңіз.", mod_adult: "18+", mod_drugs: "есірткі", mod_weapons: "қару", mod_insult: "балағат сөз", mod_scam: "алаяқтық", a11yLabel: "Нашар көретіндерге арналған режим", a11yDesc: "Ірі мәтін, жоғары контраст және басқан нәрсені дауыспен айту: түймені немесе хабарландыруды басыңыз, қосымша оның не екенін айтады.", a11yOnBtn: "Қосу", a11yOffBtn: "Өшіру", a11yTestBtn: "🔊 Дауысты тексеру", a11yTest: "Дауыс жұмыс істеп тұр. Бұл DeeHan Online нашар көретіндерге арналған режимі.", a11yOnMsg: "Нашар көретіндерге арналған режим қосылды. Элементтерді басыңыз, мен олардың не екенін айтамын. Төменгі оң жақтағы динамик түймесі бүкіл экранды оқиды.", a11yOffMsg: "Режим өшірілді.", a11yRead: "Экранды дауыстап оқу", a11yNoSpeech: "Бұл браузер дыбыстауды қолдамайды. Ірі мәтін мен контраст жұмыс істейді.", a11yBtn: "түйме", a11yField: "енгізу өрісі", a11yEmpty: "бос", a11yValue: "енгізілген", a11yFileBtn: "файл таңдау", a11ySel: "таңдалған", a11yChecked: "қосулы", a11yUnchecked: "өшірулі", a11ySelect: "тізім", a11yLink: "сілтеме", a11yDialog: "терезе", a11yAd: "Хабарландыру",
       fPhotoHint: "Суретті таңдау үшін басыңыз", fName: "Не сатасыз", fNamePh: "Мысалы, «Невский» картобы",
       fCat: "Санат", fPrice: "Бір бірлік бағасы, ₸", fPricePh: "Бос болса: келісім бойынша", fUnit: "Бірлік",
       fQty: "Қанша бар", fRegion: "Өңір", fRegionPick: "Өңірді таңдаңыз", fHarvest: "Жиналған күні", fDesc: "Сипаттама",
@@ -1118,7 +1129,7 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
         return '<button type="button" class="chip" data-act="theme-' + x[0] + '" aria-pressed="' + (cth === x[0]) + '">' + esc(t(x[1])) + "</button>";
       }).join("") + "</div>";
       inner = '<div class="pset"><div class="kv">' + esc(t("langLabel")) + '</div><div class="chips"><button type="button" class="chip" data-act="lang-ru" aria-pressed="' + (lang === "ru") + '">Русский</button><button type="button" class="chip" data-act="lang-kk" aria-pressed="' + (lang === "kk") + '">Қазақша</button></div>' +
-        themes + installRowHtml() + '<div class="row"><button type="button" class="btn ghost" data-act="about">' + esc(t("aboutBtn")) + '</button><button type="button" class="btn ghost" data-act="support">' + esc(t("supBtn")) + '</button></div><div class="row"><button type="button" class="btn ghost" data-act="terms">' + esc(t("legalTerms")) + '</button><button type="button" class="btn ghost" data-act="privacy">' + esc(t("legalPriv")) + '</button></div><div class="row"><button type="button" class="btn" data-act="editprof">' + esc(t("editProfile")) + '</button><button type="button" class="btn danger" data-act="logout">' + esc(t("logout")) + "</button></div></div>";
+        themes + a11yRowHtml() + installRowHtml() + '<div class="row"><button type="button" class="btn ghost" data-act="about">' + esc(t("aboutBtn")) + '</button><button type="button" class="btn ghost" data-act="support">' + esc(t("supBtn")) + '</button></div><div class="row"><button type="button" class="btn ghost" data-act="terms">' + esc(t("legalTerms")) + '</button><button type="button" class="btn ghost" data-act="privacy">' + esc(t("legalPriv")) + '</button></div><div class="row"><button type="button" class="btn" data-act="editprof">' + esc(t("editProfile")) + '</button><button type="button" class="btn danger" data-act="logout">' + esc(t("logout")) + "</button></div></div>";
     }
     box.innerHTML = head + tabs + inner;
   }
@@ -1135,6 +1146,7 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
     modal.innerHTML = '<div class="panel' + (cls ? " " + cls : "") + '" role="dialog" aria-modal="true" aria-labelledby="mtitle"><button type="button" class="xbtn" data-act="close" aria-label="' + esc(t("close")) + '">×</button>' + html + "</div>";
     modal.hidden = false;
     document.body.classList.add("lock");
+    if (A11.on) a11yModal();
     var f = modal.querySelector("input:not([type=file]), select, textarea, .btn");
     if (f) try { f.focus({ preventScroll: true }); } catch (e) {}
   }
@@ -1621,6 +1633,105 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
   }
   function modMsg(c) { return t("modBlock", { c: t("mod_" + c) }); }
 
+  var SP = { ok: "speechSynthesis" in window && typeof SpeechSynthesisUtterance !== "undefined", last: "", lt: 0, voices: [] };
+  function a11yVoices() { try { SP.voices = speechSynthesis.getVoices() || []; } catch (e) {} }
+  if (SP.ok) { a11yVoices(); try { speechSynthesis.addEventListener("voiceschanged", a11yVoices); } catch (e) {} }
+  function speak(text, queue) {
+    if (!SP.ok) return;
+    text = String(text || "").replace(/\s+/g, " ").trim();
+    if (!text) return;
+    var now = Date.now();
+    if (text === SP.last && now - SP.lt < 500) return;
+    SP.last = text; SP.lt = now;
+    try {
+      if (!queue) speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance(text.slice(0, 900)), want = lang === "kk" ? "kk" : "ru", v = null, i;
+      for (i = 0; i < SP.voices.length; i++) if (String(SP.voices[i].lang || "").toLowerCase().indexOf(want) === 0) { v = SP.voices[i]; break; }
+      if (!v && want === "kk") for (i = 0; i < SP.voices.length; i++) if (String(SP.voices[i].lang || "").toLowerCase().indexOf("ru") === 0) { v = SP.voices[i]; break; }
+      if (v) { u.voice = v; u.lang = v.lang; } else u.lang = "ru-RU";
+      u.rate = 1;
+      speechSynthesis.speak(u);
+    } catch (e) {}
+  }
+  var A11 = { on: false };
+  try { A11.on = localStorage.getItem("ur_a11y") === "1"; } catch (e) {}
+  function a11yApply() {
+    document.documentElement.classList.toggle("a11y", A11.on);
+    var f = $("a11yfab"); if (f) { f.hidden = !A11.on; f.setAttribute("aria-label", t("a11yRead")); }
+  }
+  function a11ySet(on) {
+    A11.on = on;
+    try { localStorage.setItem("ur_a11y", on ? "1" : "0"); } catch (e) {}
+    a11yApply();
+  }
+  function a11yRowHtml() {
+    return '<div class="kv">' + esc(t("a11yLabel")) + '</div><p class="sub">' + esc(t("a11yDesc")) + '</p><div class="chips">' +
+      [[true, "a11yOnBtn", "a11y-on"], [false, "a11yOffBtn", "a11y-off"]].map(function (x) { return '<button type="button" class="chip" data-act="' + x[2] + '" aria-pressed="' + (A11.on === x[0]) + '">' + esc(t(x[1])) + "</button>"; }).join("") +
+      '<button type="button" class="chip" data-act="a11y-test">' + esc(t("a11yTestBtn")) + "</button></div>" + (SP.ok ? "" : '<p class="note">' + esc(t("a11yNoSpeech")) + "</p>");
+  }
+  function a11yClean(s) { return String(s || "").replace(/\s+/g, " ").trim(); }
+  function a11yLabelOf(el) {
+    var a = el.getAttribute("aria-label"); if (a) return a11yClean(a);
+    if (el.id) { var l = document.querySelector('label[for="' + el.id + '"]'); if (l) return a11yClean(l.textContent); }
+    var p = el.closest("label"); if (p) return a11yClean(p.textContent);
+    return a11yClean(el.placeholder || el.name || "");
+  }
+  function a11yCard(card) { return t("a11yAd") + ". " + a11yClean(card.innerText || card.textContent).slice(0, 380); }
+  function a11yDescribe(target) {
+    if (!target || !target.closest) return "";
+    var el = target.closest('button, a[href], [role="button"], input, select, textarea, label, .tag, [data-act]');
+    if (!el || el.hasAttribute("data-silent")) return "";
+    if (el.tagName === "LABEL" && el.control) el = el.control;
+    var tag = el.tagName, type = String(el.type || "").toLowerCase(), lab;
+    if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") {
+      lab = a11yLabelOf(el);
+      if (type === "file") return lab + ", " + t("a11yFileBtn");
+      if (type === "checkbox" || type === "radio") return { lab: lab, box: el };
+      if (tag === "SELECT") return lab + ", " + t("a11ySelect") + ", " + a11yClean(el.options[el.selectedIndex] ? el.options[el.selectedIndex].text : "");
+      var val = type === "password" ? "" : a11yClean(el.value);
+      return lab + ", " + t("a11yField") + ", " + (val ? t("a11yValue") + ": " + val : t("a11yEmpty"));
+    }
+    if (el.classList.contains("galimg") || el.classList.contains("tag")) { var card = el.closest(".tag"); if (card) return a11yCard(card); }
+    var name = a11yClean(el.getAttribute("aria-label") || el.innerText || el.textContent || el.title || (el.querySelector("img") && el.querySelector("img").alt));
+    if (!name) return "";
+    var role = tag === "A" ? t("a11yLink") : t("a11yBtn"), pr = el.getAttribute("aria-pressed");
+    return name + ", " + role + (pr === "true" ? ", " + t("a11ySel") : "");
+  }
+  function a11yClick(e) {
+    if (!A11.on) return;
+    var d = a11yDescribe(e.target);
+    if (!d) return;
+    if (typeof d === "object") { setTimeout(function () { speak(d.lab + ", " + (d.box.checked ? t("a11yChecked") : t("a11yUnchecked"))); }, 0); return; }
+    speak(d);
+  }
+  function a11yFocus(e) {
+    if (!A11.on) return;
+    var el = e.target;
+    if (!el || !el.matches || !el.matches("input, select, textarea")) return;
+    var d = a11yDescribe(el);
+    if (d && typeof d === "string") speak(d, true);
+  }
+  function a11yRead() {
+    var m = document.querySelector("main"), txt = m ? a11yClean(m.innerText) : "";
+    speak(txt || document.title);
+  }
+  function a11yModal() {
+    var h = $("mtitle");
+    speak((h ? a11yClean(h.textContent) : "") + ", " + t("a11yDialog"), true);
+  }
+  document.addEventListener("click", a11yClick, true);
+  document.addEventListener("focusin", a11yFocus, true);
+  try {
+    new MutationObserver(function (list) {
+      if (!A11.on) return;
+      for (var i = 0; i < list.length; i++) {
+        var n = list[i].target, el = n && (n.nodeType === 3 ? n.parentElement : n);
+        var al = el && el.closest ? el.closest('[role="alert"]') : null;
+        if (al && a11yClean(al.textContent)) { speak(a11yClean(al.textContent), true); return; }
+      }
+    }).observe(document.body, { childList: true, subtree: true, characterData: true });
+  } catch (e) {}
+  a11yApply();
   var NSFW_TF = "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js";
   var NSFW_LIMIT = 0.6, NSFW = { p: null, failed: false };
   function loadScript(src) {
@@ -2058,6 +2169,10 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
     if (act !== "del" && pendingDel) { pendingDel = null; if (act !== "delok") renderAll(); }
     switch (act) {
       case "unstage": chatState.pending.splice(Number(el.getAttribute("data-v")), 1); renderTray(); break;
+      case "a11y-on": a11ySet(true); renderProfile(); speak(t("a11yOnMsg")); break;
+      case "a11y-off": a11ySet(false); renderProfile(); speak(t("a11yOffMsg")); break;
+      case "a11y-test": speak(t("a11yTest")); break;
+      case "a11y-read": a11yRead(); break;
       case "gal": {
         var gl2 = photosOf(byId(id)); if (!gl2.length) break;
         galState = { list: gl2, i: 0 };
