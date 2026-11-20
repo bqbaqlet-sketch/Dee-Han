@@ -1633,7 +1633,8 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
   }
   function modMsg(c) { return t("modBlock", { c: t("mod_" + c) }); }
 
-  var SP = { ok: "speechSynthesis" in window && typeof SpeechSynthesisUtterance !== "undefined", last: "", lt: 0, voices: [] };
+  var NAT = !!(window.DeeHanAndroid && window.DeeHanAndroid.speak);
+  var SP = { ok: NAT || ("speechSynthesis" in window && typeof SpeechSynthesisUtterance !== "undefined"), last: "", lt: 0, voices: [] };
   function a11yVoices() { try { SP.voices = speechSynthesis.getVoices() || []; } catch (e) {} }
   if (SP.ok) { a11yVoices(); try { speechSynthesis.addEventListener("voiceschanged", a11yVoices); } catch (e) {} }
   function speak(text, queue) {
@@ -1643,6 +1644,7 @@ window.SUPPORT_URL = "https://script.google.com/macros/s/AKfycbz4FxnnUpfF3d96cTU
     var now = Date.now();
     if (text === SP.last && now - SP.lt < 500) return;
     SP.last = text; SP.lt = now;
+    if (NAT) { try { window.DeeHanAndroid.speak(text.slice(0, 900), lang === "kk" ? "kk" : "ru", !!queue); } catch (e) {} return; }
     try {
       if (!queue) speechSynthesis.cancel();
       var u = new SpeechSynthesisUtterance(text.slice(0, 900)), want = lang === "kk" ? "kk" : "ru", v = null, i;
